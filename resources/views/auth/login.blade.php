@@ -101,10 +101,23 @@
     </style>
     @laravelPWA
     @vite('resources/css/app.css')
+
+    <script>
+        window.addEventListener("load", (event) => {
+            const loader = document.getElementById('loader')
+            const container = document.getElementById('container')
+            loader.classList.add('hidden')
+            container.classList.remove('hidden')
+            container.classList.add('flex')
+        });
+    </script>
 </head>
 
 <body>
-    <div class="Section_top flex items-center justify-center min-h-screen w-full">
+    <div class="min-h-[100vh] flex justify-center items-center" id="loader">
+        <img src="{{ asset('loader.gif') }}" class="w-[300px]" alt="">
+    </div>
+    <div class="Section_top  items-center justify-center min-h-screen w-full hidden" id="container">
         <div class="relative py-3 sm:max-w-xl sm:mx-auto ">
             <div
                 class="absolute inset-0 bg-gradient-to-r from-blue-300 to-blue-600 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl">

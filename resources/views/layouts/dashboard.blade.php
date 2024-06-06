@@ -2,6 +2,14 @@
 <html lang="en" dir="ltr">
 
 <head>
+    <script>
+        window.addEventListener("load", (event) => {
+            const loader = document.getElementById('loader')
+            const container = document.getElementById('container')
+            loader.classList.add('hidden')
+            container.classList.remove('hidden')
+        });
+    </script>
     <!-- Web Application Manifest -->
     <link rel="manifest" href="/manifest.json">
     <!-- Chrome for Android theme color -->
@@ -142,6 +150,7 @@
     <link rel="stylesheet" href="{{ asset('assets/year_picker/yearpicker.css') }}">
     <script src="{{ asset('assets/year_picker/yearpicker.js') }}"></script>
     @laravelPWA
+
 </head>
 
 <body data-mode="light" data-sidebar-size="lg" class="group">
@@ -180,15 +189,18 @@
                             </div>
                         </div>
 
-                        <div class=" ">
+                        <div class="min-h-[60vh] flex justify-center items-center" id="loader">
+                            <img src="{{ asset('loader.gif') }}" class="md:w-[300px] w-[150px]" alt="">
+                        </div>
+                        <div class=" hidden" id="container">
                             @yield('content')
-
                         </div>
 
                     </div>
                     <x-dashboard.footer></x-dashboard>
                 </div>
             </div>
+
 
             <script src="{{ asset('assets/minia/assets/libs/@popperjs/core/umd/popper.min.js') }}"></script>
             <script src="{{ asset('assets/minia/assets/libs/feather-icons/feather.min.js') }}"></script>

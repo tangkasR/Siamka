@@ -6,7 +6,7 @@
     <div class="max-w-xl flex items-center h-auto lg:h-screen flex-wrap mx-auto md:my-32 mt-32 lg:my-0 py-10 bg-slate-50">
         <!--Main Col-->
 
-        <div class="w-full rounded-lg lg:rounded-l-lg lg:rounded-r-none md:shadow-lg  md:mt-[40px] lg:mx-0">
+        <div class="w-full rounded-lg lg:rounded-l-lg lg:rounded-r-none md:shadow-lg  md:mt-[40px] lg:mx-0 bg-white">
             <div class="p-4 md:p-12 lg:text-left">
                 <!-- Image for mobile view-->
                 <form action="{{ route('guru.kehadiran_guru.store') }}" method="POST">

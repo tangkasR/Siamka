@@ -58,8 +58,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="relative overflow-x-auto card-body p-0">
-                        <div class="relative overflow-x-auto card-body  ">
+                    <div class="card-body p-0">
+                        <div class="relative overflow-x-scroll card-body  ">
                             <table id=""
                                 class="text-center uppercase table w-full pt-4 text-gray-700 dark:text-zinc-100">
                                 <thead>
@@ -156,7 +156,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="relative overflow-x-auto card-body">
+                    <div class="relative overflow-x-scroll card-body">
                         <table id="table_nilai_mata_pelajaran"
                             class="text-center table w-full pt-4 text-gray-700 dark:text-zinc-100 ">
                             <thead>
@@ -197,7 +197,7 @@
                             Nilai <span class="text-violet-500">Ekskul</span>
                         </h2>
                     </div>
-                    <div class="relative overflow-x-auto card-body">
+                    <div class="relative overflow-x-scroll card-body">
                         <table id="table_nilai_ekskul"
                             class="text-center uppercase table w-full pt-4 text-gray-700 dark:text-zinc-100">
                             <thead>

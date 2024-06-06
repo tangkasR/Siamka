@@ -17,7 +17,7 @@
                         <!-- start grid -->
                         <div class=" w-full ">
                             <input type="text" value="{{ $id }}" name="ekskul_id" hidden>
-                            <div class="grid md:grid-cols-3 md:gap-2">
+                            <div class="grid md:grid-cols-3 gap-2">
                                 @foreach ($siswas as $data)
                                     <div class="card dark:bg-zinc-800 dark:border-zinc-600">
                                         <div class="card-body  grid grid-cols-12 items-center gap-2">
@@ -27,7 +27,7 @@
                                             </h6>
                                             <div class="form-check col-span-4 flex justify-end">
                                                 <div>
-                                                    <div class="form-check grid grid-cols-2 items-center">
+                                                    <div class="form-check grid grid-cols-2 items-center ">
                                                         <label
                                                             class="font-normal text-gray-700 ltr:mr-2 rtl:ml-2 dark:text-zinc-100"
                                                             for="formrow-customCheck-{{ $data->id }}">Pilih</label>

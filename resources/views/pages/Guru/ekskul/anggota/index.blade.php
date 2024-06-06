@@ -4,7 +4,7 @@
 @endsection
 @section('table-role', 'Guru')
 @section('content')
-    <div class="grid md:grid-cols-12 gap-6 bg-white shadow-md">
+    <div class="md:grid md:grid-cols-12 md:gap-6 bg-white shadow-md">
         <div class="md:col-span-8 order-last md:order-1">
             <div class="card dark:bg-zinc-800 dark:border-zinc-600">
                 <div class="card-body border-b border-gray-100 dark:border-zinc-600 pt-6">
@@ -18,15 +18,6 @@
                                 Tambah Anggota
                             </a>
                         </div>
-                        {{-- <div class="md:col-span-3">
-                            <h6 class=" text-gray-600 text-[16px] font-medium dark:text-gray-100 capitalize">
-                                Daftar Nilai Ekskul {{ $ekskul->nama_ekskul }}
-                            </h6>
-                            <a href="{{ route('guru.nilai_ekskul', ['ekskul_id' => $ekskul->id]) }}"
-                                class="mt-3 text-white bg-gray-800 border-transparent btn w-full">
-                                Daftar Nilai
-                            </a>
-                        </div> --}}
                     </div>
                 </div>
                 <div class="relative overflow-x-auto card-body">
