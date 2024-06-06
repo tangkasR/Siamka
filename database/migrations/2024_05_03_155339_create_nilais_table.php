@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreign('mata_pelajaran_id')->references('id')->on('mata_pelajarans')->onDelete('restrict');
             $table->string('tipe_ujian');
             $table->float('nilai');
+            $table->string('semester');
             $table->timestamps();
         });
     }

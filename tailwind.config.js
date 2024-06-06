@@ -5,6 +5,7 @@ module.exports = {
         "./resources/**/*.blade.php",
         "./resources/**/*.js",
         "./resources/**/*.vue",
+        "./node_modules/flowbite/**/*.js",
     ],
 
     darkMode: "class",
@@ -13,5 +14,6 @@ module.exports = {
         plugin(function ({ addVariant }) {
             addVariant("group-dashboard", ":merge(.group).dashboard &");
         }),
+        require("flowbite/plugin"),
     ],
 };

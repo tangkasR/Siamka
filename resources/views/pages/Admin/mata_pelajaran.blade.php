@@ -2,42 +2,41 @@
 @section('table-name', 'Mata Pelajaran')
 @section('table-role', 'Admin')
 @section('content')
-    <div class="grid grid-cols-12 gap-5">
-        <div class="col-span-7">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-5 bg-white shadow-md">
+        <div class="md:col-span-8 order-last md:order-1">
             <div class="card dark:bg-zinc-800 dark:border-zinc-600">
                 <div class="card-body border-b border-gray-100 dark:border-zinc-600">
-                    <h6 class="mb-1 text-gray-700 text-15 dark:text-gray-100">Data Mata Pelajaran</h6>
-
+                    <h6 class="mb-1 text-gray-600 text-[20px] font-semibold dark:text-gray-100">Data Mata Pelajaran</h6>
                 </div>
                 <div class="relative overflow-x-auto card-body">
                     <table id="datatable" class="table w-full pt-4 text-center text-gray-700 dark:text-zinc-100">
                         <thead>
-                            <tr>
-                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-50 dark:border-zinc-600">
+                            <tr class="bg-blue-200">
+                                <th class="p-4 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
                                     No</th>
-                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-50 dark:border-zinc-600">
+                                <th class="p-4 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
                                     Nama Mata Pelajaran</th>
-                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-50 dark:border-zinc-600">
+                                <th class="p-4 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
                                     Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($mapel as $data)
-                                <tr>
-                                    <td
-                                        class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-50 dark:border-zinc-600">
+                                <tr class="{{ $loop->iteration % 2 == 0 ? 'bg-blue-50' : 'bg-white' }}">
+                                    <td class="p-4 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
                                         {{ $loop->iteration }}</td>
-                                    <td class="p-4 pr-8 border border-t-0 border-l-0 border-gray-50 dark:border-zinc-600">
+                                    <td class="p-4 border border-t-0 border-l-0 border-gray-200 dark:border-zinc-600">
                                         {{ $data->nama_mata_pelajaran }}</td>
-                                    <td class="p-4 pr-8 border border-t-0 border-l-0 border-gray-50 dark:border-zinc-600">
-                                        <a class="text-white btn w-[100px] mb-3 bg-violet-500 border-violet-500 hover:bg-violet-600 focus:ring ring-violet-50focus:bg-violet-600"
-                                            data-tw-toggle="modal"
-                                            data-tw-target="#modal-id_form_edit_{{ $data->id }}"><i
-                                                class='bx bxs-edit'></i> Ubah</a>
-                                        <a class="text-white w-[100px] btn bg-red-500 border-red-500 hover:bg-red-600 focus:ring ring-violet-50 focus:bg-red-600"
-                                            data-tw-toggle="modal"
-                                            data-tw-target="#modal-id_form_destroy_{{ $data->id }}">
-                                            <i class='bx bx-trash'></i> Hapus</a>
+                                    <td
+                                        class="p-4 border border-t-0 border-l-0 border-gray-200 dark:border-zinc-600 min-w-[250px] w-[250px]">
+                                        <div class="grid grid-cols-2 gap-2 ">
+                                            <a class="btn-edit" data-tw-toggle="modal"
+                                                data-tw-target="#modal-id_form_edit_{{ $data->id }}"><i
+                                                    class='bx bxs-edit'></i> Ubah</a>
+                                            <a class="btn-delete" data-tw-toggle="modal"
+                                                data-tw-target="#modal-id_form_destroy_{{ $data->id }}">
+                                                <i class='bx bx-trash'></i> Hapus</a>
+                                        </div>
                                     </td>
                                 </tr>
 
@@ -79,7 +78,7 @@
                                                                     value="{{ $data->nama_mata_pelajaran }}" required>
                                                             </div>
                                                             <button type="submit"
-                                                                class="w-full mt-3 text-white bg-green-600 border-transparent btn">
+                                                                class="w-full mt-3 text-white bg-violet-600 border-transparent btn">
                                                                 Simpan
                                                             </button>
                                                         </form>
@@ -136,8 +135,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-span-5 w-full ">
-
+        <div class="md:col-span-4 w-full p-3 md:order-2">
             <form class="space-y-4" action="{{ route('admin.mapel.store') }}" method="POST">
                 @csrf
                 <div class="flex justify-between">
@@ -145,6 +143,9 @@
                     <button type="button" class="
                     text-violet-600 text-[40px] " id="add_input"><i
                             class='bx bxs-plus-circle'></i></button>
+                    <div id="count"
+                        class="text-gray-500 absolute right-9 rounded-full z-50 text-[16px] top-15 px-2 border bg-green-50 ">
+                    </div>
                 </div>
                 <div id="container_add" class="">
                 </div>
@@ -165,13 +166,13 @@
     <script>
         let index = 1;
         let container = document.getElementById('container_add');
-
+        let count = document.getElementById('count')
         for (let i = 0; i < index; i++) {
             container.innerHTML = `
             <div>
                 <label for="nama_mata_pelajaran"
                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
-                    Nama Mata Pelajaran
+                    Nama Mata Pelajaran - 1
                 </label>
                 <input type="text" name="nama_mata_pelajaran[]"
                     id="nama_mata_pelajaran"
@@ -185,11 +186,12 @@
             index++;
 
             for (let i = 0; i < index; i++) {
+                count.innerHTML = `${i+1}`
                 container.innerHTML += `
                 <div class="mb-3">
                     <label for="nama_mata_pelajaran"
                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
-                        Nama Mata Pelajaran
+                        Nama Mata Pelajaran - ${i+1}
                     </label>
                     <input type="text" name="nama_mata_pelajaran[]"
                         id="nama_mata_pelajaran"
@@ -202,48 +204,14 @@
         })
     </script>
 
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     @if (session('message'))
         <script>
-            $(document).ready(function() {
-                $.toast({
-                    text: `
-        <div class="py-2 font-bold text-[14px]">
-            {{ Session::get('message') }}
-        </div>
-        `,
-                    showHideTransition: 'slide',
-                    // textColor: 'black',
-                    icon: 'success',
-                    position: 'top-right',
-                    allowToastClose: false,
-                    bgColor: '#00d447',
-                    loaderBg: '#6f00ff',
-                    hideAfter: 3000,
-                })
-            });
+            toast('message', '{{ Session::get('message') }}')
         </script>
     @endif
     @if (session('error'))
         <script>
-            $(document).ready(function() {
-                $.toast({
-                    text: `
-        <div class="py-2 font-bold text-[14px]">
-            {{ Session::get('error') }}
-        </div>
-        `,
-                    showHideTransition: 'slide',
-                    // textColor: 'black',
-                    icon: 'error',
-                    position: 'top-right',
-                    allowToastClose: false,
-                    bgColor: '#fc3b2d',
-                    loaderBg: '#6f00ff',
-                    hideAfter: 6000,
-                })
-            });
+            toast('error', '{{ Session::get('error') }}')
         </script>
     @endif
 @endsection

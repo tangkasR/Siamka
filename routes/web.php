@@ -3,11 +3,15 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EkskulController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\JadwalPelajaranController;
 use App\Http\Controllers\KehadiranController;
+use App\Http\Controllers\KehadiranGuruController;
 use App\Http\Controllers\MataPelajaranController;
 use App\Http\Controllers\NilaiController;
+use App\Http\Controllers\NilaiEkskulController;
+use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\RombelController;
 use App\Http\Controllers\RuanganController;
 use App\Http\Controllers\SesiController;
@@ -26,7 +30,7 @@ use Illuminate\Support\Facades\Route;
  */
 Route::group(['middleware' => ["must-logout"]], function () {
     Route::get('/', [AuthController::class, 'index'])->name('login');;
-    Route::post('/login', [AuthController::class, 'auth']);
+    Route::post('/login', [AuthController::class, 'login']);
 });
 Route::group(['middleware' => ["must-login"]], function () {
     Route::controller(DashboardController::class)->prefix('dashboard')->name('dashboard.')->group(function () {
@@ -35,6 +39,10 @@ Route::group(['middleware' => ["must-login"]], function () {
     // auth
     Route::get('/logout', [AuthController::class, 'logout']);
 
+    Route::controller(PengumumanController::class)->prefix('pengumuman')->name('pengumuman.')->group(function () {
+        Route::get('/show_pengumuman', 'show_pengumuman')->name('show_pengumuman');
+        Route::get('/detail/{id}', 'detail')->name('detail');
+    });
     Route::group(['middleware' => ["admin"]], function () {
         // profil
         Route::controller(AdminController::class)->prefix('admin')->name('admin.')->group(function () {
@@ -47,7 +55,19 @@ Route::group(['middleware' => ["must-login"]], function () {
             Route::get('/siswa/show-siswa/{id}', 'show_siswa')->name('siswa.show_siswa');
             Route::post('/siswa', 'store')->name('siswa.store');
             Route::post('/siswa/update/{id}', 'update')->name('siswa.update');
+            Route::post('/siswa/move_class/{id}', 'move_class')->name('siswa.move_class');
             Route::get('/siswa/destroy/{id}', 'destroy')->name('siswa.destroy');
+            Route::get('/siswa/detail_siswa/{id}', 'detail_siswa')->name('siswa.detail_siswa');
+            Route::post('/siswa/next_grade/{id}', 'next_grade')->name('siswa.next_grade');
+            Route::post('/siswa/lulus/{id}', 'lulus')->name('siswa.lulus');
+            Route::post('/siswa/aktivasi', 'aktivasi')->name('siswa.aktivasi');
+            Route::get('/siswa/tambah_aktivasi/{id}', 'tambah_aktivasi')->name('siswa.tambah_aktivasi');
+            Route::get('/siswa/deaktivasiAll/{id}', 'deaktivasiAll')->name('siswa.deaktivasiAll');
+            Route::get('/siswa/deaktivasi/{id}', 'deaktivasi')->name('siswa.deaktivasi');
+            Route::get('/siswa/rekap_nilai/{id}', 'rekap_nilai')->name('siswa.rekap_nilai');
+            Route::get('/siswa/rekap_kehadiran/{id}', 'rekap_kehadiran')->name('siswa.rekap_kehadiran');
+            Route::get('/siswa/siswa_not_active', 'siswa_not_active')->name('siswa.siswa_not_active');
+            Route::get('/siswa/clear_data', 'clear_data')->name('siswa.clear_data');
         });
 
         // guru
@@ -56,6 +76,8 @@ Route::group(['middleware' => ["must-login"]], function () {
             Route::post('/guru', 'store')->name('guru.store');
             Route::post('/guru/update/{id}', 'update')->name('guru.update');
             Route::get('/guru/destroy/{id}', 'destroy')->name('guru.destroy');
+            Route::get('/guru/detail_guru/{id}', 'detail_guru')->name('guru.detail_guru');
+            Route::get('/guru/cetak_kehadiran/{id}', 'cetak_kehadiran')->name('guru.cetak_kehadiran');
         });
 
         // rombel
@@ -80,6 +102,14 @@ Route::group(['middleware' => ["must-login"]], function () {
             Route::post('/ruangan', 'store')->name('ruangan.store');
             Route::post('/ruangan/update/{id}', 'update')->name('ruangan.update');
             Route::get('/ruangan/destroy/{id}', 'destroy')->name('ruangan.destroy');
+        });
+
+        // pengumuman
+        Route::controller(PengumumanController::class)->prefix('admin')->name('admin.')->group(function () {
+            Route::get('/pengumuman', 'index')->name('pengumuman');
+            Route::post('/pengumuman', 'store')->name('pengumuman.store');
+            Route::post('/pengumuman/update/{id}', 'update')->name('pengumuman.update');
+            Route::get('/pengumuman/destroy/{id}', 'destroy')->name('pengumuman.destroy');
         });
 
         // mata pelajaran
@@ -110,7 +140,9 @@ Route::group(['middleware' => ["must-login"]], function () {
             Route::get('/nilai/input/{id}', 'show_input')->name('nilai.show_input');
             Route::post('/nilai/save', 'store')->name('nilai.store');
             Route::post('/nilai/update/{id}', 'update')->name('nilai.update');
-            Route::get('/nilai/destroy/{id}', 'destroy')->name('nilai.destroy');
+            Route::get('/nilai/destroy', 'destroy')->name('nilai.destroy');
+            Route::get('/nilai/get-nilai', 'getNilai_guru')->name('nilai.get-nilai');
+            Route::get('/nilai/show_update/{id}/{rombel_id}', 'show_update')->name('nilai.show_update');
         });
 
         // Kehadiran
@@ -121,21 +153,61 @@ Route::group(['middleware' => ["must-login"]], function () {
             Route::get('/kehadiran/show_input/{id}', 'show_input')->name('kehadiran.show_input');
             Route::post('/kehadiran/save', 'store')->name('kehadiran.store');
             Route::post('/kehadiran/update/{id}', 'update')->name('kehadiran.update');
-            Route::get('/kehadiran/destroy/{id}', 'destroy')->name('kehadiran.destroy');
+            Route::get('/kehadiran/destroy/{rombel_id}', 'destroy')->name('kehadiran.destroy');
+            Route::get('/kehadiran/get-kehadiran', 'getKehadiran_guru')->name('kehadiran.get-kehadiran');
+            Route::get('/kehadiran/show_update/{id}/{siswa_id}', 'show_update')->name('kehadiran.show_update');
+        });
+
+        // ekskul
+        Route::controller(EkskulController::class)->prefix('guru')->name('guru.')->group(function () {
+            Route::get('/ekskul', 'index')->name('ekskul');
+            Route::get('/ekskul/daftar_anggota/{id}', 'daftar_anggota')->name('ekskul.daftar_anggota');
+            Route::get('/ekskul/daftar_rombel/{id}', 'daftar_rombel')->name('ekskul.daftar_rombel');
+            Route::get('/ekskul/show-siswa/{id}/{rombel_id}', 'show_siswa')->name('ekskul.show-siswa');
+            Route::post('/ekskul/store', 'store')->name('ekskul.store');
+            Route::post('/ekskul/addmember', 'addmember')->name('ekskul.addmember');
+            Route::post('/ekskul/update/{id}', 'update')->name('ekskul.update');
+            Route::get('/ekskul/destroy/{id}', 'destroy')->name('ekskul.destroy');
+            Route::get('/ekskul/delete_member/{id}', 'delete_member')->name('ekskul.delete_member');
+            Route::post('/ekskul/change_status', 'change_status')->name('ekskul.change_status');
+            Route::get('/ekskul/activate/{id}', 'activate')->name('ekskul.activate');
+        });
+        Route::controller(NilaiEkskulController::class)->prefix('guru')->name('guru.')->group(function () {
+            Route::get('/show_ekskul', 'index')->name('show_ekskul');
+            Route::get('/nilai_ekskul/{ekskul_id}', 'nilai')->name('nilai_ekskul');
+            Route::get('/tambah_nilai/{ekskul_id}', 'tambah_nilai')->name('tambah_nilai');
+            Route::post('/nilai_ekskul/store/{ekskul_id}', 'store')->name('nilai_ekskul.store');
+            Route::post('/nilai_ekskul/update/{id}', 'update')->name('nilai_ekskul.update');
+            Route::get('/nilai_ekskul/destroy/{id}', 'destroy')->name('nilai_ekskul.destroy');
         });
 
         // profil
         Route::controller(GuruController::class)->prefix('guru')->name('guru.')->group(function () {
             Route::get('/profil', 'profil')->name('profil');
+            Route::post('/update_profil', 'update_profil')->name('update_profil');
         });
+
+        // absensi guru
+        Route::controller(KehadiranGuruController::class)->prefix('guru')->name('guru.')->group(function () {
+            Route::get('/kehadiran_guru', 'index')->name('kehadiran_guru');
+            Route::post('/kehadiran_guru/store', 'store')->name('kehadiran_guru.store');
+        });
+    });
+    Route::controller(KehadiranGuruController::class)->prefix('guru')->name('guru.')->group(function () {
+        Route::get('/getData', 'getData')->name('kehadiran_guru.getData');
     });
     Route::group(['middleware' => ["siswa"]], function () {
         Route::controller(SiswaController::class)->prefix('siswa')->name('siswa.')->group(function () {
             Route::get('/siswa/jadwal-pelajaran', 'show_jadwal')->name('show_jadwal');
-            Route::get('/siswa/kehadiran', 'show_kehadiran')->name('show_kehadiran');
             Route::get('/siswa/nilai', 'show_nilai')->name('show_nilai');
             Route::get('/profil', 'profil')->name('profil');
+            Route::post('/update_profil', 'update_profil')->name('update_profil');
             Route::get('/siswa/nilai/filter', 'filter_nilai')->name('nilai.filter');
+            Route::get('/siswa/nilai/get_nilai', 'getNilai')->name('nilai.get_nilai');
+            Route::get('/siswa/kehadiran', 'show_kehadiran')->name('show_kehadiran');
+            Route::get('/siswa/get-kehadiran', 'get_kehadiran')->name('get-kehadiran');
+            Route::get('/siswa/filter-kehadiran', 'filter_kehadiran')->name('filter-kehadiran');
+            Route::get('/siswa/ekskul', 'show_ekskul')->name('ekskul');
         });
     });
 });

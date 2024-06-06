@@ -2,66 +2,59 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Guru;
-use App\Models\Rombel;
+use App\Services\GuruService;
+use App\Services\RombelService;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class RombelController extends Controller
 {
+    private $rombel;
+    private $guru;
+    public function __construct(
+        RombelService $rombel,
+        GuruService $guru
+    ) {
+        $this->rombel = $rombel;
+        $this->guru = $guru;
+    }
     public function index()
     {
-        $guruAll = Guru::select('id', 'nama')->get();
-        $rombel = DB::table('rombels')
-            ->join('gurus', 'rombels.guru_id', '=', 'gurus.id')
-            ->select('rombels.id', 'rombels.nama_rombel', 'gurus.nama', 'rombels.guru_id')
-            ->orderBy('nama_rombel')
-            ->get();
-        $guru_wali_kelas = [];
-        $guru = [];
-        foreach ($rombel as $item) {
-            array_push($guru_wali_kelas, $item->guru_id);
-        }
-        foreach ($guruAll as $item) {
-            if (!in_array($item->id, $guru_wali_kelas)) {
-                array_push($guru, [
-                    'id' => $item->id,
-                    'nama' => $item->nama,
-                ]);
-            }
-        }
-        return view('pages.admin.rombel', ['rombel' => $rombel, 'guru' => $guru, 'guruAll' => $guruAll]);
+        return view('pages.admin.rombel', [
+            'rombel' => $this->rombel->getAll(),
+            'guru' => $this->rombel->getGuruBukanWaliKelas(),
+            'guruAll' => $this->guru->getAll(),
+        ]);
     }
 
     public function store(Request $request)
     {
-        $index = 0;
-        foreach ($request->nama_rombel as $item) {
-            Rombel::create([
-                'guru_id' => $request->guru_id[$index],
-                'nama_rombel' => $item,
-            ]);
-            $index++;
-        };
-        return back()->with('message', 'Berhasil menambah data');
+        try {
+            $this->rombel->store($request->all());
+            return redirect()->back()->with('message', 'Berhasil menambah data');
+
+        } catch (QueryException $er) {
+            return redirect()->back()->with('error', 'Gagal menambah data');
+        }
     }
     public function update(Request $request, $id)
     {
-        Rombel::where('id', $id)->update([
-            'guru_id' => $request->guru_id,
-            'nama_rombel' => $request->nama_rombel,
-        ]);
-        return back()->with('message', 'Berhasil mengubah data');
+        try {
+            $this->rombel->update($request->all(), $id);
+            return redirect()->back()->with('message', 'Berhasil mengubah data');
+
+        } catch (QueryException $er) {
+            return redirect()->back()->with('error', 'Gagal mengubah data');
+        }
     }
     public function destroy(Request $request, $id)
     {
         try {
-            $rombel = Rombel::where('id', $id)->select('id')->first();
-            $rombel->delete();
-        } catch (QueryException $e) {
-            return back()->with('error', 'Data Rombel telah digunakan');
+            $this->rombel->destroy($id);
+            return redirect()->back()->with('message', 'Berhasil menghapus data');
+
+        } catch (QueryException $er) {
+            return redirect()->back()->with('error', 'Gagal menghapus data');
         }
-        return back()->with('message', 'Berhasil menghapus data');
     }
 }

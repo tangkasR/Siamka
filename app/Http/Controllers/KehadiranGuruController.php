@@ -1,0 +1,75 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Services\AuthService;
+use App\Services\DateService;
+use App\Services\KehadiranService;
+use App\Services\KehadiranGuruService;
+use Illuminate\Validation\ValidationException;
+
+class KehadiranGuruController extends Controller
+{
+    private $auth;
+    private $kehadiran;
+    private $kehadiran_guru;
+    private $date;
+
+    public function __construct(
+        AuthService $auth,
+        KehadiranService $kehadiran,
+        KehadiranGuruService $kehadiran_guru,
+        DateService $date
+    ) {
+        $this->auth = $auth;
+        $this->kehadiran = $kehadiran;
+        $this->kehadiran_guru = $kehadiran_guru;
+        $this->date = $date;
+    }
+    public function index(Request $request)
+    {
+        $guru = $this->auth->getUser('guru');
+        $tahun = $this->date->getDate()->year;
+        if ($request->ajax()) {
+            $tahun = $request->tahun;
+            return view('pages.Guru.data_kehadiran', [
+                'guru' => $guru,
+                'tanggal' => $this->date->getDate()->format('d-m-Y'),
+                'bulan' => $this->date->getDate()->month,
+                'tahun' => $this->date->getDate()->year,
+                'rekaps' => $this->kehadiran_guru->rekapKehadiranGuru($guru->id, $tahun),
+                'years' => $this->kehadiran_guru->getYear(),
+            ]);
+        }
+        return view('pages.Guru.kehadiran', [
+            'guru' => $guru,
+            'tanggal' => $this->date->getDate()->format('d-m-Y'),
+            'bulan' => $this->date->getDate()->month,
+            'tahun' => $this->date->getDate()->year,
+            'rekaps' => $this->kehadiran_guru->rekapKehadiranGuru($guru->id, $tahun),
+            'years' => $this->kehadiran_guru->getYear(),
+        ]);
+    }
+    public function getData(Request $request)
+    {
+        $kehadirans = $this->kehadiran_guru->getData($request->guru_id, $request->bulan, $request->tahun);
+        return response($kehadirans);
+
+    }
+    public function store(Request $request)
+    {
+        try {
+            $guru = $this->auth->getUser('guru');
+            if (count($this->kehadiran_guru->checkAbsensi($guru->id)) > 0) {
+                return back()->with('error', 'Anda sudah melakukan absensi');
+            }
+            $this->kehadiran_guru->store($request->all());
+            return back()->with('message', 'Anda berhasil absen hari ini!');
+        } catch (ValidationException $err) {
+            return back()->with('error', $err->getMessage());
+        }
+
+    }
+
+}

@@ -15,6 +15,7 @@ class Nilai extends Model
         'mata_pelajaran_id',
         'tipe_ujian',
         'nilai',
+        'semester',
     ];
 
     public function mapels()

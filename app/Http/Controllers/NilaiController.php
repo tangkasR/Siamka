@@ -2,123 +2,129 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\MataPelajaran;
-use App\Models\Nilai;
-use App\Models\Rombel;
-use App\Models\Siswa;
+use App\Services\AuthService;
+use App\Services\MataPelajaranService;
+use App\Services\NilaiService;
+use App\Services\RombelService;
+use App\Services\SiswaService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class NilaiController extends Controller
 {
+    private $rombel;
+    private $auth;
+    private $nilai;
+    private $mapel;
+    private $siswa;
+
+    public function __construct(
+        RombelService $rombel,
+        AuthService $auth,
+        NilaiService $nilai,
+        MataPelajaranService $mapel,
+        SiswaService $siswa
+    ) {
+        $this->rombel = $rombel;
+        $this->auth = $auth;
+        $this->nilai = $nilai;
+        $this->mapel = $mapel;
+        $this->siswa = $siswa;
+    }
     public function index()
     {
-        $rombel = Rombel::select('id', 'nama_rombel')->get();
-        return view('pages.guru.nilai.index', ['rombel' => $rombel]);
-    }
-    public function show_siswa(Request $request, $id)
-    {
-        $rombel = Rombel::select('nama_rombel')->where('id', $id)->first();
-        $guru = auth()->guard('guru')->user();
-        $nilai = DB::table('nilais')
-            ->join('siswas', 'nilais.siswa_id', '=', 'siswas.id')
-            ->join('mata_pelajarans', 'nilais.mata_pelajaran_id', '=', 'mata_pelajarans.id')
-            ->join('rombel_siswa', 'siswas.id', '=', 'rombel_siswa.siswa_id')
-            ->where('rombel_id', '=', $id)
-            ->where('mata_pelajarans.id', '=', $guru->mata_pelajaran_id)
-            ->select('nilais.id', 'siswas.nama', 'nilais.tipe_ujian', 'nilais.nilai', 'mata_pelajarans.nama_mata_pelajaran')
-            ->get();
-        $mapel = MataPelajaran::select('id', 'nama_mata_pelajaran')->get();
-
-        return view('pages.guru.nilai.nilai', [
-            'nilai' => $nilai,
-            'rombel_id' => $id,
-            'rombel' => $rombel,
-            'mapel' => $mapel,
+        return view('pages.guru.nilai.index', [
+            'rombel' => $this->rombel->getAll(),
         ]);
+    }
+    public function show_siswa($id)
+    {
+        return view('pages.guru.nilai.nilai', [
+            'rombel' => $this->rombel->getOne('id', $id),
+            'mapel' => $this->mapel->getAll(),
+            'guru' => $this->auth->getUser('guru'),
+        ]);
+    }
+    public function getNilai_guru(Request $request)
+    {
+        $guru = $this->auth->getUser('guru');
+        $nilai = $this->nilai->get_nilai_with_rombel_id_and_mapel_id($request->rombel_id, $guru->mata_pelajaran_id)
+            ->paginate(5);
+        return response($nilai);
     }
     public function filter(Request $request)
     {
-        $rombel_id = $request->rombel_id;
-        $tipe_ujian = $request->tipe_ujian;
         $guru = auth()->guard('guru')->user();
-        $nilai = DB::table('nilais')
-            ->join('siswas', 'nilais.siswa_id', '=', 'siswas.id')
-            ->join('mata_pelajarans', 'nilais.mata_pelajaran_id', '=', 'mata_pelajarans.id')
-            ->join('rombel_siswa', 'siswas.id', '=', 'rombel_siswa.siswa_id')
-            ->where('rombel_id', '=', $rombel_id)
-            ->where('mata_pelajarans.id', '=', $guru->mata_pelajaran_id)
-            ->where('nilais.tipe_ujian', '=', $tipe_ujian)
-            ->select('nilais.id', 'siswas.nama', 'nilais.tipe_ujian', 'nilais.nilai', 'mata_pelajarans.nama_mata_pelajaran')
-            ->get();
-
+        $nilai = $this->nilai->get_nilai_with_rombel_id_and_mapel_id_and_tipe_ujian(
+            $request->rombel_id,
+            $request->mapel_id,
+            $request->tipe_ujian,
+            $request->semester
+        )->paginate(5);
         return response($nilai);
-
     }
 
     public function show_input($id)
     {
-        $guru = auth()->guard('guru')->user();
-        $mapel = MataPelajaran::select('id', 'nama_mata_pelajaran')->get();
-        $rombel = Rombel::where('id', $id)->with('siswas')->first();
-        return view('pages.guru.nilai.tambah_nilai', ['guru' => $guru, 'rombel' => $rombel, 'mapel' => $mapel]);
+        return view('pages.guru.nilai.tambah_nilai', [
+            'guru' => $this->auth->getUser('guru'),
+            'rombel' => $this->rombel->getOne('id', $id),
+            'mapel' => $this->mapel->getAll(),
+            'siswas' => $this->siswa->getByRombelIdActive($id),
+        ]);
     }
 
     public function store(Request $request)
     {
-        $data_siswa = [];
-        $index = 0;
-        $nilai = DB::table('nilais')
-            ->join('siswas', 'nilais.siswa_id', '=', 'siswas.id')
-            ->join('mata_pelajarans', 'nilais.mata_pelajaran_id', '=', 'mata_pelajarans.id')
-            ->join('rombel_siswa', 'siswas.id', '=', 'rombel_siswa.siswa_id')
-            ->where('rombel_id', '=', $request->rombel_id)
-            ->where('mata_pelajarans.id', '=', $request->mata_pelajaran_id)
-            ->where('nilais.tipe_ujian', '=', $request->tipe_ujian)
-            ->select('nilais.id', 'siswas.nama', 'nilais.tipe_ujian', 'nilais.nilai', 'mata_pelajarans.nama_mata_pelajaran')
-            ->get();
-        // dd($nilai);
+        $checkSiswa = $this->nilai->get_nilai_with_rombel_id_and_mapel_id_and_tipe_ujian(
+            $request->rombel_id,
+            $request->mata_pelajaran_id,
+            $request->tipe_ujian,
+            $request->semester
+        )->get();
 
-        if (count($nilai) > 0) {
+        if (count($checkSiswa) > 0) {
             return redirect()->back()
-                ->with('error', 'Gagal memasukan data. Data nilai dengan tipa ujian tersebut sudah dimasukan!');
+                ->with('error', 'Nilai dengan semester dan tipe ujian tersebut sudah dimasukan!');
+        }
+        if ($request->siswa_id == null) {
+            return redirect()->back()
+                ->with('error', 'Masukan semua nilai Siswa!');
         }
         if (count($request->siswa_id) != count($request->nilai)) {
             return redirect()->back()
                 ->with('error', 'Masukan semua nilai Siswa!');
         }
-        foreach ($request->siswa_id as $id) {
-            array_push($data_siswa, [
-                'siswa_id' => $id,
-                'nilai' => $request->nilai[$index],
-            ]);
-            $index++;
-        };
-        foreach ($data_siswa as $siswa) {
-            Nilai::create([
-                'siswa_id' => $siswa['siswa_id'],
-                'mata_pelajaran_id' => $request->mata_pelajaran_id,
-                'tipe_ujian' => $request->tipe_ujian,
-                'nilai' => $siswa['nilai'],
-            ]);
-        };
+        $this->nilai->store($request->all());
         return redirect()->route('guru.nilai.show_siswa', ['id' => $request->rombel_id])
             ->with('message', 'Berhasil menambah data nilai');
-
     }
-
+    public function show_update($id, $rombel_id)
+    {
+        $nilai = $this->nilai->getNilaiByParams('id', $id)->first();
+        return view('pages.Guru.nilai.ubah-nilai', [
+            'data' => $nilai,
+            'rombel_id' => $rombel_id,
+        ]);
+    }
     public function update(Request $request, $id)
     {
-        $siswa = Siswa::where('nama', $request->nama_siswa)->select('id')->first();
-        Nilai::where('id', $id)->update([
-            'tipe_ujian' => $request->tipe_ujian,
-            'nilai' => $request->nilai,
-        ]);
-        return redirect()->back()->with('message', 'Berhasil mengubah data nilai');
+        try {
+            $this->nilai->update($request->all(), $id);
+            return redirect()->route('guru.nilai.show_siswa', ['id' => $request->rombel_id])
+                ->with('message', 'Berhasil mengubah data nilai');
+        } catch (QueryException $er) {
+            return redirect()->route('guru.nilai.show_siswa', ['id' => $request->rombel_id])
+                ->with('message', 'Gagal mengubah data nilai');
+        }
     }
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request)
     {
-        Nilai::where('id', $id)->delete();
-        return redirect()->back();
+        try {
+            $this->nilai->destroy($request->all());
+            return redirect()->back()->with('message', 'Berhasil menghapus data nilai');
+        } catch (ValidationException $er) {
+            return redirect()->back()->with('error', $er->getMessage());
+        }
     }
 }

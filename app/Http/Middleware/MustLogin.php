@@ -14,15 +14,17 @@ class MustLogin
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
+
     public function handle(Request $request, Closure $next): Response
     {
         if (
-            Auth::guard('admin')->check() != null ||
-            Auth::guard('siswa')->check() != null ||
-            Auth::guard('guru')->check() != null
+            auth()->guard('admin')->check() != null ||
+            auth()->guard('guru')->check() != null ||
+            auth()->guard('siswa')->check() != null
         ) {
             return $next($request);
         }
-        return redirect('/');
+
+        return redirect()->back();
     }
 }

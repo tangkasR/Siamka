@@ -3,41 +3,52 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ruangan;
+use App\Services\RuanganService;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 class RuanganController extends Controller
 {
+    private $ruangan;
+    public function __construct(RuanganService $ruangan)
+    {
+        $this->ruangan = $ruangan;
+    }
     public function index()
     {
-        $ruangan = Ruangan::select('id', 'nomor_ruangan')->get();
-        return view('pages.admin.ruangan', ['ruangan' => $ruangan]);
+        return view('pages.admin.ruangan', [
+            'ruangan' => $this->ruangan->getAll(),
+        ]);
     }
 
     public function store(Request $request)
     {
-        foreach ($request->nomor_ruangan as $data) {
-            Ruangan::create([
-                'nomor_ruangan' => $data,
-            ]);
-        };
+        try {
+            $this->ruangan->store($request->nomor_ruangan);
+            return redirect()->back()->with('message', 'Berhasil menambah data');
 
-        return back()->with('message', 'Berhasil menambah data');
+        } catch (QueryException $er) {
+            return redirect()->back()->with('error', 'Gagal menambah data');
+        }
     }
     public function update(Request $request, $id)
     {
-        Ruangan::where('id', $id)->update([
-            'nomor_ruangan' => $request->nomor_ruangan,
-        ]);
-        return back()->with('message', 'Berhasil mengubah data');
+        try {
+            $this->ruangan->update($request->all(), $id);
+            return redirect()->back()->with('message', 'Berhasil mengubah data');
+
+        } catch (QueryException $er) {
+            return redirect()->back()->with('error', 'Gagal mengubah data');
+        }
     }
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     {
         try {
-            Ruangan::where('id', $id)->delete();
-        } catch (QueryException $e) {
-            return back()->with('error', 'Data Ruangan digunakan di Jadwal Pelajaran');
+            $this->ruangan->destroy($id);
+            return redirect()->back()->with('message', 'Berhasil menghapus data');
+
+        } catch (QueryException $er) {
+            return redirect()->back()->with('error', 'Gagal menghapus data');
         }
-        return back()->with('message', 'Berhasil menghapus data');
     }
 }

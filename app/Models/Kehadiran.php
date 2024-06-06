@@ -22,6 +22,6 @@ class Kehadiran extends Model
 
     public function siswas()
     {
-        return $this->belongsToMany(Siswa::class)->withPivot('kehadiran', 'keterangan');
+        return $this->belongsToMany(Siswa::class)->withPivot('kehadiran');
     }
 }

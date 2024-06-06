@@ -13,13 +13,29 @@ return new class extends Migration
     {
         Schema::create('siswas', function (Blueprint $table) {
             $table->id();
-            $table->string('nama');
-            $table->string('nik')->unique();
-            $table->date('tanggal_lahir');
-            $table->string('jenis_kelamin');
-            $table->string('email')->unique();
+            $table->string('nis', 20)->unique();
+            $table->string('nisn', 20)->unique();
+            $table->string('nomor_id', 20)->unique();
+            $table->string('nama', 100);
+            $table->string('jenis_kelamin', 5);
+            $table->string('nik', 20);
+            $table->string('tempat_tanggal_lahir', 100);
+            $table->string('alamat', 100);
+            $table->string('no_hp', 30);
+            $table->string('kompetensi_keahlian', 30);
+            $table->string('agama', 20);
+            $table->string('nama_ayah', 100);
+            $table->string('nama_ibu', 100);
+            $table->string('pekerjaan_orang_tua', 100);
+            $table->string('no_hp_orang_tua', 30);
+            $table->string('asal_smp', 100);
+            $table->string('tahun_lulus_smp', 10);
+            $table->string('username', 20)->unique();
+            $table->string('password', 20);
+            $table->string('status_siswa', 20);
+            $table->string('aktivasi_akun', 20);
+            $table->string('profil', 255);
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
             $table->rememberToken();
             $table->timestamps();
         });

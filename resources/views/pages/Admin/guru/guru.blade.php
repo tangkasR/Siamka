@@ -2,14 +2,14 @@
 @section('table-name', 'Guru')
 @section('table-role', 'Admin')
 @section('content')
-    <div class="grid grid-cols-12 gap-6">
+    <div class="grid grid-cols-12 gap-6 bg-white shadow-md">
         <div class="col-span-12">
-            <div class="card dark:bg-zinc-800 dark:border-zinc-600">
+            <div class="card  dark:bg-zinc-800 dark:border-zinc-600">
                 <div class="card-body border-b border-gray-100 dark:border-zinc-600">
-                    <div class="grid grid-cols-3 mt-6 gap-3">
+                    <div class="grid md:grid-cols-3 items-start md:gap-3 gap-5">
                         <div>
                             <label for="file"
-                                class="block mb-3 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
+                                class="block mb-3 text-lg font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
                                 Template Excel Tambah Data
                             </label>
                             <button id="btn-download" type="button"
@@ -21,21 +21,23 @@
                                 <thead>
                                     <tr>
                                         <th>nama</th>
-                                        <th>nomor_induk</th>
-                                        <th>jenis_kelamin</th>
-                                        <th>email</th>
+                                        <th>mapel</th>
+                                        <th>jabatan</th>
+                                        <th>niy</th>
                                         <th>password</th>
-                                        <th>nama_mapel</th>
                                         <th></th>
                                         <th></th>
                                         <th></th>
-                                        <th>List Mata Pelajaran</th>
-                                        <th>Pilih Mapel</th>
+                                        <th></th>
+                                        <th>List Mapel</th>
+                                        <th>Pilih Mapel dari list disebelah</th>
+                                        <th>Pastikan tidak typo</th>
                                         <th></th>
                                         <th></th>
-                                        <th>Pilih Jenis Kelamin</th>
-                                        <th>Laki-Laki</th>
-                                        <th>Perempuan</th>
+                                        <th>Password: tanggal lahir</th>
+                                        <th>Format password</th>
+                                        <th>tanggal bulan tahun</th>
+                                        <th>02022002</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -60,13 +62,11 @@
                         </div>
                         <form action="{{ route('admin.guru.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
-                            <label for="file"
-                                class="block mb-3 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
-                                Tambah Data Guru
-                            </label>
-                            <input type="file" name="file"
-                                class="bg-gray-800/5 border border-gray-100 text-gray-900 dark:text-gray-100 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder-gray-400 dark:placeholder:text-zinc-100/60 focus:ring-0"
-                                required>
+                            <label class="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
+                                for="file">Tambah Data Guru</label>
+                            <input
+                                class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-slate-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                id="file" type="file" name="file" required>
                             <button type="submit" class="mt-3 w-full text-white bg-violet-500 border-transparent btn">
                                 Simpan
                             </button>
@@ -76,48 +76,51 @@
                 <div class="relative overflow-x-auto card-body">
                     <table id="datatable" class="text-center table w-full pt-4 text-gray-700 dark:text-zinc-100">
                         <thead>
-                            <tr>
-                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-50 dark:border-zinc-600">
+                            <tr class="bg-blue-200">
+                                <th class="p-4 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
                                     No</th>
-                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-50 dark:border-zinc-600">
+                                <th class="p-4 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
                                     Nama</th>
-                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-50 dark:border-zinc-600">
-                                    Nomor Induk</th>
-                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-50 dark:border-zinc-600">
-                                    Jenis Kelamin</th>
-                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-50 dark:border-zinc-600">
+                                <th class="p-4 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
                                     Mata Pelajaran</th>
-                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-50 dark:border-zinc-600">
-                                    Email</th>
-                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-50 dark:border-zinc-600">
+                                <th class="p-4 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                    Jabatan</th>
+                                <th class="p-4 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                    Nomor Induk Yayasan</th>
+                                <th class="p-4 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                    Username</th>
+                                <th class="p-4 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
                                     Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($guru as $data)
-                                <tr>
-                                    <td
-                                        class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-50 dark:border-zinc-600">
+                                <tr class="{{ $loop->iteration % 2 == 0 ? 'bg-blue-50' : 'bg-white' }}">
+                                    <td class="p-4 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
                                         {{ $loop->iteration }}</td>
-                                    <td class="p-4 pr-8 border border-t-0 border-l-0 border-gray-50 dark:border-zinc-600">
+                                    <td class="p-4 border border-t-0 border-l-0 border-gray-200 dark:border-zinc-600">
                                         {{ $data->nama }}</td>
-                                    <td class="p-4 pr-8 border border-t-0 border-l-0 border-gray-50 dark:border-zinc-600">
-                                        {{ $data->nomor_induk }}</td>
-                                    <td class="p-4 pr-8 border border-t-0 border-l-0 border-gray-50 dark:border-zinc-600">
-                                        {{ $data->jenis_kelamin }}</td>
-                                    <td class="p-4 pr-8 border border-t-0 border-l-0 border-gray-50 dark:border-zinc-600">
-                                        {{ $data->nama_mata_pelajaran }}</td>
-                                    <td class="p-4 pr-8 border border-t-0 border-l-0 border-gray-50 dark:border-zinc-600">
-                                        {{ $data->email }}</td>
-                                    <td class="p-4 pr-8 border border-t-0 border-l-0 border-gray-50 dark:border-zinc-600">
-                                        <a class="text-white btn mb-3 w-[100px] bg-violet-500 border-violet-500 hover:bg-violet-600 focus:ring ring-violet-50focus:bg-violet-600"
-                                            data-tw-toggle="modal"
-                                            data-tw-target="#modal-id_form_edit_{{ $data->id }}"><i
-                                                class='bx bxs-edit'></i> Ubah</a>
-                                        <a class="text-white btn w-[100px] bg-red-500 border-red-500 hover:bg-red-600 focus:ring ring-violet-50 focus:bg-red-600"
-                                            data-tw-toggle="modal"
-                                            data-tw-target="#modal-id_form_destroy_{{ $data->id }}">
-                                            <i class='bx bx-trash'></i> Hapus</a>
+                                    <td class="p-4 border border-t-0 border-l-0 border-gray-200 dark:border-zinc-600">
+                                        {{ $data->mata_pelajarans->nama_mata_pelajaran }}</td>
+                                    <td class="p-4 border border-t-0 border-l-0 border-gray-200 dark:border-zinc-600">
+                                        {{ $data->jabatan }}</td>
+                                    <td class="p-4 border border-t-0 border-l-0 border-gray-200 dark:border-zinc-600">
+                                        {{ $data->nomor_induk_yayasan }}</td>
+                                    <td class="p-4 border border-t-0 border-l-0 border-gray-200 dark:border-zinc-600">
+                                        {{ $data->username }}</td>
+                                    <td
+                                        class="p-4 border border-t-0 border-l-0 border-gray-200 dark:border-zinc-600 min-w-[250px] w-[250px]">
+                                        <div class="grid grid-cols-2 gap-2">
+                                            <a class="btn-show "
+                                                href="{{ route('admin.guru.detail_guru', ['id' => $data->id]) }}">
+                                                <i class='bx bx-show'></i> Detail</a>
+                                            <a class="btn-edit" data-tw-toggle="modal"
+                                                data-tw-target="#modal-id_form_edit_{{ $data->id }}"><i
+                                                    class='bx bxs-edit'></i> Ubah</a>
+                                            <a class="btn-delete" data-tw-toggle="modal"
+                                                data-tw-target="#modal-id_form_destroy_{{ $data->id }}">
+                                                <i class='bx bx-trash'></i> Hapus</a>
+                                        </div>
                                     </td>
 
                                 </tr>
@@ -148,21 +151,7 @@
                                                             action="{{ route('admin.guru.update', ['id' => $data->id]) }}"
                                                             method="POST">
                                                             @csrf
-                                                            <div>
-                                                                <label for="mata_pelajaran_id"
-                                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
-                                                                    Mata Pelajaran
-                                                                </label>
-                                                                <select name="mata_pelajaran_id"
-                                                                    class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100">
-                                                                    @foreach ($mapel as $item)
-                                                                        <option value="{{ $item->id }}"
-                                                                            {{ $data->nama_mata_pelajaran == $item->nama_mata_pelajaran ? 'selected' : '' }}>
-                                                                            {{ $item->nama_mata_pelajaran }}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
-                                                            <div>
+                                                            <div class="mb-3">
                                                                 <label for="nama"
                                                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
                                                                     Nama
@@ -172,42 +161,52 @@
                                                                     placeholder="Masukan Nama Guru"
                                                                     value="{{ $data->nama }}" required>
                                                             </div>
-                                                            <div>
-                                                                <label for="nomor_induk"
-                                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
-                                                                    Nomor Induk
-                                                                </label>
-                                                                <input type="text" name="nomor_induk" id="nomor_induk"
-                                                                    class="bg-gray-800/5 border border-gray-100 text-gray-900 dark:text-gray-100 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder-gray-400 dark:placeholder:text-zinc-100/60 focus:ring-0"
-                                                                    placeholder="Masukan Nomor Induk Siswa"
-                                                                    value="{{ $data->nomor_induk }}" required>
-                                                            </div>
                                                             <div class="mb-3">
-                                                                <label for="jenis_kelamin"
+                                                                <label for="mata_pelajaran_id"
                                                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
-                                                                    Jenis Kelamin
+                                                                    Mata Pelajaran
                                                                 </label>
-                                                                <select id="jenis_kelamin" name="jenis_kelamin"
+                                                                <select name="mata_pelajaran_id"
                                                                     class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100">
-                                                                    <option value="Laki-Laki"
-                                                                        {{ $data->jenis_kelamin == 'Laki-Laki' ? 'selected' : '' }}>
-                                                                        Laki-Laki</option>
-                                                                    <option value="Perempuan"
-                                                                        {{ $data->jenis_kelamin == 'Perempuan' ? 'selected' : '' }}>
-                                                                        Perempuan</option>
+                                                                    @foreach ($mapel as $item)
+                                                                        <option value="{{ $item->id }}"
+                                                                            {{ $data->mata_pelajarans->nama_mata_pelajaran == $item->nama_mata_pelajaran ? 'selected' : '' }}>
+                                                                            {{ $item->nama_mata_pelajaran }}</option>
+                                                                    @endforeach
                                                                 </select>
                                                             </div>
-                                                            <div>
-                                                                <label for="email"
+                                                            <div class="mb-3">
+                                                                <label for="jabatan"
                                                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
-                                                                    Email
+                                                                    Jabatan
                                                                 </label>
-                                                                <input type="text" name="email" id="email"
+                                                                <input type="text" name="jabatan" id="jabatan"
+                                                                    class="bg-gray-800/5 border border-gray-100 text-gray-900 dark:text-gray-100 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder-gray-400 dark:placeholder:text-zinc-100/60 focus:ring-0"
+                                                                    placeholder="Masukan Nomor Induk Yayasan"
+                                                                    value="{{ $data->jabatan }}" required>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="nomor_induk_yayasan"
+                                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
+                                                                    Nomor Induk Yayasan
+                                                                </label>
+                                                                <input type="text" name="nomor_induk_yayasan"
+                                                                    id="nomor_induk_yayasan"
+                                                                    class="bg-gray-800/5 border border-gray-100 text-gray-900 dark:text-gray-100 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder-gray-400 dark:placeholder:text-zinc-100/60 focus:ring-0"
+                                                                    placeholder="Masukan Nomor Induk Yayasan"
+                                                                    value="{{ $data->nomor_induk_yayasan }}" required>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="username"
+                                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
+                                                                    Username
+                                                                </label>
+                                                                <input type="text" name="username" id="username"
                                                                     class="bg-gray-800/5 border border-gray-100 text-gray-900 dark:text-gray-100 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder-gray-400 dark:placeholder:text-zinc-100/60 focus:ring-0"
                                                                     placeholder="Masukan Email Siswa"
-                                                                    value="{{ $data->email }}" required>
+                                                                    value="{{ $data->username }}" required>
                                                             </div>
-                                                            <div>
+                                                            <div class="mb-3">
                                                                 <label for="password"
                                                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
                                                                     Password
@@ -217,7 +216,7 @@
                                                                     placeholder="Masukan Password Siswa" required>
                                                             </div>
                                                             <button type="submit"
-                                                                class="w-full text-white mt-3 bg-green-600 border-transparent btn">
+                                                                class="w-full text-white mt-3 bg-violet-600 border-transparent btn">
                                                                 Simpan
                                                             </button>
                                                         </form>
@@ -278,57 +277,24 @@
 
     <script>
         document.getElementById('btn-download').addEventListener('click', () => {
-            TableToExcel.convert(document.getElementById("template-input"), {
-                name: `template-input-guru.xlsx`,
-                sheet: {
-                    name: `Sheet template-input-guru`
-                }
-            });
+            const workbook = XLSX.utils.book_new();
+            const tableInputGuru = document.getElementById('template-input');
+            const worksheetGuru = XLSX.utils.table_to_sheet(tableInputGuru);
+            XLSX.utils.book_append_sheet(workbook, worksheetGuru, 'Template Input Guru');
+            XLSX.writeFile(workbook, `template-input-guru.xlsx`);
+
+
         })
     </script>
 
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     @if (session('message'))
         <script>
-            $(document).ready(function() {
-                $.toast({
-                    text: `
-        <div class="py-2 font-bold text-[14px]">
-            {{ Session::get('message') }}
-        </div>
-        `,
-                    showHideTransition: 'slide',
-                    // textColor: 'black',
-                    icon: 'success',
-                    position: 'top-right',
-                    allowToastClose: false,
-                    bgColor: '#00d447',
-                    loaderBg: '#6f00ff',
-                    hideAfter: 3000,
-                })
-            });
+            toast('message', '{{ Session::get('message') }}')
         </script>
     @endif
     @if (session('error'))
         <script>
-            $(document).ready(function() {
-                $.toast({
-                    text: `
-        <div class="py-2 font-bold text-[14px]">
-            {{ Session::get('error') }}
-        </div>
-        `,
-                    showHideTransition: 'slide',
-                    // textColor: 'black',
-                    icon: 'error',
-                    position: 'top-right',
-                    allowToastClose: false,
-                    bgColor: '#fc3b2d',
-                    loaderBg: '#6f00ff',
-                    hideAfter: 6000,
-                })
-            });
+            toast('error', '{{ Session::get('error') }}')
         </script>
     @endif
 @endsection

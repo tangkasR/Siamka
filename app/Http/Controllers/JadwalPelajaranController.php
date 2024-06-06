@@ -2,92 +2,85 @@
 
 namespace App\Http\Controllers;
 
-use App\Imports\JadwalImport;
-use App\Models\JadwalPelajaran;
-use App\Models\MataPelajaran;
-use App\Models\Rombel;
-use App\Models\Ruangan;
-use App\Models\Sesi;
+use App\Services\JadwalPelajaranService;
+use App\Services\MataPelajaranService;
+use App\Services\RombelService;
+use App\Services\RuanganService;
+use App\Services\SesiService;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Maatwebsite\Excel\Facades\Excel;
 
 class JadwalPelajaranController extends Controller
 {
+    private $rombel;
+    private $jadwal;
+    private $ruangan;
+    private $mapel;
+    private $sesi;
+
+    public function __construct(
+        RombelService $rombel,
+        JadwalPelajaranService $jadwal,
+        RuanganService $ruangan,
+        MataPelajaranService $mapel,
+        SesiService $sesi
+    ) {
+        $this->rombel = $rombel;
+        $this->jadwal = $jadwal;
+        $this->ruangan = $ruangan;
+        $this->mapel = $mapel;
+        $this->sesi = $sesi;
+    }
     public function index()
     {
-        $rombel = Rombel::select('id', 'nama_rombel')->get();
         return view('pages.admin.jadwal_pelajaran.index', [
-            'rombel' => $rombel,
+            'rombel' => $this->rombel->getAll(),
         ]);
     }
 
     public function show_jadwal($id)
     {
-        $jadwal_pelajaran = JadwalPelajaran::with('ruangans', 'mata_pelajarans', 'sesis')
-            ->where('rombel_id', $id)
-            ->get();
-
-        $ruangan = Ruangan::select('id', 'nomor_ruangan')->select('id', 'nomor_ruangan')->get();
-        $mapel = MataPelajaran::select('id', 'nama_mata_pelajaran')->select('id', 'nama_mata_pelajaran')->get();
-        $sesi = Sesi::select('id', 'nama_sesi')->select('id', 'nama_sesi')->get();
-        $rombel = Rombel::where('id', $id)->first();
-        $hari = [
-            'senin',
-            'selasa',
-            'rabu',
-            'kamis',
-            'jumat',
-            'sabtu',
-        ];
-        $templates = [];
-        $temp_hari = '';
-        foreach ($hari as $data) {
-            if ($temp_hari != $data) {
-                foreach ($sesi as $item_sesi) {
-                    array_push($templates, [
-                        'hari' => $data,
-                        'sesi' => $item_sesi->nama_sesi,
-                        'rombel' => $rombel->nama_rombel,
-                    ]);
-                }
-            }
-            $temp_hari = $data;
-        }
-        // dd($templates);
-
         return view('pages.admin.jadwal_pelajaran.jadwal_pelajaran', [
-            'jadwal_pelajaran' => $jadwal_pelajaran,
-            'ruangan' => $ruangan,
-            'rombel' => $rombel,
-            'mapel' => $mapel,
-            'sesi' => $sesi,
-            'templates' => $templates,
+            'jadwal_pelajaran' => $this->jadwal->getByRombelId($id),
+            'ruangan' => $this->ruangan->getAll(),
+            'rombel' => $this->rombel->getOne('id',$id),
+            'mapel' => $this->mapel->getAll(),
+            'sesi' => $this->sesi->getAll(),
+            'templates' => $this->jadwal->createTemplate($id),
         ]);
 
     }
 
     public function store(Request $request)
     {
-        Excel::import(new JadwalImport, $request->file);
-        return back()->with('message', 'Berhasil menambah data');
+        if ($request->file == null) {
+            return back()->with('error', 'Masukan file excel');
+        }
+        try {
+            $this->jadwal->store($request->all());
+            return redirect()->back()->with('message', 'Berhasil menambah data');
+
+        } catch (QueryException $er) {
+            return redirect()->back()->with('error', 'Gagal menambah data');
+        }
     }
     public function update(Request $request, $id)
     {
-        // dd($request->all());
-        JadwalPelajaran::where('id', $id)->update([
-            'ruangan_id' => $request->ruangan_id,
-            'mata_pelajaran_id' => $request->mata_pelajaran_id,
-        ]);
-        return back()->with('message', 'Berhasil mengubah data');
+        try {
+            $this->jadwal->update($request->all(), $id);
+            return redirect()->back()->with('message', 'Berhasil mengubah data');
+
+        } catch (QueryException $er) {
+            return redirect()->back()->with('error', 'Gagal mengubah data');
+        }
     }
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     {
         try {
-            JadwalPelajaran::where('rombel_id', $id)->delete();
+            $this->jadwal->destroyAllByRombelId($id);
+            return back()->with('message', 'Berhasil menghapus semua data');
         } catch (QueryException $e) {
             return back()->with('error', 'Gagal menghapus semua data');
         }
-        return back()->with('message', 'Berhasil menghapus semua data');
     }
 }

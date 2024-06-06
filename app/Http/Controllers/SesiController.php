@@ -2,45 +2,53 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Sesi;
+use App\Services\SesiService;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 class SesiController extends Controller
 {
-
+    private $sesi;
+    public function __construct(SesiService $sesi)
+    {
+        $this->sesi = $sesi;
+    }
     public function index()
     {
-        $sesi = Sesi::select('id', 'nama_sesi')->get();
-        return view('pages.admin.sesi', ['sesi' => $sesi]);
+        return view('pages.admin.sesi', [
+            'sesi' => $this->sesi->getAll(),
+        ]);
     }
 
     public function store(Request $request)
     {
+        try {
+            $this->sesi->store($request->nama_sesi);
+            return redirect()->back()->with('message', 'Berhasil menambah data');
 
-        foreach ($request->nama_sesi as $data) {
-            Sesi::create([
-                'nama_sesi' => $data,
-            ]);
-        };
-
-        return back()->with('message', 'Berhasil menambah data');
+        } catch (QueryException $er) {
+            return redirect()->back()->with('error', 'Gagal menambah data');
+        }
     }
 
     public function update(Request $request, $id)
     {
-        Sesi::where('id', $id)->update([
-            'nama_sesi' => $request->nama_sesi,
-        ]);
-        return back()->with('message', 'Berhasil mengubah data');
+        try {
+            $this->sesi->update($request->all(), $id);
+            return redirect()->back()->with('message', 'Berhasil mengubah data');
+
+        } catch (QueryException $er) {
+            return redirect()->back()->with('error', 'Gagal mengubah data');
+        }
     }
     public function destroy(Request $request, $id)
     {
         try {
-            Sesi::where('id', $id)->delete();
-        } catch (QueryException $e) {
-            return back()->with('error', 'Data Sesi telah digunakan di Jadwal Pelajaran');
+            $this->sesi->destroy($id);
+            return redirect()->back()->with('message', 'Berhasil menghapus data');
+
+        } catch (QueryException $er) {
+            return redirect()->back()->with('error', 'Gagal menghapus data');
         }
-        return back()->with('message', 'Berhasil menghapus data');
     }
 }

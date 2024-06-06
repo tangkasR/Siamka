@@ -2,35 +2,43 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\AuthService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
+    private $auth;
+
+    public function __construct(AuthService $auth)
+    {
+        $this->auth = $auth;
+    }
+
     public function index()
     {
         return view('auth.login');
     }
-    public function auth(Request $req)
+    public function login(Request $req)
     {
         $credentials = $req->validate([
-            'email' => ['required', 'email'],
+            'username' => ['required'],
             'password' => ['required'],
         ]);
 
-        if (Auth::guard('admin')->attempt($credentials)) {
+        if ($this->auth->checkLogin('admin', $credentials)) {
             $req->session()->regenerate();
             return redirect()->intended('dashboard');
         }
-        if (Auth::guard('siswa')->attempt($credentials)) {
+        if ($this->auth->checkLogin('siswa', $credentials)) {
             $req->session()->regenerate();
             return redirect()->intended('dashboard');
         }
-        if (Auth::guard('guru')->attempt($credentials)) {
+        if ($this->auth->checkLogin('guru', $credentials)) {
             $req->session()->regenerate();
             return redirect()->intended('dashboard');
         }
+
         Session::flash('status', 'failed');
         Session::flash('message', 'Email atau Password salah!');
         return redirect('/');
@@ -38,7 +46,7 @@ class AuthController extends Controller
 
     public function logout(Request $req)
     {
-        Auth::logout();
+        $this->auth->logout();
         $req->session()->invalidate();
         $req->session()->regenerateToken();
 

@@ -22,7 +22,7 @@
                         <a href="{{ route('admin.ruangan') }}"
                             class="block py-2.5 px-6 text-sm font-medium text-gray-950 transition-all duration-150 ease-linear hover:text-violet-500 dark:text-gray-300 dark:active:text-white dark:hover:text-white">
                             <i class='bx bx-home-alt'></i>
-                            <span data-key="t-dashboard"> Ruangan</span>
+                            <span data-key="t-dashboard"> Ruangan </span>
                         </a>
                     </li>
                     <li>
@@ -67,6 +67,20 @@
                             <span data-key="t-dashboard"> Jadwal Pelajaran</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ route('admin.pengumuman') }}"
+                            class="block py-2.5 px-6 text-sm font-medium text-gray-950 transition-all duration-150 ease-linear hover:text-violet-500 dark:text-gray-300 dark:active:text-white dark:hover:text-white">
+                            <i class='bx bxs-user-voice'></i>
+                            <span data-key="t-dashboard"> Pengumuman </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.siswa.siswa_not_active') }}"
+                            class="block py-2.5 px-6 text-sm font-medium text-gray-950 transition-all duration-150 ease-linear hover:text-violet-500 dark:text-gray-300 dark:active:text-white dark:hover:text-white">
+                            <i class='bx bxs-user'></i>
+                            <span data-key="t-dashboard"> Data Siswa Lulus / Keluar</span>
+                        </a>
+                    </li>
                 @endif
 
                 @if (auth()->guard('guru')->check())
@@ -78,10 +92,44 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('guru.nilai') }}"
+                        <a href="{{ route('guru.ekskul') }}"
                             class="block py-2.5 px-6 text-sm font-medium text-gray-950 transition-all duration-150 ease-linear hover:text-violet-500 dark:text-gray-300 dark:active:text-white dark:hover:text-white">
+                            <i class='bx bx-walk'></i>
+                            <span data-key="t-dashboard"> Ekstrakurikuler</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript: void(0);" aria-expanded="false"
+                            class="block py-2.5 px-6 text-sm font-medium text-gray-950 transition-all duration-150 ease-linear nav-menu hover:text-violet-500 dark:text-gray-300 dark:active:text-white dark:hover:text-white">
                             <i class='bx bxs-report'></i>
-                            <span data-key="t-dashboard"> Nilai</span>
+                            <span data-key="t-charts">Nilai</span>
+                        </a>
+                        <ul class="mm-collapse">
+                            <li>
+                                <a href="{{ route('guru.nilai') }}"
+                                    class="block py-[6.4px] pr-6 text-sm font-medium text-gray-950 transition-all duration-150 ease-linear pl-[52.8px] hover:text-violet-500 dark:text-gray-300 dark:active:text-white dark:hover:text-white">Nilai
+                                    Mata Pelajaran</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('guru.show_ekskul') }}"
+                                    class="block py-[6.4px] pr-6 text-sm font-medium text-gray-950 transition-all duration-150 ease-linear pl-[52.8px] hover:text-violet-500 dark:text-gray-300 dark:active:text-white dark:hover:text-white">Nilai
+                                    Ekstrakurikuler</a>
+                            </li>
+                        </ul>
+
+                    </li>
+                    <li>
+                        <a href="{{ route('pengumuman.show_pengumuman') }}"
+                            class="block py-2.5 px-6 text-sm font-medium text-gray-950 transition-all duration-150 ease-linear hover:text-violet-500 dark:text-gray-300 dark:active:text-white dark:hover:text-white">
+                            <i class='bx bxs-user-voice'></i>
+                            <span data-key="t-dashboard"> Pengumuman</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('guru.kehadiran_guru') }}"
+                            class="block py-2.5 px-6 text-sm font-medium text-gray-950 transition-all duration-150 ease-linear hover:text-violet-500 dark:text-gray-300 dark:active:text-white dark:hover:text-white">
+                            <i class='bx bx-check-double'></i>
+                            <span data-key="t-dashboard"> Absen</span>
                         </a>
                     </li>
                 @endif
@@ -105,6 +153,20 @@
                             class="block py-2.5 px-6 text-sm font-medium text-gray-950 transition-all duration-150 ease-linear hover:text-violet-500 dark:text-gray-300 dark:active:text-white dark:hover:text-white">
                             <i class='bx bxs-report'></i>
                             <span data-key="t-dashboard"> Nilai</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('siswa.ekskul') }}"
+                            class="block py-2.5 px-6 text-sm font-medium text-gray-950 transition-all duration-150 ease-linear hover:text-violet-500 dark:text-gray-300 dark:active:text-white dark:hover:text-white">
+                            <i class='bx bx-walk'></i>
+                            <span data-key="t-dashboard"> Ekstrakurikuler</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('pengumuman.show_pengumuman') }}"
+                            class="block py-2.5 px-6 text-sm font-medium text-gray-950 transition-all duration-150 ease-linear hover:text-violet-500 dark:text-gray-300 dark:active:text-white dark:hover:text-white">
+                            <i class='bx bxs-user-voice'></i>
+                            <span data-key="t-dashboard"> Pengumuman</span>
                         </a>
                     </li>
                 @endif

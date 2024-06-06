@@ -1,42 +1,254 @@
 @extends('layouts.dashboard')
-@section('table-name', '')
-@section('table-role', 'profil')
+@section('table-name', 'Profil')
+@section('table-role', 'Guru')
 @section('content')
-    <div class="max-w-2xl flex items-center h-auto lg:h-screen flex-wrap mx-auto my-32 lg:my-0">
+    <div class="md:max-w-4xl max-w-2xl flex items-center h-auto lg:h-screen flex-wrap mx-auto md:my-32 mt-32 lg:my-0 py-10">
         <!--Main Col-->
         <div id="profile"
-            class="w-full rounded-lg lg:rounded-l-lg lg:rounded-r-none shadow-2xl bg-white mx-6 mt-[40px] lg:mx-0">
+            class="w-full rounded-lg lg:rounded-l-lg lg:rounded-r-none shadow-2xl bg-white md:mt-[40px] lg:mx-0">
             <div class="p-4 md:p-12 lg:text-left">
                 <!-- Image for mobile view-->
-                <div class="block lg:hidden rounded-full shadow-xl mx-auto -mt-[100px] h-48 w-48 bg-cover bg-center"
-                    style="background-image: url('{{ asset('assets/img/profil-default.jpg') }}')"></div>
-                <div class="w-full flex flex-col justify-center items-center mt-10">
-                    <div class="w-fit">
-                        <h1 class="text-3xl font-bold pt-8 lg:pt-0 capitalize">{{ $guru->nama }}</h1>
-                        <div class="mx-auto lg:mx-0 w-full pt-3 border-b-2 border-violet-500 opacity-25"></div>
+                <form action="{{ route('guru.update_profil') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div id="profile-photo-mobile"
+                        class="block  rounded-full shadow-xl mx-auto md:-mt-[120px] -mt-[150px] md:min-w-[300px] md:min-h-[300px] h-[250px] w-[250px]   bg-cover bg-center z-50 border-2 border-slate-600"
+                        style="background-image: url('{{ $guru->profil != '-' ? asset('storage/profil/' . $guru->profil) : asset('assets/img/profil-default.jpg') }}')">
+                        <div class="w-full h-full block">
+                            <input
+                                class="block w-full h-full opacity-0 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-slate-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                id="file" type="file" name="profil" onchange="loadPhoto(this)"
+                                value="{{ $guru->profil }}">
+                            <div
+                                class="absolute md:text-[40px] text-[30px] px-2 pt-1  -mt-16 md:translate-x-5 border-2 bg-slate-200 border-slate-600 rounded-full">
+                                <i class='bx bxs-camera'></i>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="mt-8 max-w-96 mx-auto">
-                    <div class="mb-3 grid grid-cols-2 gap-1">
-                        <p class="text-[18px] font-semibold text-gray-600">Nomor Induk</p>
-                        <p class="text-[14px] text-gray-600 capitalize">{{ $guru->nomor_induk }}</p>
+                    <div class="w-full flex justify-center flex-col items-center md:mt-10 mt-6 ">
+                        <input type="text" value="{{ $guru->nama }}"
+                            class="border-none bg-transparent text-3xl font-medium capitalize text-center outline-none appearance-none focus:ring-0"
+                            disabled>
+                        <div class="mx-auto lg:mx-0 w-1/2 pt-2 border-b-2 border-violet-200 "></div>
                     </div>
-                    <div class="mx-auto lg:mx-0 w-full mb-5 border-b-[1px] border-violet-500 opacity-25"></div>
-                    <div class="mb-3 grid grid-cols-2 gap-1">
-                        <p class="text-[18px] font-semibold text-gray-600">Email</p>
-                        <p class="text-[14px] text-gray-600">{{ $guru->email }}</p>
+                    <div class="mt-8 w-full mx-auto py-6 px-3">
+                        <div class="grid grid-cols-2 gap-5">
+                            <div class="relative z-0 w-full mb-10 ">
+                                <input type="text" id="floating_email"
+                                    class="block py-2.5 px-3 w-full text-[16px] text-gray-900 font-medium bg-transparent border-0 border-b-2 border-violet-200 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                    value="{{ $guru->mata_pelajarans->nama_mata_pelajaran }}" disabled />
+                                <label for="floating_email"
+                                    class="peer-focus:font-medium absolute text-[16px] text-gray-500 font-medium dark:text-gray-400 duration-300 transform -translate-y-7 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-7">
+                                    Mata Pelajaran</label>
+                            </div>
+                            <div class="relative z-0 w-full mb-10">
+                                <input type="text" id="floating_email"
+                                    class="capitalize block py-2.5 px-3 w-full text-[16px] text-gray-900 font-medium bg-transparent border-0 border-b-2 border-violet-200 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                    value="{{ $guru->jabatan }}" disabled />
+                                <label for="floating_email"
+                                    class="peer-focus:font-medium absolute text-[16px] text-gray-500 font-medium dark:text-gray-400 duration-300 transform -translate-y-7 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-7">
+                                    Jabatan</label>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-5">
+                            <div class="relative z-0 w-full mb-10">
+                                <input type="text" id="floating_email"
+                                    class="block py-2.5 px-3 w-full text-[16px] text-gray-900 font-medium bg-transparent border-0 border-b-2 border-violet-200 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                    value="{{ $guru->username }}" disabled />
+                                <label for="floating_email"
+                                    class="peer-focus:font-medium absolute text-[16px] text-gray-500 font-medium dark:text-gray-400 duration-300 transform -translate-y-7 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-7">
+                                    Username</label>
+                            </div>
+                            <div class="relative z-0 w-full mb-10">
+                                <select id="floating_email" name="jenis_kelamin"
+                                    class="block py-2.5 px-3 w-full text-[14px] text-gray-900 font-medium bg-transparent border-0 border-b-2 border-violet-200 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                    required>
+                                    <option value="" hidden>
+                                        Pilih</option>
+                                    <option value="L" {{ $guru->jenis_kelamin == 'L' ? 'selected' : '' }}
+                                        {{ old('jenis_kelamin', $guru->jenis_kelamin) == 'L' ? 'selected' : '' }}>
+                                        Laki-Laki</option>
+                                    <option value="P" {{ $guru->jenis_kelamin == 'P' ? 'selected' : '' }}
+                                        {{ old('jenis_kelamin', $guru->jenis_kelamin) == 'P' ? 'selected' : '' }}>
+                                        Perempuan</option>
+                                </select>
+                                <label for="floating_email"
+                                    class="peer-focus:font-medium absolute text-[16px] text-gray-500 font-medium dark:text-gray-400 duration-300 transform -translate-y-7 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-7">
+                                    Jenis Kelamin</label>
+                            </div>
+                        </div>
+                        <div class="md:grid md:grid-cols-2 md:gap-5 mt-3">
+                            <div class="relative z-0 w-full mb-10" style="background-color: rgba(237, 233, 254, 0.473)">
+                                <input type="text" id="floating_email" name="tempat_tanggal_lahir"
+                                    class="capitalize block py-2.5 px-3 w-full text-[16px] text-gray-900 font-medium bg-transparent border-0 border-b-2 border-violet-200 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-violet-400 peer"
+                                    value="{{ old('tempat_tanggal_lahir', $guru->tempat_tanggal_lahir) }}" />
+                                <label for="floating_email"
+                                    class="peer-focus:font-medium absolute text-[16px] text-gray-500 font-medium dark:text-gray-400 duration-300 transform -translate-y-11 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-11">
+                                    Tempat Tanggal Lahir</label>
+                            </div>
+                            <div class="relative z-0 w-full mb-10" style="background-color: rgba(237, 233, 254, 0.473)">
+                                <input type="text" id="floating_email" name="alamat"
+                                    class="capitalize block py-2.5 px-3 w-full text-[16px] text-gray-900 font-medium bg-transparent border-0 border-b-2 border-violet-200 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-violet-400 peer"
+                                    value="{{ old('alamat', $guru->alamat) }}" />
+                                <label for="floating_email"
+                                    class="peer-focus:font-medium absolute text-[16px] text-gray-500 font-medium dark:text-gray-400 duration-300 transform -translate-y-11 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-11">
+                                    Alamat</label>
+                            </div>
+                        </div>
+                        <div class="md:grid md:grid-cols-2 md:gap-5">
+                            <div class="relative z-0 w-full mb-10" style="background-color: rgba(237, 233, 254, 0.473)">
+                                <input type="text" id="floating_email" name="pendidikan_terakhir"
+                                    class="capitalize block py-2.5 px-3 w-full text-[16px] text-gray-900 font-medium bg-transparent border-0 border-b-2 border-violet-200 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-violet-400 peer"
+                                    value="{{ old('pendidikan_terakhir', $guru->pendidikan_terakhir) }}" />
+                                <label for="floating_email"
+                                    class="peer-focus:font-medium absolute text-[16px] text-gray-500 font-medium dark:text-gray-400 duration-300 transform -translate-y-11 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-11">
+                                    Pendidikan Terakhir</label>
+                            </div>
+                            <div class="relative z-0 w-full mb-10" style="background-color: rgba(237, 233, 254, 0.473)">
+                                <input type="text" id="floating_email" name="no_hp"
+                                    class="capitalize block py-2.5 px-3 w-full text-[16px] text-gray-900 font-medium bg-transparent border-0 border-b-2 border-violet-200 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-violet-400 peer"
+                                    value="{{ old('no_hp', $guru->no_hp) }}" />
+                                <label for="floating_email"
+                                    class="peer-focus:font-medium absolute text-[16px] text-gray-500 font-medium dark:text-gray-400 duration-300 transform -translate-y-11 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-11">
+                                    No Handphone</label>
+                            </div>
+                        </div>
+                        <div class="md:grid md:grid-cols-2 md:gap-5">
+                            <div class="">
+                                <div class="relative z-0 w-full mb-10 col-span-9 pt-5">
+                                    <input
+                                        class=" block w-full  text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-slate-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                        id="file" type="file" name="ktp">
+                                    <label for="floating_email"
+                                        class="peer-focus:font-medium absolute text-[16px] text-gray-500 font-medium dark:text-gray-400 duration-300 transform -translate-y-7 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-7">
+                                        KTP</label>
+                                    <a class="hover:text-blue-600  right-0 peer-focus:font-medium absolute md:text-[20px] text-[16px] cursor-pointer  text-gray-500 font-medium dark:text-gray-400 duration-300 transform md:-translate-y-8 -translate-y-7  scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 md:peer-focus:-translate-y-8 peer-focus:-translate-y-7"
+                                        data-tw-toggle="modal" data-tw-target="#modal_view_ktp">
+                                        <i class='bx bx-show'></i> Lihat File KTP</a>
+                                </div>
+                            </div>
+                            <div class="">
+                                <div class="relative z-0 w-full mb-10 col-span-9 pt-5">
+                                    <input
+                                        class="block w-full  text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-slate-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                        id="file" type="file" name="ijazah">
+                                    <label for="floating_email"
+                                        class="peer-focus:font-medium absolute text-[16px] text-gray-500 font-medium dark:text-gray-400 duration-300 transform -translate-y-7 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-7">
+                                        Ijazah</label>
+                                    <a class=" hover:text-blue-600  right-0 peer-focus:font-medium absolute md:text-[20px] text-[16px] cursor-pointer  text-gray-500 font-medium dark:text-gray-400 duration-300 transform md:-translate-y-8 -translate-y-7  scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 md:peer-focus:-translate-y-8 peer-focus:-translate-y-7"
+                                        data-tw-toggle="modal" data-tw-target="#modal_view_ijazah">
+                                        <i class='bx bx-show'></i> Lihat File Ijazah</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="md:grid md:grid-cols-2 md:gap-5">
+                            <div class="">
+                                <div class="relative z-0 w-full mb-10 col-span-9 pt-5">
+                                    <input
+                                        class="block w-full  text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-slate-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                        id="file" type="file" name="kartu_keluarga">
+                                    <label for="floating_email"
+                                        class="peer-focus:font-medium absolute text-[16px] text-gray-500 font-medium dark:text-gray-400 duration-300 transform -translate-y-7 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-7">
+                                        Kartu Keluarga</label>
+                                    <a class="hover:text-blue-600  right-0 peer-focus:font-medium absolute md:text-[20px] text-[16px] cursor-pointer  text-gray-500 font-medium dark:text-gray-400 duration-300 transform md:-translate-y-8 -translate-y-7  scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 md:peer-focus:-translate-y-8 peer-focus:-translate-y-7"
+                                        data-tw-toggle="modal" data-tw-target="#modal_view_kartu_keluarga">
+                                        <i class='bx bx-show'></i> Lihat File KK</a>
+                                </div>
+                            </div>
+                        </div>
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <script>
+                                            toast('error', '{{ $error }}')
+                                        </script>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                        <input type="text" name="old_profil" value="{{ $guru->profil }}" hidden>
+                        <input type="text" name="old_ktp" value="{{ $guru->ktp }}" hidden>
+                        <input type="text" name="old_ijazah" value="{{ $guru->ijazah }}" hidden>
+                        <input type="text" name="old_kartu_keluarga" value="{{ $guru->kartu_keluarga }}" hidden>
+
+                        <button type="submit" class=" w-full text-white bg-blue-500 border-transparent btn">
+                            Simpan
+                        </button>
                     </div>
-                    <div class="mx-auto lg:mx-0 w-full mb-5 border-b-[1px] border-violet-500 opacity-25"></div>
-                    <div class="mb-3 grid grid-cols-2 gap-1">
-                        <p class="text-[18px] font-semibold text-gray-600">Mata Pelajaran</p>
-                        <p class="text-[14px] text-gray-600 capitalize">{{ $mapel->nama_mata_pelajaran }}</p>
+                </form>
+            </div>
+        </div>
+    </div>
+    {{-- Modal ktp --}}
+    <div class="relative z-50 hidden modal" id="modal_view_ktp" aria-labelledby="modal-title" role="dialog"
+        aria-modal="true">
+        <div class="fixed inset-0 z-50 overflow-y-auto">
+            <div class="absolute inset-0 transition-opacity bg-black bg-opacity-50 modal-overlay">
+            </div>
+            <div class="p-x-6 mx-auto animate-translate md:max-w-4xl w-full ">
+                <div
+                    class="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl dark:bg-zinc-600">
+                    <div class="bg-white dark:bg-zinc-700">
+                        <iframe src="{{ url('storage/ktp/' . $guru->ktp) }}" class="w-full min-h-[90vh]"
+                            frameborder="0"></iframe>
                     </div>
-                    <div class="mx-auto lg:mx-0 w-full mb-5 border-b-[1px] border-violet-500 opacity-25"></div>
                 </div>
             </div>
         </div>
-
-
-
     </div>
+    {{-- End Modal ktp --}}
+    {{-- Modal ijazah --}}
+    <div class="relative z-50 hidden modal" id="modal_view_ijazah" aria-labelledby="modal-title" role="dialog"
+        aria-modal="true">
+        <div class="fixed inset-0 z-50 overflow-y-auto">
+            <div class="absolute inset-0 transition-opacity bg-black bg-opacity-50 modal-overlay">
+            </div>
+            <div class="p-x-6 mx-auto animate-translate md:max-w-4xl w-full ">
+                <div
+                    class="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl dark:bg-zinc-600">
+                    <div class="bg-white dark:bg-zinc-700">
+                        <iframe src="{{ url('storage/ijazah/' . $guru->ijazah) }}" class="w-full min-h-[90vh]"
+                            frameborder="0"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- End Modal ijazah --}}
+    {{-- Modal kartu keluarga --}}
+    <div class="relative z-50 hidden modal" id="modal_view_kartu_keluarga" aria-labelledby="modal-title" role="dialog"
+        aria-modal="true">
+        <div class="fixed inset-0 z-50 overflow-y-auto">
+            <div class="absolute inset-0 transition-opacity bg-black bg-opacity-50 modal-overlay">
+            </div>
+            <div class="p-x-6 mx-auto animate-translate md:max-w-4xl w-full ">
+                <div
+                    class="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl dark:bg-zinc-600">
+                    <div class="bg-white dark:bg-zinc-700">
+                        <iframe src="{{ url('storage/kartu_keluarga/' . $guru->kartu_keluarga) }}"
+                            class="w-full min-h-[90vh]" frameborder="0"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- End Modal kartu keluarga --}}
+    @if (session('message'))
+        <script>
+            toast('message', '{{ Session::get('message') }}')
+        </script>
+    @endif
+    <script>
+        function loadPhoto(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var profilePhotoMobile = document.getElementById('profile-photo-mobile');
+                    profilePhotoMobile.style.backgroundImage = 'url(' + e.target.result + ')';
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
 @endsection

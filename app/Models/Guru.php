@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Ekskul;
+use App\Models\KehadiranGuru;
 use App\Models\MataPelajaran;
 use App\Models\Rombel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,9 +18,18 @@ class Guru extends Authenticatable
     protected $fillable = [
         'mata_pelajaran_id',
         'nama',
-        'nomor_induk',
+        'jabatan',
+        'nomor_induk_yayasan',
         'jenis_kelamin',
-        'email',
+        'tempat_tanggal_lahir',
+        'alamat',
+        'pendidikan_terakhir',
+        'no_hp',
+        'profil',
+        'ktp',
+        'ijazah',
+        'kartu_keluarga',
+        'username',
         'password',
     ];
 
@@ -39,5 +50,13 @@ class Guru extends Authenticatable
     public function rombels()
     {
         return $this->hasOne(Rombel::class);
+    }
+    public function kehadiran_gurus()
+    {
+        return $this->hasMany(KehadiranGuru::class);
+    }
+    public function ekskuls()
+    {
+        return $this->hasMany(Ekskul::class, 'guru_id', 'id');
     }
 }
