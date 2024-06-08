@@ -81,7 +81,7 @@ class GuruService
 
         $ext = $new_file->getClientOriginalExtension();
         $new_file_name = $new_path . '-' . rand(0, 9999999) . '.' . $ext;
-        $new_file->storeAs('public/' . $new_file_name);
+        $new_file->storeAs('app/public/' . $new_file_name);
         return $new_file_name;
     }
 
