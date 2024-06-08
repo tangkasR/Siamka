@@ -84,7 +84,7 @@
                                         {{ $loop->iteration }}</td>
                                     <td class="p-4 border border-t-0 border-l-0 border-gray-200 dark:border-zinc-600">
                                         <div class="block w-[100px] h-[100px] bg-cover bg-center col-span-5 rounded-2xl"
-                                            style="background-image: url('{{ $data->image != '-' ? asset('storage/pengumuman/' . $data->image) : asset('assets/img/attention-default.jpg') }}')">
+                                            style="background-image: url('{{ $data->image != '-' ? asset('storage/' . $data->image) : asset('assets/img/attention-default.jpg') }}')">
 
                                         </div>
 
@@ -147,7 +147,7 @@
                                                                     </label>
                                                                     <div id="profile-photo-mobile_edit_{{ $data->id }}"
                                                                         class=" block w-[200px]  h-[200px] lg:w-[240px] lg:h-[240px] bg-cover bg-center  rounded-2xl"
-                                                                        style="background-image: url('{{ $data->image != '-' ? asset('storage/pengumuman/' . $data->image) : asset('assets/img/attention-default.jpg') }}')">
+                                                                        style="background-image: url('{{ $data->image != '-' ? asset('storage/' . $data->image) : asset('assets/img/attention-default.jpg') }}')">
                                                                         <input
                                                                             class="block w-full  h-full opacity-0 text-sm text-gray-900 border border-gray-300  cursor-pointer bg-slate-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                                                                             id="file" type="file" name="image"

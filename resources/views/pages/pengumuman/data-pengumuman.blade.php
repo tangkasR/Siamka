@@ -3,7 +3,7 @@
         <a href="{{ route('pengumuman.detail', ['id' => $data->id]) }}">
             <div
                 class="p-6 min-h-[420px] max-w-lg border border-violet-300 rounded-2xl hover:shadow-xl hover:shadow-violet-100 flex flex-col justify-start items-start">
-                <img src="{{ $data->image != '-' ? asset('storage/pengumuman/' . $data->image) : asset('assets/img/attention-default.jpg') }}"
+                <img src="{{ $data->image != '-' ? asset('storage/' . $data->image) : asset('assets/img/attention-default.jpg') }}"
                     class="shadow rounded-lg overflow-hidden border">
                 <div class="mt-4 text-left">
                     <h4 class="font-bold text-[25px] line-clamp-2 py-3">{{ $data->judul }}</h4>

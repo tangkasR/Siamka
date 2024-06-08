@@ -46,7 +46,7 @@ class GuruService
         $guru = $this->auth->getUser('guru');
 
         if (isset($datas['profil'])) {
-            $datas['profil'] = $this->handleStoreAs('profil', $datas['profil'], $datas['old_profil']);
+            $datas['profil'] = $this->handleStoreAs('profil-guru', $datas['profil'], $datas['old_profil']);
         } else {
             $datas['profil'] = $datas['old_profil'];
         }
@@ -64,7 +64,7 @@ class GuruService
         }
 
         if (isset($datas['kartu_keluarga'])) {
-            $datas['kartu_keluarga'] = $this->handleStoreAs('kartu_keluarga', $datas['kartu_keluarga'], $datas['old_kartu_keluarga']);
+            $datas['kartu_keluarga'] = $this->handleStoreAs('kk', $datas['kartu_keluarga'], $datas['old_kartu_keluarga']);
         } else {
             $datas['kartu_keluarga'] = $datas['old_kartu_keluarga'];
         }
@@ -74,14 +74,14 @@ class GuruService
 
     private function handleStoreAs($new_path, $new_file, $old_file)
     {
-        $oldPath = storage_path('app/public/' . $new_path . '/' . $old_file);
+        $oldPath = storage_path('app/public/' . $old_file);
         if (file_exists($oldPath)) {
             unlink($oldPath);
         }
 
         $ext = $new_file->getClientOriginalExtension();
         $new_file_name = $new_path . '-' . rand(0, 9999999) . '.' . $ext;
-        $new_file->storeAs('public/' . $new_path, $new_file_name);
+        $new_file->storeAs('public/', $new_file_name);
         return $new_file_name;
     }
 

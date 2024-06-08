@@ -13,7 +13,7 @@
                     @csrf
                     <div id=""
                         class="block  rounded-full shadow-xl mx-auto md:-mt-[120px] -mt-[150px] md:min-w-[300px] md:min-h-[300px] h-[250px] w-[250px]   bg-cover bg-center z-50 border-2 border-slate-600"
-                        style="background-image: url('{{ $guru->profil != '-' ? asset('storage/profil/' . $guru->profil) : asset('assets/img/profil-default.jpg') }}')">
+                        style="background-image: url('{{ $guru->profil != '-' ? asset('storage/' . $guru->profil) : asset('assets/img/profil-default.jpg') }}')">
                     </div>
 
                     <input type="text" name="latitude" id="latitude" hidden>

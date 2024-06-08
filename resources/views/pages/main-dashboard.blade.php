@@ -406,7 +406,7 @@
                                 <a href="{{ route('pengumuman.detail', ['id' => $data->id]) }}">
                                     <div
                                         class="p-6 min-h-[420px] max-w-lg border transition-all border-violet-300 rounded-2xl hover:shadow-2xl hover:shadow-violet-200 flex flex-col justify-start items-start">
-                                        <img src="{{ $data->image != '-' ? asset('storage/pengumuman/' . $data->image) : asset('assets/img/attention-default.jpg') }}"
+                                        <img src="{{ $data->image != '-' ? asset('storage/' . $data->image) : asset('assets/img/attention-default.jpg') }}"
                                             class="shadow rounded-lg overflow-hidden border">
                                         <div class="mt-4">
                                             <h4 class="py-3 font-bold text-[25px] line-clamp-2">{{ $data->judul }}</h4>
@@ -597,7 +597,7 @@
                                 <a href="{{ route('pengumuman.detail', ['id' => $data->id]) }}">
                                     <div
                                         class="p-6 min-h-[420px] max-w-lg border transition-all border-violet-300 rounded-2xl hover:shadow-2xl hover:shadow-violet-200 flex flex-col justify-start items-start">
-                                        <img src="{{ $data->image != '-' ? asset('storage/pengumuman/' . $data->image) : asset('assets/img/attention-default.jpg') }}"
+                                        <img src="{{ $data->image != '-' ? asset('storage/' . $data->image) : asset('assets/img/attention-default.jpg') }}"
                                             class="shadow rounded-lg overflow-hidden border">
                                         <div class="mt-4">
                                             <h4 class="py-3 font-bold text-[25px] line-clamp-2">{{ $data->judul }}</h4>

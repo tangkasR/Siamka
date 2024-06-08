@@ -104,7 +104,7 @@ class SiswaService
         $siswa = $this->auth->getUser('siswa');
 
         if (isset($datas['profil'])) {
-            $datas['profil'] = $this->handleStoreAs('profil', $datas['profil'], $datas['old_profil']);
+            $datas['profil'] = $this->handleStoreAs('profil-siswa', $datas['profil'], $datas['old_profil']);
         } else {
             $datas['profil'] = $datas['old_profil'];
         }
@@ -126,14 +126,14 @@ class SiswaService
     }
     private function handleStoreAs($new_path, $new_file, $old_file)
     {
-        $oldPath = storage_path('app/public/' . $new_path . '/' . $old_file);
+        $oldPath = storage_path('app/public/' . $old_file);
         if (file_exists($oldPath)) {
             unlink($oldPath);
         }
 
         $ext = $new_file->getClientOriginalExtension();
         $new_file_name = $new_path . '-' . rand(0, 9999999) . '.' . $ext;
-        $new_file->storeAs('public/' . $new_path, $new_file_name);
+        $new_file->storeAs('public/', $new_file_name);
         return $new_file_name;
     }
     private function handleLulus($rombel_id)

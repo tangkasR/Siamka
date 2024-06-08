@@ -8,7 +8,7 @@
             <div class="p-4 md:p-12 lg:text-left">
                 <div id="profile-photo-mobile"
                     class="block  rounded-full shadow-xl mx-auto md:-mt-[120px] -mt-[150px] md:min-w-[300px] md:min-h-[300px] h-[250px] w-[250px]   bg-cover bg-center z-50 border-2 border-slate-600"
-                    style="background-image: url('{{ $siswa->profil != '-' ? asset('storage/profil/' . $siswa->profil) : asset('assets/img/profil-default.jpg') }}')">
+                    style="background-image: url('{{ $siswa->profil != '-' ? asset('storage/' . $siswa->profil) : asset('assets/img/profil-default.jpg') }}')">
                 </div>
                 <div class="w-full flex justify-center flex-col items-center md:mt-10 mt-6 ">
                     <input type="text" value="{{ $siswa->nama }}" name="nama"

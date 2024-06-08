@@ -443,7 +443,7 @@ class SiswaController extends Controller
             // dd($siswas);
             if (count($siswas) > 0) {
                 foreach ($siswas as $data) {
-                    $path = storage_path('app/public/profil/' . $data->profil);
+                    $path = storage_path('app/public/' . $data->profil);
                     if (file_exists($path)) {
                         unlink($path);
                     }

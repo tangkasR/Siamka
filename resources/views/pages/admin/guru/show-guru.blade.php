@@ -8,7 +8,7 @@
             <div class="p-4 md:p-12 lg:text-left">
                 <div id="profile-photo-mobile"
                     class="block  rounded-full shadow-xl mx-auto md:-mt-[120px] -mt-[150px] md:min-w-[300px] md:min-h-[300px] h-[200px] w-[200px]   bg-cover bg-center z-50 border-2 border-slate-600"
-                    style="background-image: url('{{ $guru->profil != '-' ? asset('storage/profil/' . $guru->profil) : asset('assets/img/profil-default.jpg') }}')">
+                    style="background-image: url('{{ $guru->profil != '-' ? asset('storage/' . $guru->profil) : asset('assets/img/profil-default.jpg') }}')">
                 </div>
                 <div class="w-full flex justify-center flex-col items-center md:mt-10 mt-6 ">
                     <input type="text" value="{{ $guru->nama }}" name="nama"
@@ -153,7 +153,7 @@
                 <div
                     class="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl dark:bg-zinc-600">
                     <div class="bg-white dark:bg-zinc-700">
-                        <iframe src="{{ url('storage/ktp/' . $guru->ktp) }}" class="w-full min-h-[90vh]"
+                        <iframe src="{{ url('storage/' . $guru->ktp) }}" class="w-full min-h-[90vh]"
                             frameborder="0"></iframe>
                     </div>
                 </div>
@@ -171,7 +171,7 @@
                 <div
                     class="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl dark:bg-zinc-600">
                     <div class="bg-white dark:bg-zinc-700">
-                        <iframe src="{{ url('storage/ijazah/' . $guru->ijazah) }}" class="w-full min-h-[90vh]"
+                        <iframe src="{{ url('storage/' . $guru->ijazah) }}" class="w-full min-h-[90vh]"
                             frameborder="0"></iframe>
                     </div>
                 </div>
@@ -189,7 +189,7 @@
                 <div
                     class="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl dark:bg-zinc-600">
                     <div class="bg-white dark:bg-zinc-700">
-                        <iframe src="{{ url('storage/kartu_keluarga/' . $guru->kartu_keluarga) }}"
+                        <iframe src="{{ url('storage/' . $guru->kartu_keluarga) }}"
                             class="w-full min-h-[90vh]" frameborder="0"></iframe>
                     </div>
                 </div>

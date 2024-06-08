@@ -19,7 +19,7 @@
             <div class=" md:py-6 md:px-24  lg:text-left">
                 <div id="profile-photo-mobile"
                     class="block  rounded-md shadow-lg mx-auto md:min-w-[400px] md:-mt-16 md:min-h-[400px] h-[250px] w-[250px]   bg-cover bg-center z-50 border-[1px] border-slate-600"
-                    style="background-image: url('{{ $pengumuman->image != '-' ? asset('storage/pengumuman/' . $pengumuman->image) : asset('assets/img/attention-default.jpg') }}')">
+                    style="background-image: url('{{ $pengumuman->image != '-' ? asset('storage/' . $pengumuman->image) : asset('assets/img/attention-default.jpg') }}')">
                 </div>
                 <div class="w-full flex justify-center flex-col items-center md:mt-10 mt-6 ">
                 </div>

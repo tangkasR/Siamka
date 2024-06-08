@@ -62,7 +62,7 @@
                                 class="w-full md:max-w-[150px] md:min-w-[150px] flex items-center px-3  py-4 h-[70px] border-x border-gray-50 bg-gray-50/30  dropdown-toggle dark:bg-zinc-700 dark:border-zinc-600 dark:text-gray-100"
                                 id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="true">
-                                <img src="{{ auth()->guard('guru')->user()->profil != '-' ? asset('storage/profil/' . auth()->guard('guru')->user()->profil) : asset('assets/img/profil-default.jpg') }}"
+                                <img src="{{ auth()->guard('guru')->user()->profil != '-' ? asset('storage/' . auth()->guard('guru')->user()->profil) : asset('assets/img/profil-default.jpg') }}"
                                     alt="Logo"
                                     class="inline-block md:w-[70px] md:h-12 w-10 h-10 me-3 rounded-full border border-black">
                                 <div class="truncate">
@@ -97,7 +97,7 @@
                                 class=" w-full md:max-w-[150px] flex items-center px-3 py-4 h-[70px] border-x border-gray-50 bg-gray-50/30  dropdown-toggle dark:bg-zinc-700 dark:border-zinc-600 dark:text-gray-100"
                                 id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="true">
-                                <img src="{{ auth()->guard('siswa')->user()->profil != '-' ? asset('storage/profil/' . auth()->guard('siswa')->user()->profil) : asset('assets/img/profil-default.jpg') }}"
+                                <img src="{{ auth()->guard('siswa')->user()->profil != '-' ? asset('storage/' . auth()->guard('siswa')->user()->profil) : asset('assets/img/profil-default.jpg') }}"
                                     alt="Logo"
                                     class="inline-block  md:w-[70px] md:h-12 w-10 h-10 me-3 rounded-full border border-black">
                                 <div class="truncate">

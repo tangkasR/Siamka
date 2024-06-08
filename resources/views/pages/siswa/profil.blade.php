@@ -12,7 +12,7 @@
                     @csrf
                     <div id="profile-photo-mobile"
                         class="block  rounded-full shadow-xl mx-auto md:-mt-[120px] -mt-[150px] md:min-w-[300px] md:min-h-[300px] h-[250px] w-[250px]   bg-cover bg-center z-50 border-2 border-slate-600"
-                        style="background-image: url('{{ $siswa->profil != '-' ? asset('storage/profil/' . $siswa->profil) : asset('assets/img/profil-default.jpg') }}')">
+                        style="background-image: url('{{ $siswa->profil != '-' ? asset('storage/' . $siswa->profil) : asset('assets/img/profil-default.jpg') }}')">
                         <div class="w-full h-full block">
                             <input
                                 class="block w-full h-full opacity-0 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-slate-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
