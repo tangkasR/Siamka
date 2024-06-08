@@ -37,6 +37,8 @@ class JadwalImport implements ToCollection, WithHeadingRow
                     'sesi_id' => $id_sesi->id,
                     'hari' => $hari,
                 ]);
+            } else {
+                return redirect()->back();
             }
         }
         // dd($hari);
