@@ -149,7 +149,7 @@
     {{-- year picker --}}
     <link rel="stylesheet" href="{{ asset('assets/year_picker/yearpicker.css') }}">
     <script src="{{ asset('assets/year_picker/yearpicker.js') }}"></script>
-    @laravelPWA
+
 
 </head>
 

@@ -99,7 +99,7 @@
             }
         }
     </style>
-    @laravelPWA
+  
     @vite('resources/css/app.css')
 
     <script>
