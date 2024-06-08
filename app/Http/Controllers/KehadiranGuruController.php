@@ -33,7 +33,7 @@ class KehadiranGuruController extends Controller
         $tahun = $this->date->getDate()->year;
         if ($request->ajax()) {
             $tahun = $request->tahun;
-            return view('pages.Guru.data_kehadiran', [
+            return view('pages.guru.data_kehadiran', [
                 'guru' => $guru,
                 'tanggal' => $this->date->getDate()->format('d-m-Y'),
                 'bulan' => $this->date->getDate()->month,
@@ -42,7 +42,7 @@ class KehadiranGuruController extends Controller
                 'years' => $this->kehadiran_guru->getYear(),
             ]);
         }
-        return view('pages.Guru.kehadiran', [
+        return view('pages.guru.kehadiran', [
             'guru' => $guru,
             'tanggal' => $this->date->getDate()->format('d-m-Y'),
             'bulan' => $this->date->getDate()->month,

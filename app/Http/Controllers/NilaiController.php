@@ -102,7 +102,7 @@ class NilaiController extends Controller
     public function show_update($id, $rombel_id)
     {
         $nilai = $this->nilai->getNilaiByParams('id', $id)->first();
-        return view('pages.Guru.nilai.ubah-nilai', [
+        return view('pages.guru.nilai.ubah-nilai', [
             'data' => $nilai,
             'rombel_id' => $rombel_id,
         ]);

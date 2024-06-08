@@ -82,7 +82,7 @@ class KehadiranController extends Controller
     public function show_update($id, $siswa_id)
     {
         $siswa = $this->siswa->getById($siswa_id);
-        return view('pages.Guru.kehadiran.ubah-kehadiran', [
+        return view('pages.guru.kehadiran.ubah-kehadiran', [
             'siswa' => $siswa,
             'rombel_id' => $siswa->rombels->last()->id,
             'kehadiran' => $this->kehadiran->getById($id),

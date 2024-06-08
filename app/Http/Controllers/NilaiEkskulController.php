@@ -26,14 +26,14 @@ class NilaiEkskulController extends Controller
     public function index()
     {
         $guru = $this->auth->getUser('guru');
-        return view('pages.Guru.ekskul.nilai.index', [
+        return view('pages.guru.ekskul.nilai.index', [
             'ekskuls' => $this->ekskul->getAll($guru->id),
         ]);
     }
     public function nilai($id)
     {
         $ekskul = $this->ekskul->getById($id);
-        return view('pages.Guru.ekskul.nilai.nilai', [
+        return view('pages.guru.ekskul.nilai.nilai', [
             'nilais' => $this->nilai_ekskul->getAll($id),
             'ekskul' => $ekskul,
             'siswas' => $this->ekskul->getMemberList($id),
@@ -46,7 +46,7 @@ class NilaiEkskulController extends Controller
         if ($ekskul->status == 'tidak aktif') {
             return redirect()->back()->with('error', 'Status ekskul tidak aktif! Silahkan aktivasi ekskul terlebih dahulu di menu Ekskul!');
         }
-        return view('pages.Guru.ekskul.nilai.tambah_nilai', [
+        return view('pages.guru.ekskul.nilai.tambah_nilai', [
             'siswas' => $this->ekskul->getMemberList($id),
             'ekskul' => $ekskul,
         ]);

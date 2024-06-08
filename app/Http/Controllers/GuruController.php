@@ -40,7 +40,7 @@ class GuruController extends Controller
     public function detail_guru($id)
     {
         // dd($this->guru->getById($id));
-        return view('pages.Admin.guru.show-guru', [
+        return view('pages.admin.guru.show-guru', [
             'guru' => $this->guru->getById($id),
         ]);
     }
@@ -106,7 +106,7 @@ class GuruController extends Controller
         $tahun = $this->date->getDate()->year;
         if ($request->ajax()) {
             $tahun = $request->tahun;
-            return view('pages.Admin.guru.data-kehadiran', [
+            return view('pages.admin.guru.data-kehadiran', [
                 'guru' => $guru,
                 'tanggal' => $this->date->getDate()->format('d-m-Y'),
                 'bulan' => $this->date->getDate()->month,
@@ -115,7 +115,7 @@ class GuruController extends Controller
                 'years' => $this->kehadiran_guru->getYear(),
             ]);
         }
-        return view('pages.Admin.guru.rekap-kehadiran', [
+        return view('pages.admin.guru.rekap-kehadiran', [
             'guru' => $guru,
             'tanggal' => $this->date->getDate()->format('d-m-Y'),
             'bulan' => $this->date->getDate()->month,

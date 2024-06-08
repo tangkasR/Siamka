@@ -74,7 +74,7 @@ class SiswaController extends Controller
     }
     public function detail_siswa($id)
     {
-        return view('pages.Admin.siswa.show-siswa', [
+        return view('pages.admin.siswa.show-siswa', [
             'siswa' => $this->siswa->getById($id),
         ]);
     }
@@ -295,7 +295,7 @@ class SiswaController extends Controller
     }
     public function tambah_aktivasi($rombel_id)
     {
-        return view('pages.Admin.siswa.aktivasi', [
+        return view('pages.admin.siswa.aktivasi', [
             'siswas' => $this->siswa->getByRombelIdNotActiveAccount($rombel_id),
             'rombel' => $this->rombel->getOne('id', $rombel_id),
         ]);
@@ -374,7 +374,7 @@ class SiswaController extends Controller
         if ($request->ajax()) {
             if ($request->tahun) {
                 $tahun = $request->tahun;
-                return view('pages.Admin.siswa.data-kehadiran', [
+                return view('pages.admin.siswa.data-kehadiran', [
                     'bulan' => $bulan,
                     'kehadirans' => $this->kehadiran->getMonthlyAttendance($siswa->id, $tahun),
                     'siswa' => $siswa,
@@ -385,7 +385,7 @@ class SiswaController extends Controller
                 ]);
             }
         }
-        return view('pages.Admin.siswa.rekap-kehadiran', [
+        return view('pages.admin.siswa.rekap-kehadiran', [
             'bulan' => $bulan,
             'kehadirans' => $this->kehadiran->getMonthlyAttendance($siswa->id, $tahun),
             'siswa' => $siswa,
@@ -420,7 +420,7 @@ class SiswaController extends Controller
         }
 
         $siswa = $this->siswa->getById($id);
-        return view('pages.Admin.siswa.rekap-nilai', [
+        return view('pages.admin.siswa.rekap-nilai', [
             'semesters' => $semesters,
             'formattedData' => $formattedData,
             'siswa' => $siswa,
@@ -431,7 +431,7 @@ class SiswaController extends Controller
     }
     public function siswa_not_active()
     {
-        return view('pages.Admin.siswa.not_active', [
+        return view('pages.admin.siswa.not_active', [
             'siswas' => $this->siswa->getNotActive(),
             'tanggal' => $this->date->getDate()->format('d-m-Y'),
         ]);
@@ -469,7 +469,7 @@ class SiswaController extends Controller
     public function show_ekskul()
     {
         $siswa = $this->auth->getUser('siswa');
-        return view('pages.Siswa.ekskul', [
+        return view('pages.siswa.ekskul', [
             'ekskuls' => $this->siswa->getById($siswa->id)->ekskuls,
         ]);
     }

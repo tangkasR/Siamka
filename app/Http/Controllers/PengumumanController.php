@@ -18,13 +18,13 @@ class PengumumanController extends Controller
     }
     public function index()
     {
-        return view('pages.Admin.pengumuman.pengumuman', [
+        return view('pages.admin.pengumuman.pengumuman', [
             'pengumumans' => $this->pengumuman->getAll(),
         ]);
     }
     public function detail($id)
     {
-        return view('pages.Admin.pengumuman.detail_pengumuman', [
+        return view('pages.admin.pengumuman.detail_pengumuman', [
             'pengumuman' => $this->pengumuman->getById($id),
             'auth' => auth(),
         ]);

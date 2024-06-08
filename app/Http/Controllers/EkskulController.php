@@ -69,7 +69,7 @@ class EkskulController extends Controller
 
     public function daftar_anggota($id)
     {
-        return view('pages.Guru.ekskul.anggota.index', [
+        return view('pages.guru.ekskul.anggota.index', [
             'id' => $id,
             'siswas' => $this->ekskul->getMemberList($id),
             'ekskul' => $this->ekskul->getById($id),
@@ -81,14 +81,14 @@ class EkskulController extends Controller
         if ($checkStatus->status == 'tidak aktif') {
             return redirect()->back()->with('error', 'Status ekskul tidak aktif');
         }
-        return view('pages.Guru.ekskul.anggota.list_rombel', [
+        return view('pages.guru.ekskul.anggota.list_rombel', [
             'rombels' => $this->rombel->getAll(),
             'id' => $id,
         ]);
     }
     public function show_siswa($id, $rombel_id)
     {
-        return view('pages.Guru.ekskul.anggota.tambah', [
+        return view('pages.guru.ekskul.anggota.tambah', [
             'siswas' => $this->ekskul->getSiswaNonMember($rombel_id, $id),
             'id' => $id,
             'rombel' => $this->rombel->getOne('id', $rombel_id),
