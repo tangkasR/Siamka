@@ -19,3 +19,8 @@ jobs:
           server: ${{ secrets.FTP_SERVER_MAIN }}
           username: ${{ secrets.FTP_USERNAME_MAIN }}
           password: ${{ secrets.FTP_PASSWORD_MAIN }}
+          log-level: verbose           # Enable detailed logging
+          server-dir: /remote-dir      # Specify the remote directory (update if necessary)
+          local-dir: ./local-dir       # Specify the local directory (update if necessary)
+          keep-alive: true             # Enable keep-alive functionality
+          keep-alive-interval: 300     # Send keep-alive messages every 300 seconds (5 minutes)
