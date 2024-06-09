@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Services\AuthService;
 use App\Services\DateService;
-use App\Services\KehadiranService;
 use App\Services\KehadiranGuruService;
+use App\Services\KehadiranService;
+use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 class KehadiranGuruController extends Controller
@@ -29,8 +29,10 @@ class KehadiranGuruController extends Controller
     }
     public function index(Request $request)
     {
+        $latlong = $this->kehadiran_guru->setLatLongSekolah();
         $guru = $this->auth->getUser('guru');
         $tahun = $this->date->getDate()->year;
+
         if ($request->ajax()) {
             $tahun = $request->tahun;
             return view('pages.guru.data_kehadiran', [
@@ -40,6 +42,7 @@ class KehadiranGuruController extends Controller
                 'tahun' => $this->date->getDate()->year,
                 'rekaps' => $this->kehadiran_guru->rekapKehadiranGuru($guru->id, $tahun),
                 'years' => $this->kehadiran_guru->getYear(),
+                'latlong' => $latlong,
             ]);
         }
         return view('pages.guru.kehadiran', [
@@ -49,6 +52,7 @@ class KehadiranGuruController extends Controller
             'tahun' => $this->date->getDate()->year,
             'rekaps' => $this->kehadiran_guru->rekapKehadiranGuru($guru->id, $tahun),
             'years' => $this->kehadiran_guru->getYear(),
+            'latlong' => $latlong,
         ]);
     }
     public function getData(Request $request)

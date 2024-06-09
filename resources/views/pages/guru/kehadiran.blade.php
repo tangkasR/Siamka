@@ -14,6 +14,8 @@
                     @csrf
                     <input type="text" name="latitude" id="latitude">
                     <input type="text" name="longitude" id="longitude">
+                    <input type="text" id="latitude_sekolah" value="{{ $latlong['latitude'] }}">
+                    <input type="text" id="longitude_sekolah" value="{{ $latlong['longitude'] }}">
                     <input type="text" name="guru_id" value="{{ $guru->id }}" id="guru_id" hidden>
                     <input type="text" name="" value="{{ $bulan }}" id="bulan" hidden>
                     <input type="text" name="" value="{{ $tahun }}" id="tahun" hidden>
@@ -179,6 +181,8 @@
     <script>
         let latitude = document.getElementById('latitude');
         let longitude = document.getElementById('longitude');
+        let latitude_sekolah = document.getElementById('latitude_sekolah').value;
+        let longitude_sekolah = document.getElementById('longitude_sekolah').value;
         let map
         if (navigator.geolocation) {
             navigator.geolocation.watchPosition(successCallBack, errorCallBack, {
@@ -201,7 +205,7 @@
             }).addTo(map);
             let marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
 
-            let circle = L.circle([position.coords.latitude, position.coords.longitude], {
+            let circle = L.circle([latitude_sekolah, longitude_sekolah], {
                 color: 'red',
                 fillColor: '#f03',
                 fillOpacity: 0.5,
