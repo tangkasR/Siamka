@@ -220,6 +220,12 @@
             let marker = L.marker([position.coords.latitude, position.coords.longitude], {
                 icon: icon_user
             }).addTo(map);
+            map.removeLayer(marker);
+            marker = L.marker([position.coords.latitude, position.coords.longitude], {
+                icon: icon_user
+            }).addTo(map);
+
+
             let marker_sekolah = L.marker([latitude_sekolah, longitude_sekolah], {
                 icon: icon_sekolah
             }).addTo(map);
