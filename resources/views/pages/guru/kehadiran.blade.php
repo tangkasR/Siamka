@@ -196,6 +196,12 @@
             iconAnchor: [16, 32], // Titik referensi ikon (center bottom)
             popupAnchor: [0, -32] // Titik referensi popup (center top)
         });
+        let icon_user = L.icon({
+            iconUrl: `{{ asset('/assets/img/mark-user.png') }}`, // Ganti dengan path ikon khusus Anda
+            iconSize: [22, 28], // Ukuran ikon (width, height)
+            iconAnchor: [16, 32], // Titik referensi ikon (center bottom)
+            popupAnchor: [0, -32] // Titik referensi popup (center top)
+        });
 
         // geolocation
         if (navigator.geolocation) {
@@ -211,7 +217,9 @@
             longitude.value = position.coords.longitude;
             console.log(position.coords)
 
-            let marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
+            let marker = L.marker([position.coords.latitude, position.coords.longitude], {
+                icon: icon_user
+            }).addTo(map);
             let marker_sekolah = L.marker([latitude_sekolah, longitude_sekolah], {
                 icon: icon_sekolah
             }).addTo(map);
