@@ -220,7 +220,9 @@
             let marker = L.marker([position.coords.latitude, position.coords.longitude], {
                 icon: icon_user
             }).addTo(map);
-            let marker_sekolah = L.marker([latitude_sekolah, longitude_sekolah]).addTo(map);
+            let marker_sekolah = L.marker([latitude_sekolah, longitude_sekolah], {
+                icon: icon_sekolah
+            }).addTo(map);
             let circle = L.circle([latitude_sekolah, longitude_sekolah], {
                 color: '#fc4e4e',
                 fillOpacity: 0.1,
