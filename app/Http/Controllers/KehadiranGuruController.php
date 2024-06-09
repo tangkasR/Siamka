@@ -33,6 +33,8 @@ class KehadiranGuruController extends Controller
         $guru = $this->auth->getUser('guru');
         $tahun = $this->date->getDate()->year;
 
+        session()->flash('error', 'Tolong lakukan absensi di handphone!');
+
         if ($request->ajax()) {
             $tahun = $request->tahun;
             return view('pages.guru.data_kehadiran', [
