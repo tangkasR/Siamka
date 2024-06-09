@@ -8,7 +8,7 @@
             <div class="p-4 md:p-12 lg:text-left">
                 <!-- Image for mobile view-->
                 <div>
-                    <div id="map" style="height: 500px"></div>
+                    <div id="map" class="z-10" style="height: 500px"></div>
                 </div>
                 <form action="{{ route('guru.kehadiran_guru.store') }}" method="POST">
                     @csrf
