@@ -19,7 +19,7 @@
                     <input type="text" name="guru_id" value="{{ $guru->id }}" id="guru_id" hidden>
                     <input type="text" name="" value="{{ $bulan }}" id="bulan" hidden>
                     <input type="text" name="" value="{{ $tahun }}" id="tahun" hidden>
-                    <div class="mt-14 mb-6 ">
+                    <div class="my-6 ">
                         <p class="mb-4 text-gray-800 text-[18px] font-medium">Selamat datang <span
                                 class="font-semibold text-violet-600 text-[20px] capitalize">{{ $guru->nama }}</span>
                             di fitur
