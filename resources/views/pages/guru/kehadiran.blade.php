@@ -2,20 +2,20 @@
 @section('table-name', 'Absensi')
 @section('table-role', 'Guru')
 @section('content')
-    <div class="max-w-xl flex items-center h-auto lg:h-screen flex-wrap mx-auto md:my-32 mt-32 lg:my-0 py-10 bg-slate-50">
+    <div class="max-w-xl flex items-center h-auto lg:h-screen flex-wrap mx-auto  lg:my-0 md:py-10 bg-slate-50">
         <!--Main Col-->
-        <div class="w-full rounded-lg lg:rounded-l-lg lg:rounded-r-none md:shadow-lg  md:mt-[40px] lg:mx-0 bg-white">
+        <div class="w-full rounded-lg lg:rounded-l-lg lg:rounded-r-none md:shadow-lg   lg:mx-0 bg-white">
             <div class="p-4 md:p-12 lg:text-left">
                 <!-- Image for mobile view-->
                 <div>
-                    <div id="map" class="z-10" style="height: 500px"></div>
+                    <div id="map" class="z-10"></div>
                 </div>
                 <form action="{{ route('guru.kehadiran_guru.store') }}" method="POST">
                     @csrf
-                    <input type="text" name="latitude" id="latitude">
-                    <input type="text" name="longitude" id="longitude">
-                    <input type="text" id="latitude_sekolah" value="{{ $latlong['latitude'] }}">
-                    <input type="text" id="longitude_sekolah" value="{{ $latlong['longitude'] }}">
+                    <input type="text" name="latitude" id="latitude" hidden>
+                    <input type="text" name="longitude" id="longitude" hidden>
+                    <input type="text" id="latitude_sekolah" value="{{ $latlong['latitude'] }}" hidden>
+                    <input type="text" id="longitude_sekolah" value="{{ $latlong['longitude'] }}" hidden>
                     <input type="text" name="guru_id" value="{{ $guru->id }}" id="guru_id" hidden>
                     <input type="text" name="" value="{{ $bulan }}" id="bulan" hidden>
                     <input type="text" name="" value="{{ $tahun }}" id="tahun" hidden>
@@ -174,16 +174,30 @@
         </script>
     @endif
 
-
-    {{-- leaflet --}}
-    <script></script>
-
-    <script>
+    <script type="module">
         let latitude = document.getElementById('latitude');
         let longitude = document.getElementById('longitude');
+
+        // leaflet
         let latitude_sekolah = document.getElementById('latitude_sekolah').value;
         let longitude_sekolah = document.getElementById('longitude_sekolah').value;
-        let map
+        let map = L.map('map').setView([latitude_sekolah, longitude_sekolah], 16);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        // Pastikan peta meresize dengan benar
+        setTimeout(() => {
+            map.invalidateSize();
+        }, 1000);
+        // icon leaflet
+        let icon_sekolah = L.icon({
+            iconUrl: `{{ asset('/assets/img/default-school.png') }}`, // Ganti dengan path ikon khusus Anda
+            iconSize: [32, 32], // Ukuran ikon (width, height)
+            iconAnchor: [16, 32], // Titik referensi ikon (center bottom)
+            popupAnchor: [0, -32] // Titik referensi popup (center top)
+        });
+
+        // geolocation
         if (navigator.geolocation) {
             navigator.geolocation.watchPosition(successCallBack, errorCallBack, {
                 enableHighAccuracy: true,
@@ -197,18 +211,13 @@
             longitude.value = position.coords.longitude;
             console.log(position.coords)
 
-
-            map = L.map("map").setView([position.coords.latitude, position.coords.longitude], 16);
-            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-                maxZoom: 19,
-                attribution: '&copy; <a href="">JelajahJogja</a>'
-            }).addTo(map);
             let marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
-
+            let marker_sekolah = L.marker([latitude_sekolah, longitude_sekolah], {
+                icon: icon_sekolah
+            }).addTo(map);
             let circle = L.circle([latitude_sekolah, longitude_sekolah], {
-                color: 'red',
-                fillColor: '#f03',
-                fillOpacity: 0.5,
+                color: '#fc4e4e',
+                fillOpacity: 0.1,
                 radius: 100
             }).addTo(map);
         }

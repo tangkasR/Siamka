@@ -134,6 +134,13 @@
             width: 8px !important;
             height: 8px !important;
         }
+
+        #map {
+            height: 200px;
+            width: 100%;
+            max-width: none;
+            max-height: none
+        }
     </style>
     <script src="{{ asset('assets/jquery/jquery.js') }}"></script>
     <script src="{{ asset('assets/toast/toast.js') }}"></script>
@@ -149,18 +156,6 @@
     {{-- year picker --}}
     <link rel="stylesheet" href="{{ asset('assets/year_picker/yearpicker.css') }}">
     <script src="{{ asset('assets/year_picker/yearpicker.js') }}"></script>
-
-    {{-- leaflet --}}
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-    <!-- Make sure you put this AFTER Leaflet's CSS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-
-    {{-- leaflet geocoder --}}
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
-    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-
 </head>
 
 <body data-mode="light" data-sidebar-size="lg" class="group">
