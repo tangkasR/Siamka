@@ -39,7 +39,7 @@ class KehadiranGuruService
     public function store($datas)
     {
         $distance = round($this->distance($datas));
-        if ($distance > 40) {
+        if ($distance > 60) {
             throw ValidationException::withMessages(['error' => 'Anda diluar lingkungan sekolah, dan berada dijarak ' . $distance . ' m']);
         }
 
