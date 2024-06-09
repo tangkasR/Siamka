@@ -2,22 +2,18 @@
 @section('table-name', 'Absensi')
 @section('table-role', 'Guru')
 @section('content')
-
     <div class="max-w-xl flex items-center h-auto lg:h-screen flex-wrap mx-auto md:my-32 mt-32 lg:my-0 py-10 bg-slate-50">
         <!--Main Col-->
-
         <div class="w-full rounded-lg lg:rounded-l-lg lg:rounded-r-none md:shadow-lg  md:mt-[40px] lg:mx-0 bg-white">
             <div class="p-4 md:p-12 lg:text-left">
                 <!-- Image for mobile view-->
+                <div>
+                    <div id="map" style="height: 500px"></div>
+                </div>
                 <form action="{{ route('guru.kehadiran_guru.store') }}" method="POST">
                     @csrf
-                    <div id=""
-                        class="block  rounded-full shadow-xl mx-auto md:-mt-[120px] -mt-[150px] md:min-w-[300px] md:min-h-[300px] h-[250px] w-[250px]   bg-cover bg-center z-50 border-2 border-slate-600"
-                        style="background-image: url('{{ $guru->profil != '-' ? asset('storage/' . $guru->profil) : asset('assets/img/profil-default.jpg') }}')">
-                    </div>
-
-                    <input type="text" name="latitude" id="latitude" hidden>
-                    <input type="text" name="longitude" id="longitude" hidden>
+                    <input type="text" name="latitude" id="latitude">
+                    <input type="text" name="longitude" id="longitude">
                     <input type="text" name="guru_id" value="{{ $guru->id }}" id="guru_id" hidden>
                     <input type="text" name="" value="{{ $bulan }}" id="bulan" hidden>
                     <input type="text" name="" value="{{ $tahun }}" id="tahun" hidden>
@@ -177,10 +173,13 @@
     @endif
 
 
+    {{-- leaflet --}}
+    <script></script>
+
     <script>
         let latitude = document.getElementById('latitude');
         let longitude = document.getElementById('longitude');
-
+        let map
         if (navigator.geolocation) {
             navigator.geolocation.watchPosition(successCallBack, errorCallBack, {
                 enableHighAccuracy: true,
@@ -192,6 +191,22 @@
         function successCallBack(position) {
             latitude.value = position.coords.latitude;
             longitude.value = position.coords.longitude;
+            console.log(position.coords)
+
+
+            map = L.map("map").setView([position.coords.latitude, position.coords.longitude], 16);
+            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                maxZoom: 19,
+                attribution: '&copy; <a href="">JelajahJogja</a>'
+            }).addTo(map);
+            let marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
+
+            let circle = L.circle([position.coords.latitude, position.coords.longitude], {
+                color: 'red',
+                fillColor: '#f03',
+                fillOpacity: 0.5,
+                radius: 100
+            }).addTo(map);
         }
 
         function errorCallBack(error) {
