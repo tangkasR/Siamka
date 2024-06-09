@@ -163,6 +163,9 @@
             </div>
         </div>
     </div>
+    <script>
+        toast('error', 'Tolong melakukan absensi dihandphone!')
+    </script>
     @if (session('message'))
         <script>
             toast('message', '{{ Session::get('message') }}')
