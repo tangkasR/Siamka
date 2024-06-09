@@ -182,6 +182,10 @@
         let latitude_sekolah = document.getElementById('latitude_sekolah').value;
         let longitude_sekolah = document.getElementById('longitude_sekolah').value;
         let map = L.map('map').setView([latitude_sekolah, longitude_sekolah], 16);
+        let userMarker = null; // Variabel untuk menyimpan marker pengguna
+        let schoolMarker = null; // Variabel untuk menyimpan marker sekolah
+        let schoolCircle = null; // Variabel untuk menyimpan circle sekolah
+
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
@@ -215,21 +219,32 @@
         function successCallBack(position) {
             latitude.value = position.coords.latitude;
             longitude.value = position.coords.longitude;
-            console.log(position.coords)
+            console.log(position.coords);
 
-            let marker = L.marker([position.coords.latitude, position.coords.longitude], {
+            // Hapus marker pengguna jika sudah ada
+            if (userMarker) {
+                map.removeLayer(userMarker);
+            }
+
+            // Tambahkan marker baru pengguna
+            userMarker = L.marker([position.coords.latitude, position.coords.longitude], {
                 icon: icon_user
             }).addTo(map);
-            map.removeLayer(marker);
-            marker = L.marker([position.coords.latitude, position.coords.longitude], {
-                icon: icon_user
-            }).addTo(map);
 
+            // Hapus marker sekolah dan circle jika sudah ada
+            if (schoolMarker) {
+                map.removeLayer(schoolMarker);
+            }
+            if (schoolCircle) {
+                map.removeLayer(schoolCircle);
+            }
 
-            let marker_sekolah = L.marker([latitude_sekolah, longitude_sekolah], {
+            // Tambahkan marker dan circle baru untuk sekolah
+            schoolMarker = L.marker([latitude_sekolah, longitude_sekolah], {
                 icon: icon_sekolah
             }).addTo(map);
-            let circle = L.circle([latitude_sekolah, longitude_sekolah], {
+
+            schoolCircle = L.circle([latitude_sekolah, longitude_sekolah], {
                 color: '#fc4e4e',
                 fillOpacity: 0.1,
                 radius: 100
@@ -237,7 +252,7 @@
         }
 
         function errorCallBack(error) {
-            alert('Error obtaining location: ' + error.message);
+            console.error(`Error(${error.code}): ${error.message}`);
         }
     </script>
 
