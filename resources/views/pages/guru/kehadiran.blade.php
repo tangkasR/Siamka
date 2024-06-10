@@ -250,7 +250,7 @@
             schoolCircle = L.circle([latitude_sekolah, longitude_sekolah], {
                 color: '#fc4e4e',
                 fillOpacity: 0.1,
-                radius: 60
+                radius: 100
             }).addTo(map);
         }
 
