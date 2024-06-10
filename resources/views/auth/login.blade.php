@@ -70,13 +70,6 @@
             animation: change 10s infinite ease-in-out;
         }
 
-
-        .Section_top {
-            animation: none;
-            background-image: url(asset('assets/bg-login/bg-login-1.jpg'));
-        }
-
-
         @keyframes change {
             0% {
                 background-image: url({{ asset('assets/bg-login/bg-login-1.jpg') }});
