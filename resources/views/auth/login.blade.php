@@ -70,12 +70,12 @@
             animation: change 10s infinite ease-in-out;
         }
 
-        @media only screen and (max-width: 600px) {
-            .Section_top {
-                animation: none;
-                background-image: url(asset('assets/bg-login/bg-login-1.jpg'));
-            }
+
+        .Section_top {
+            animation: none;
+            background-image: url(asset('assets/bg-login/bg-login-1.jpg'));
         }
+
 
         @keyframes change {
             0% {
@@ -99,7 +99,7 @@
             }
         }
     </style>
-  
+
     @vite('resources/css/app.css')
 
     <script>
