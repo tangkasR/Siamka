@@ -6,8 +6,9 @@
         <div class="col-span-12">
             <div class="card dark:bg-zinc-800 dark:border-zinc-600">
                 <div class="card-body border-b border-gray-100 dark:border-zinc-600">
-                    <h5 class="text-slate-800 text-[20px] mb-3 leading-10 font-medium">Daftar Siswa Rombel <span
+                    <h5 class="text-slate-800 text-[20px] leading-10 font-medium m-0">Daftar Siswa Rombel <span
                             class="text-violet-800 font-bold">{{ $rombel->nama_rombel }}</span></h5>
+                    <p class="text-slate-800 text-[16px] mb-3 leading-10 font-medium">{{ $tanggal }}</p>
 
                     <div class="grid md:grid-cols-12 mt-6 gap-3">
                         <div class="md:mb-0 mb-3 md:col-span-4">

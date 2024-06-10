@@ -70,6 +70,7 @@ class SiswaController extends Controller
             'rombels' => $this->rombel->getAll(),
             'admin' => $this->auth->getUser('admin')->username,
             'tahun_pembelajaran' => $tahun_pembelajaran,
+            'tanggal' => $this->date->getDate()->format('d-m-Y'),
         ]);
     }
     public function detail_siswa($id)

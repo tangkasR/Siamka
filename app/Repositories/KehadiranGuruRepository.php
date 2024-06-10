@@ -54,8 +54,8 @@ class KehadiranGuruRepository implements KehadiranGuruInterface
 
         // benar
         return $lokasi = [
-            'latitude' => -7.768509545633629,
-            'longitude' => 110.41372473676195,
+            'latitude' => -7.779299903666246,
+            'longitude' => 110.4161371429074,
         ];
 
     }
