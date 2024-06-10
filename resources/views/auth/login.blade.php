@@ -70,6 +70,12 @@
             animation: change 10s infinite ease-in-out;
         }
 
+        @media only screen and (max-width: 600px) {
+            .Section_top {
+                animation: none;
+            }
+        }
+
         @keyframes change {
             0% {
                 background-image: url({{ asset('assets/bg-login/bg-login-1.jpg') }});
@@ -110,18 +116,20 @@
     <div class="min-h-[100vh] flex justify-center items-center" id="loader">
         <img src="{{ asset('loader.gif') }}" class="w-[300px]" alt="">
     </div>
-    <div class="Section_top  items-center justify-center min-h-screen w-full hidden" id="container">
-        <div class="relative py-3 sm:max-w-xl sm:mx-auto ">
-            <div
-                class="absolute inset-0 bg-gradient-to-r from-blue-300 to-blue-600 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl">
+    <div class="items-center justify-center min-h-screen w-full hidden md:p-0 p-6 bg-gradient-to-r from-blue-500 to-blue-100 md:bg-none Section_top"
+        id="container">
+        <div class="relative py-3 sm:max-w-xl sm:mx-auto">
+            <div class="absolute inset-0 bg-gradient-to-r from-blue-300 to-blue-600 shadow-lg transform -skew-y-12 sm:skew-y-0 sm:-rotate-6 rotate-0 sm:rounded-3xl rounded-md"
+                id="bg-blue">
             </div>
-            <div class="relative py-10 px-14 bg-white shadow-lg sm:rounded-3xl ">
+            <div class="relative md:py-10 md:px-14 p-6 bg-white shadow-lg sm:rounded-3xl rounded-md">
                 <div class="max-w-md mx-auto">
 
                     <form class="" action="login" method="POST">
                         @csrf
                         <div class="mb-2 w-full flex justify-center items-center flex-col">
-                            <img src="{{ asset('assets/img/logo.png') }}" alt="Logo" class="mb-4 max-w-[150px]">
+                            <img src="{{ asset('assets/img/logo.png') }}" alt="Logo"
+                                class="mb-4 md:max-w-[150px] max-w-[100px]">
                             <h3 class="text-[30px] font-bold text-gray-700 text-center">SMK KARTEK 2 JATILAWANG</h3>
                         </div>
                         <div class="mb-4 text-center">
