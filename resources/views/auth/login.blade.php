@@ -70,7 +70,7 @@
             animation: change 10s infinite ease-in-out;
         }
 
-        @media only screen and (max-width: 600px) {
+        @media only screen and (max-width: 639px) {
             .Section_top {
                 animation: none;
             }
@@ -116,8 +116,11 @@
     <div class="min-h-[100vh] flex justify-center items-center" id="loader">
         <img src="{{ asset('loader.gif') }}" class="w-[300px]" alt="">
     </div>
-    <div class="items-center justify-center min-h-screen w-full hidden md:p-0 p-6 bg-gradient-to-r from-blue-500 to-blue-100 md:bg-none Section_top"
+    <div class="items-center justify-center min-h-screen w-full hidden md:p-0 p-6 relative Section_top overflow-hidden"
         id="container">
+        <div
+            class="bg-gradient-to-r from-blue-500 to-blue-100 md:bg-none sm:hidden absolute -rotate-45 w-[1000px] min-h-[150vh]">
+        </div>
         <div class="relative py-3 sm:max-w-xl sm:mx-auto">
             <div class="absolute inset-0 bg-gradient-to-r from-blue-300 to-blue-600 shadow-lg transform -skew-y-12 sm:skew-y-0 sm:-rotate-6 rotate-0 sm:rounded-3xl rounded-md"
                 id="bg-blue">
