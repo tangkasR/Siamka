@@ -130,7 +130,8 @@
                         <div class="mb-2 w-full flex justify-center items-center flex-col">
                             <img src="{{ asset('assets/img/logo.png') }}" alt="Logo"
                                 class="mb-4 md:max-w-[150px] max-w-[100px]">
-                            <h3 class="text-[30px] font-bold text-gray-700 text-center">SMK KARTEK 2 JATILAWANG</h3>
+                            <h3 class="md:text-[30px] text-[24px] font-bold text-gray-700 text-center">SMK KARTEK 2
+                                JATILAWANG</h3>
                         </div>
                         <div class="mb-4 text-center">
                             <h3 class="text-[18px] font-semibold text-gray-500">Sistem Informasi Akademik Siswa</h3>
