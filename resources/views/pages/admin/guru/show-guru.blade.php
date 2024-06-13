@@ -36,9 +36,14 @@
                     </div>
                     <div class="md:grid md:grid-cols-2 md:gap-5">
                         <div class="relative z-0 w-full mb-10 ">
-                            <input type="text" id="floating_email"
-                                class="block py-2.5 px-0 w-full text-[14px] text-gray-900 font-medium bg-transparent border-0 border-b-2 border-violet-200 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                value="{{ $guru->mata_pelajarans->nama_mata_pelajaran }}" disabled />
+                            <div
+                                class="grid grid-cols-12 capitalize   w-full text-[16px] text-gray-900 font-medium bg-transparent border-0 border-b-2 border-violet-200 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer">
+                                @foreach ($guru->mapels as $mapel)
+                                    <input type="text" id="" name=""
+                                        class="bg-transparent border-0 col-span-6 appearance-none py-2.5 px-3 ring-0 mt-[1px]"
+                                        value="{{ $mapel->nama_mata_pelajaran }}" disabled />
+                                @endforeach
+                            </div>
                             <label for="floating_email"
                                 class="peer-focus:font-medium absolute text-[16px] text-gray-500 font-medium dark:text-gray-400 duration-300 transform -translate-y-7 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-7">
                                 Mata Pelajaran</label>
@@ -189,8 +194,8 @@
                 <div
                     class="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl dark:bg-zinc-600">
                     <div class="bg-white dark:bg-zinc-700">
-                        <iframe src="{{ url('storage/' . $guru->kartu_keluarga) }}"
-                            class="w-full min-h-[90vh]" frameborder="0"></iframe>
+                        <iframe src="{{ url('storage/' . $guru->kartu_keluarga) }}" class="w-full min-h-[90vh]"
+                            frameborder="0"></iframe>
                     </div>
                 </div>
             </div>

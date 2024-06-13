@@ -6,7 +6,9 @@
         <div class="col-span-12">
             <div class="card dark:bg-zinc-800 dark:border-zinc-600">
                 <div class="px-[30px] pt-[20px]">
-                    <h1 class="text-[20px] font-semibold text-gray-700">Daftar Rombongan Belajar</h1>
+                    <h1 class="text-[18px] font-medium text-gray-700 leading-5">Silahkan pilih rombongan belajar untuk
+                        melihat data
+                        siswa</h1>
                 </div>
                 <hr class="text-[2px] my-[20px] text-black w-full" />
                 <div class="relative overflow-x-auto card-body mb-[50px] h-[100%]">
@@ -132,8 +134,7 @@
     <!-- Initialize Swiper -->
     <script type="module">
         var swiper = new Swiper(".mySwiper1", {
-            initialSlide: 1,
-            centeredSlides: true,
+            centeredSlides: false,
             grabCursor: true,
             pagination: {
                 el: ".swiper-pagination1",
@@ -152,7 +153,7 @@
         });
         var swiper = new Swiper(".mySwiper2", {
             initialSlide: 1,
-            centeredSlides: true,
+            centeredSlides: false,
             grabCursor: true,
             pagination: {
                 el: ".swiper-pagination2",
@@ -171,7 +172,7 @@
         });
         var swiper = new Swiper(".mySwiper3", {
             initialSlide: 1,
-            centeredSlides: true,
+            centeredSlides: false,
             grabCursor: true,
             pagination: {
                 el: ".swiper-pagination3",

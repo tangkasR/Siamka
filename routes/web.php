@@ -43,6 +43,11 @@ Route::group(['middleware' => ["must-login"]], function () {
         Route::get('/show_pengumuman', 'show_pengumuman')->name('show_pengumuman');
         Route::get('/detail/{id}', 'detail')->name('detail');
     });
+    Route::controller(GuruController::class)->prefix('guru')->name('guru.')->group(function () {
+        Route::post('/download_ktp', 'download_ktp')->name('download_ktp');
+        Route::post('/download_kk', 'download_kk')->name('download_kk');
+        Route::post('/download_ijazah', 'download_ijazah')->name('download_ijazah');
+    });
     Route::group(['middleware' => ["admin"]], function () {
         // profil
         Route::controller(AdminController::class)->prefix('admin')->name('admin.')->group(function () {
@@ -66,8 +71,9 @@ Route::group(['middleware' => ["must-login"]], function () {
             Route::get('/siswa/deaktivasi/{id}', 'deaktivasi')->name('siswa.deaktivasi');
             Route::get('/siswa/rekap_nilai/{id}', 'rekap_nilai')->name('siswa.rekap_nilai');
             Route::get('/siswa/rekap_kehadiran/{id}', 'rekap_kehadiran')->name('siswa.rekap_kehadiran');
-            Route::get('/siswa/siswa_not_active', 'siswa_not_active')->name('siswa.siswa_not_active');
-            Route::get('/siswa/clear_data', 'clear_data')->name('siswa.clear_data');
+            Route::get('/siswa/siswa_not_active', 'siswa_not_active_index')->name('siswa.siswa_not_active');
+            Route::get('/siswa/not_active/{angkatan}', 'siswa_not_active')->name('siswa.not_active');
+            Route::get('/siswa/clear_data/{angkatan}', 'clear_data')->name('siswa.clear_data');
         });
 
         // guru
@@ -127,6 +133,7 @@ Route::group(['middleware' => ["must-login"]], function () {
             Route::post('/jadwal_pelajaran', 'store')->name('jadwal_pelajaran.store');
             Route::post('/jadwal_pelajaran/update/{id}', 'update')->name('jadwal_pelajaran.update');
             Route::get('/jadwal_pelajaran/destroy/{id}', 'destroy')->name('jadwal_pelajaran.destroy');
+            Route::get('/jadwal_pelajaran/get-mapels/{guru_id}', 'getMapelsByGuru')->name('jadwal_pelajaran.get-mapels');
         });
 
     });
@@ -149,7 +156,6 @@ Route::group(['middleware' => ["must-login"]], function () {
         Route::controller(KehadiranController::class)->prefix('guru')->name('guru.')->group(function () {
             Route::get('/kehadiran', 'index')->name('kehadiran');
             Route::get('/kehadiran/filter', 'filter')->name('kehadiran.filter');
-            Route::get('/kehadiran/daftar_siswa/{id}', 'show_siswa')->name('kehadiran.show_siswa');
             Route::get('/kehadiran/show_input/{id}', 'show_input')->name('kehadiran.show_input');
             Route::post('/kehadiran/save', 'store')->name('kehadiran.store');
             Route::post('/kehadiran/update/{id}', 'update')->name('kehadiran.update');
@@ -184,7 +190,10 @@ Route::group(['middleware' => ["must-login"]], function () {
         // profil
         Route::controller(GuruController::class)->prefix('guru')->name('guru.')->group(function () {
             Route::get('/profil', 'profil')->name('profil');
+            Route::get('/tambah_rombel', 'tambah_rombel')->name('tambah_rombel');
             Route::post('/update_profil', 'update_profil')->name('update_profil');
+            Route::post('/store_rombel', 'store_rombel')->name('store_rombel');
+
         });
 
         // absensi guru

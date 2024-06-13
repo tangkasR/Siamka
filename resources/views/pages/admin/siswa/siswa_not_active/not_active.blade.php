@@ -15,7 +15,7 @@
                         </div>
                         <div class="md:mt-0 mt-3 ">
                             <div class="px-6 py-4  shadow-md border border-red-100 rounded-md">
-                                <p class="mb-3 text-sm font-medium">Hapus data siswa yang lebih dari 5 tahun lalu
+                                <p class="mb-3 text-sm font-medium">Hapus data siswa diangkatan {{ $angkatan }}
                                 </p>
                                 <a class="btn-delete
                                     text-center" data-tw-toggle="modal"
@@ -46,10 +46,7 @@
                                 <th class="p-4  border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
                                     Status Akun</th>
                                 <th class="p-4  border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
-                                    Tahun Ajaran
-                                </th>
-                                <th class="p-4  border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
-                                    Tanggal Lulus
+                                    Tanggal Lulus / Keluar
                                 </th>
                                 <th class="p-4  border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
                                     Aksi</th>
@@ -77,12 +74,10 @@
                                     <td class="p-4  border border-t-0 border-l-0 border-gray-200 dark:border-zinc-600">
                                         {{ $data->aktivasi_akun }}</td>
                                     <td class="p-4  border border-t-0 border-l-0 border-gray-200 dark:border-zinc-600">
-                                        {{ $data->tahun_awal }}/{{ $data->tahun_akhir }}</td>
-                                    <td class="p-4  border border-t-0 border-l-0 border-gray-200 dark:border-zinc-600">
                                         {{ $data->updated_at }}</td>
                                     <td
-                                        class="p-4 min-w-[300px] border border-t-0 border-l-0 border-gray-200 dark:border-zinc-600 ">
-                                        <div class="grid grid-cols-1 gap-3  w-full">
+                                        class="p-4 min-w-[150px] w-[150px] border border-t-0 border-l-0 border-gray-200 dark:border-zinc-600 ">
+                                        <div class="min-w-[150px]  w-full">
                                             <a class="btn-show "
                                                 href="{{ route('admin.siswa.detail_siswa', ['id' => $data->id]) }}">
                                                 <i class='bx bx-show'></i> Detail Siswa</a>
@@ -119,10 +114,11 @@
                         <div class="p-5">
                             <h3 class="mb-4 text-xl font-medium text-gray-700 dark:text-gray-100">
                                 Apakah anda ingin
-                                menghapus semua data siswa yang sudah lebih dari 5 tahun lalu dari tahun
-                                <span class="text-red-600 font-bold">{{ explode('-', $tanggal)[2] }}!</span>
+                                menghapus semua data siswa di angkatan
+                                <span class="text-red-600 font-bold">{{ $angkatan }}!</span>
                             </h3>
-                            <form class="space-y-4" action="{{ route('admin.siswa.clear_data') }}" method="GET">
+                            <form class="space-y-4"
+                                action="{{ route('admin.siswa.clear_data', ['angkatan' => $angkatan]) }}" method="GET">
                                 @csrf
                                 <button type="submit" class="w-full text-white bg-red-600 border-transparent btn">
                                     Hapus

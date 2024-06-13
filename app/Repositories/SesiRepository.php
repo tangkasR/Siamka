@@ -17,6 +17,10 @@ class SesiRepository implements SesiInterface
     {
         return $this->sesi->select('id', 'nama_sesi')->get();
     }
+    public function getById($nama)
+    {
+        return $this->sesi->where('nama_sesi', $nama)->first();
+    }
     public function store($data)
     {
         return $this->sesi->create([

@@ -16,7 +16,7 @@ class JadwalPelajaranRepository implements JadwalPelajaranInterface
     }
     public function getByRombelId($id)
     {
-        return $this->jadwal->with('ruangans', 'mata_pelajarans', 'sesis')->where('rombel_id', $id)->get();
+        return $this->jadwal->with('ruangans', 'sesis', 'gurus')->where('rombel_id', $id)->get();
     }
     public function store($data)
     {
@@ -26,7 +26,8 @@ class JadwalPelajaranRepository implements JadwalPelajaranInterface
     {
         return $this->jadwal->where('id', $id)->update([
             'ruangan_id' => $data['ruangan_id'],
-            'mata_pelajaran_id' => $data['mata_pelajaran_id'],
+            'guru_id' => $data['guru_id'],
+            'nama_mata_pelajaran' => $data['nama_mata_pelajaran'],
         ]);
     }
     public function destroyAllByRombelId($id)

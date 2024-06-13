@@ -5,8 +5,15 @@
     <div class="grid grid-cols-12 gap-6 bg-white shadow-md">
         <div class="col-span-12">
             <div class="card dark:bg-zinc-800 dark:border-zinc-600">
-                <div class="px-[30px] pt-[20px]">
-                    <h1 class="text-[20px] font-semibold text-gray-700">Daftar Rombongan Belajar</h1>
+                <div class="px-[30px] pt-[20px] flex justify-between items-center flex-wrap">
+                    <h1 class="text-[18px] font-medium text-gray-800 leading-4 md:mb-0 mb-4">Pilih Rombel Untuk Memasukan
+                        Nilai</h1>
+                    <div>
+                        <a href="{{ route('guru.tambah_rombel') }}"
+                            class="w-full min-w-[300px] bg-gray-500 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-md">
+                            Tambah Data Rombel
+                        </a>
+                    </div>
                 </div>
                 <hr class="text-[2px] my-[20px] text-black w-full" />
                 <div class="relative overflow-x-auto card-body mb-[50px] h-[100%]">
@@ -18,7 +25,7 @@
                                     @if (explode(' ', $data->nama_rombel)[0] == 'X')
                                         <div class="swiper-slide">
                                             <div
-                                                class="card dark:bg-zinc-800 dark:border-zinc-600   bg-blue-50 border-blue-300 border-2 hover:border-violet-300  hover:border-2 hover:shadow-lg hover:shadow-violet-300 transition-all">
+                                                class=" card dark:bg-zinc-800 dark:border-zinc-600   bg-blue-50 border-blue-300 border-2 hover:border-violet-300  hover:border-2 hover:shadow-lg hover:shadow-violet-300 transition-all">
                                                 <div class="card-body  ">
                                                     <i class='mb-6 bx bxs-calendar text-[30px] text-gray-600'></i>
                                                     <h6
@@ -55,7 +62,7 @@
                                     @if (explode(' ', $data->nama_rombel)[0] == 'XI')
                                         <div class="swiper-slide">
                                             <div
-                                                class="card dark:bg-zinc-800 dark:border-zinc-600   bg-blue-50 border-blue-300 border-2 hover:border-violet-300  hover:border-2 hover:shadow-lg hover:shadow-violet-300 transition-all">
+                                                class=" card dark:bg-zinc-800 dark:border-zinc-600   bg-blue-50 border-blue-300 border-2 hover:border-violet-300  hover:border-2 hover:shadow-lg hover:shadow-violet-300 transition-all">
                                                 <div class="card-body  ">
                                                     <i class='mb-6 bx bxs-calendar text-[30px] text-gray-600'></i>
                                                     <h6
@@ -80,7 +87,7 @@
                             </div>
                         </div>
                         <div class="mt-3 mx-auto">
-                            <div class="swiper-pagination2"></div>
+                            <div class="swiper-pagination2 "></div>
                         </div>
                     </div>
                     {{-- End Data Kelas XI --}}
@@ -92,7 +99,7 @@
                                     @if (explode(' ', $data->nama_rombel)[0] == 'XII')
                                         <div class="swiper-slide">
                                             <div
-                                                class="card dark:bg-zinc-800 dark:border-zinc-600   bg-blue-50 border-blue-300 border-2 hover:border-violet-300  hover:border-2 hover:shadow-lg hover:shadow-violet-300 transition-all">
+                                                class=" card dark:bg-zinc-800 dark:border-zinc-600   bg-blue-50 border-blue-300 border-2 hover:border-violet-300  hover:border-2 hover:shadow-lg hover:shadow-violet-300 transition-all">
                                                 <div class="card-body  ">
                                                     <i class='mb-6 bx bxs-calendar text-[30px] text-gray-600'></i>
                                                     <h6
@@ -117,24 +124,17 @@
                             </div>
                         </div>
                         <div class="mt-3 mx-auto">
-                            <div class="swiper-pagination3"></div>
+                            <div class="swiper-pagination3 "></div>
                         </div>
                     </div>
                     {{-- End Data Kelas XII --}}
-
-
                 </div>
             </div>
         </div>
     </div>
-
-
-
-    <!-- Initialize Swiper -->
     <script type="module">
         var swiper = new Swiper(".mySwiper1", {
-            initialSlide: 1,
-            centeredSlides: true,
+            centeredSlides: false,
             grabCursor: true,
             pagination: {
                 el: ".swiper-pagination1",
@@ -152,8 +152,7 @@
             },
         });
         var swiper = new Swiper(".mySwiper2", {
-            initialSlide: 1,
-            centeredSlides: true,
+            centeredSlides: false,
             grabCursor: true,
             pagination: {
                 el: ".swiper-pagination2",
@@ -171,8 +170,7 @@
             },
         });
         var swiper = new Swiper(".mySwiper3", {
-            initialSlide: 1,
-            centeredSlides: true,
+            centeredSlides: false,
             grabCursor: true,
             pagination: {
                 el: ".swiper-pagination3",

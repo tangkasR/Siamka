@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Guru;
+use App\Models\JadwalPelajaran;
 use App\Models\MataPelajaran;
 use App\Models\Rombel;
 use App\Models\Ruangan;
@@ -15,9 +17,10 @@ class JadwalPelajaran extends Model
     protected $fillable = [
         'ruangan_id',
         'rombel_id',
-        'mata_pelajaran_id',
+        'guru_id',
         'sesi_id',
         'hari',
+        'nama_mata_pelajaran',
     ];
     public function ruangans()
     {
@@ -34,5 +37,9 @@ class JadwalPelajaran extends Model
     public function sesis()
     {
         return $this->belongsTo(Sesi::class, 'sesi_id', 'id');
+    }
+    public function gurus()
+    {
+        return $this->belongsTo(Guru::class, 'guru_id', 'id');
     }
 }

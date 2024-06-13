@@ -4,14 +4,20 @@ namespace App\Repositories;
 
 use App\Interfaces\RombelInterface;
 use App\Models\Rombel;
+use App\Services\DateService;
+use App\Services\SesiService;
 use Illuminate\Support\Facades\DB;
 
 class RombelRepository implements RombelInterface
 {
     private $rombel;
-    public function __construct(Rombel $rombel)
+    private $sesi;
+    private $data;
+    public function __construct(Rombel $rombel, SesiService $sesi, DateService $date)
     {
         $this->rombel = $rombel;
+        $this->sesi = $sesi;
+        $this->date = $date;
     }
 
     public function getAll()
@@ -25,6 +31,53 @@ class RombelRepository implements RombelInterface
     public function getOne($condition, $params)
     {
         return $this->rombel->where($condition, $params)->with('siswas')->first();
+    }
+    private function translateDayToIndonesian($englishDay)
+    {
+        $days = [
+            'Sunday' => 'minggu',
+            'Monday' => 'senin',
+            'Tuesday' => 'selasa',
+            'Wednesday' => 'rabu',
+            'Thursday' => 'kamis',
+            'Friday' => 'jumat',
+            'Saturday' => 'sabtu',
+        ];
+
+        return $days[$englishDay] ?? $englishDay;
+    }
+    public function getByGuruIdSesiSatu($guru_id)
+    {
+        $sesi = $this->sesi->getByNama('07:00-09:00');
+        return DB::table('rombels')
+            ->join('jadwal_pelajarans', 'rombels.id', '=', 'jadwal_pelajarans.rombel_id')
+            ->join('gurus', 'jadwal_pelajarans.guru_id', '=', 'gurus.id')
+            ->where('jadwal_pelajarans.sesi_id', $sesi->id)
+            ->where('jadwal_pelajarans.hari', $this->translateDayToIndonesian($this->date->getDate()->format('l')))
+            ->where('jadwal_pelajarans.guru_id', $guru_id)
+            ->select('rombels.id', 'rombels.nama_rombel')
+            ->orderBy('nama_rombel')
+            ->first();
+    }
+    public function rombelWithoutGuru($id)
+    {
+        return DB::table('rombels')
+            ->leftJoin('guru_rombel', function ($join) use ($id) {
+                $join->on('rombels.id', '=', 'guru_rombel.rombel_id')
+                    ->where('guru_rombel.guru_id', '=', $id);
+            })
+            ->whereNull('guru_rombel.guru_id')
+            ->select('rombels.*')
+            ->get();
+    }
+    public function getByGuruId($id)
+    {
+        return DB::table('rombels')
+            ->leftJoin('guru_rombel', 'rombels.id', '=', 'guru_rombel.rombel_id')
+            ->where('guru_rombel.guru_id', $id)
+            ->select('rombels.*')
+            ->orderBy('rombels.nama_rombel')
+            ->get();
     }
     public function getBySiswaId($id)
     {

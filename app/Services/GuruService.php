@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Interfaces\GuruInterface;
 use App\Services\AuthService;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Storage;
 
 class GuruService
 {
@@ -78,11 +80,19 @@ class GuruService
         if (file_exists($oldPath)) {
             unlink($oldPath);
         }
-
         $ext = $new_file->getClientOriginalExtension();
         $new_file_name = $new_path . '-' . rand(0, 9999999) . '.' . $ext;
+        if ($new_path == 'ktp' || $new_path == 'ijazah' || $new_path == 'kk') {
+            $imageContent = file_get_contents($new_file->getRealPath());
+            $encryptedImage = Crypt::encrypt($imageContent);
+
+            // Menyimpan gambar terenkripsi
+            $encryptedFileName = 'encrypted_' . $new_path . '_' . rand(0, 9999999) . '_' . $new_file->getClientOriginalName();
+            Storage::put('public/' . $encryptedFileName, $encryptedImage);
+            return $encryptedFileName;
+        }
+
         $new_file->storeAs('public/' . $new_file_name);
         return $new_file_name;
     }
-
 }

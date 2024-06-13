@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\AuthService;
+use App\Services\GuruService;
 use App\Services\MataPelajaranService;
 use App\Services\NilaiService;
 use App\Services\RombelService;
@@ -17,31 +18,37 @@ class NilaiController extends Controller
     private $nilai;
     private $mapel;
     private $siswa;
+    private $guru;
 
     public function __construct(
         RombelService $rombel,
         AuthService $auth,
         NilaiService $nilai,
         MataPelajaranService $mapel,
-        SiswaService $siswa
+        SiswaService $siswa,
+        GuruService $guru
     ) {
         $this->rombel = $rombel;
         $this->auth = $auth;
         $this->nilai = $nilai;
         $this->mapel = $mapel;
         $this->siswa = $siswa;
+        $this->guru = $guru;
     }
     public function index()
     {
+        $guru_id = $this->auth->getUser('guru')->id;
         return view('pages.guru.nilai.index', [
-            'rombel' => $this->rombel->getAll(),
+            'rombel' => $this->rombel->getByGuruId($guru_id),
         ]);
     }
     public function show_siswa($id)
     {
+        $guru_id = $this->auth->getUser('guru')->id;
+        $guru = $this->guru->getById($guru_id);
         return view('pages.guru.nilai.nilai', [
             'rombel' => $this->rombel->getOne('id', $id),
-            'mapel' => $this->mapel->getAll(),
+            'mapel' => $guru->mapels,
             'guru' => $this->auth->getUser('guru'),
         ]);
     }
@@ -66,10 +73,12 @@ class NilaiController extends Controller
 
     public function show_input($id)
     {
+        $guru_id = $this->auth->getUser('guru')->id;
+        $guru = $this->guru->getById($guru_id);
         return view('pages.guru.nilai.tambah_nilai', [
-            'guru' => $this->auth->getUser('guru'),
+            'guru' => $guru,
             'rombel' => $this->rombel->getOne('id', $id),
-            'mapel' => $this->mapel->getAll(),
+            'mapel' => $guru->mapels,
             'siswas' => $this->siswa->getByRombelIdActive($id),
         ]);
     }

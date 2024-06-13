@@ -30,12 +30,17 @@
                             disabled>
                         <div class="mx-auto lg:mx-0 w-1/2 pt-2 border-b-2 border-violet-200 "></div>
                     </div>
-                    <div class="mt-8 w-full mx-auto py-6 px-3">
+                    <div class="mt-8 w-full mx-auto pt-6 px-3">
                         <div class="grid grid-cols-2 gap-5">
                             <div class="relative z-0 w-full mb-10 ">
-                                <input type="text" id="floating_email"
-                                    class="block py-2.5 px-3 w-full text-[16px] text-gray-900 font-medium bg-transparent border-0 border-b-2 border-violet-200 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                    value="{{ $guru->mata_pelajarans->nama_mata_pelajaran }}" disabled />
+                                <div
+                                    class="grid grid-cols-12 capitalize   w-full text-[16px] text-gray-900 font-medium bg-transparent border-0 border-b-2 border-violet-200 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer">
+                                    @foreach ($guru->mapels as $mapel)
+                                        <input type="text" id="" name=""
+                                            class="bg-transparent border-0 col-span-6 appearance-none py-2.5 px-3 ring-0 mt-[1px]"
+                                            value="{{ $mapel->nama_mata_pelajaran }}" disabled />
+                                    @endforeach
+                                </div>
                                 <label for="floating_email"
                                     class="peer-focus:font-medium absolute text-[16px] text-gray-500 font-medium dark:text-gray-400 duration-300 transform -translate-y-7 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-7">
                                     Mata Pelajaran</label>
@@ -121,9 +126,6 @@
                                     <label for="floating_email"
                                         class="peer-focus:font-medium absolute text-[16px] text-gray-500 font-medium dark:text-gray-400 duration-300 transform -translate-y-7 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-7">
                                         KTP</label>
-                                    <a class="hover:text-blue-600  right-0 peer-focus:font-medium absolute md:text-[20px] text-[16px] cursor-pointer  text-gray-500 font-medium dark:text-gray-400 duration-300 transform md:-translate-y-8 -translate-y-7  scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 md:peer-focus:-translate-y-8 peer-focus:-translate-y-7"
-                                        data-tw-toggle="modal" data-tw-target="#modal_view_ktp">
-                                        <i class='bx bx-show'></i> Lihat File KTP</a>
                                 </div>
                             </div>
                             <div class="">
@@ -134,9 +136,6 @@
                                     <label for="floating_email"
                                         class="peer-focus:font-medium absolute text-[16px] text-gray-500 font-medium dark:text-gray-400 duration-300 transform -translate-y-7 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-7">
                                         Ijazah</label>
-                                    <a class=" hover:text-blue-600  right-0 peer-focus:font-medium absolute md:text-[20px] text-[16px] cursor-pointer  text-gray-500 font-medium dark:text-gray-400 duration-300 transform md:-translate-y-8 -translate-y-7  scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 md:peer-focus:-translate-y-8 peer-focus:-translate-y-7"
-                                        data-tw-toggle="modal" data-tw-target="#modal_view_ijazah">
-                                        <i class='bx bx-show'></i> Lihat File Ijazah</a>
                                 </div>
                             </div>
                         </div>
@@ -149,9 +148,6 @@
                                     <label for="floating_email"
                                         class="peer-focus:font-medium absolute text-[16px] text-gray-500 font-medium dark:text-gray-400 duration-300 transform -translate-y-7 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-7">
                                         Kartu Keluarga</label>
-                                    <a class="hover:text-blue-600  right-0 peer-focus:font-medium absolute md:text-[20px] text-[16px] cursor-pointer  text-gray-500 font-medium dark:text-gray-400 duration-300 transform md:-translate-y-8 -translate-y-7  scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 md:peer-focus:-translate-y-8 peer-focus:-translate-y-7"
-                                        data-tw-toggle="modal" data-tw-target="#modal_view_kartu_keluarga">
-                                        <i class='bx bx-show'></i> Lihat File KK</a>
                                 </div>
                             </div>
                         </div>
@@ -172,68 +168,48 @@
                         <input type="text" name="old_ijazah" value="{{ $guru->ijazah }}" hidden>
                         <input type="text" name="old_kartu_keluarga" value="{{ $guru->kartu_keluarga }}" hidden>
 
-                        <button type="submit" class=" w-full text-white bg-blue-500 border-transparent btn">
+                        <button type="submit"
+                            class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md">
                             Simpan
                         </button>
                     </div>
                 </form>
-            </div>
-        </div>
-    </div>
-    {{-- Modal ktp --}}
-    <div class="relative z-50 hidden modal" id="modal_view_ktp" aria-labelledby="modal-title" role="dialog"
-        aria-modal="true">
-        <div class="fixed inset-0 z-50 overflow-y-auto">
-            <div class="absolute inset-0 transition-opacity bg-black bg-opacity-50 modal-overlay">
-            </div>
-            <div class="p-x-6 mx-auto animate-translate md:max-w-4xl w-full ">
-                <div
-                    class="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl dark:bg-zinc-600">
-                    <div class="bg-white dark:bg-zinc-700">
-                        <iframe src="{{ url('storage/' . $guru->ktp) }}" class="w-full min-h-[90vh]"
-                            frameborder="0"></iframe>
+                <div class="grid md:grid-cols-3 md:gap-4 md:mt-4 px-[10px]">
+                    <div class="md:mt-0 mt-4">
+                        <form action="{{ route('guru.download_ktp') }}" method="POST">
+                            @csrf
+                            <input type="text" name="ktp" value="{{ $guru->ktp }}" id="" hidden>
+                            <button type="submit"
+                                class="w-full bg-violet-500 hover:bg-violet-700 text-white font-bold py-2 px-4 rounded-md">
+                                Download KTP
+                            </button>
+                        </form>
+                    </div>
+                    <div class="md:mt-0 mt-4">
+                        <form action="{{ route('guru.download_ijazah') }}" method="POST">
+                            @csrf
+                            <input type="text" name="ijazah" value="{{ $guru->ijazah }}" id="" hidden>
+                            <button type="submit"
+                                class="w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md">
+                                Download Ijazah
+                            </button>
+                        </form>
+                    </div>
+                    <div class="md:mt-0 mt-4">
+                        <form action="{{ route('guru.download_kk') }}" method="POST">
+                            @csrf
+                            <input type="text" name="kk" value="{{ $guru->kartu_keluarga }}" id=""
+                                hidden>
+                            <button type="submit"
+                                class="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md">
+                                Download KK
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    {{-- End Modal ktp --}}
-    {{-- Modal ijazah --}}
-    <div class="relative z-50 hidden modal" id="modal_view_ijazah" aria-labelledby="modal-title" role="dialog"
-        aria-modal="true">
-        <div class="fixed inset-0 z-50 overflow-y-auto">
-            <div class="absolute inset-0 transition-opacity bg-black bg-opacity-50 modal-overlay">
-            </div>
-            <div class="p-x-6 mx-auto animate-translate md:max-w-4xl w-full ">
-                <div
-                    class="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl dark:bg-zinc-600">
-                    <div class="bg-white dark:bg-zinc-700">
-                        <iframe src="{{ url('storage/' . $guru->ijazah) }}" class="w-full min-h-[90vh]"
-                            frameborder="0"></iframe>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    {{-- End Modal ijazah --}}
-    {{-- Modal kartu keluarga --}}
-    <div class="relative z-50 hidden modal" id="modal_view_kartu_keluarga" aria-labelledby="modal-title" role="dialog"
-        aria-modal="true">
-        <div class="fixed inset-0 z-50 overflow-y-auto">
-            <div class="absolute inset-0 transition-opacity bg-black bg-opacity-50 modal-overlay">
-            </div>
-            <div class="p-x-6 mx-auto animate-translate md:max-w-4xl w-full ">
-                <div
-                    class="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl dark:bg-zinc-600">
-                    <div class="bg-white dark:bg-zinc-700">
-                        <iframe src="{{ url('storage/' . $guru->kartu_keluarga) }}" class="w-full min-h-[90vh]"
-                            frameborder="0"></iframe>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    {{-- End Modal kartu keluarga --}}
     @if (session('message'))
         <script>
             toast('message', '{{ Session::get('message') }}')

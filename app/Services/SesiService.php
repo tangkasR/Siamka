@@ -15,6 +15,10 @@ class SesiService
     {
         return $this->sesi->getAll();
     }
+    public function getByNama($nama)
+    {
+        return $this->sesi->getById($nama);
+    }
     public function store($nama_sesis)
     {
         return $this->handleStore($nama_sesis);

@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('table-name', 'Guru')
+@section('table-name', 'Data Guru')
 @section('table-role', 'Admin')
 @section('content')
     <div class="grid grid-cols-12 gap-6 bg-white shadow-md">
@@ -21,7 +21,8 @@
                                 <thead>
                                     <tr>
                                         <th>nama</th>
-                                        <th>mapel</th>
+                                        <th>mapel1</th>
+                                        <th>mapel2</th>
                                         <th>jabatan</th>
                                         <th>niy</th>
                                         <th>password</th>
@@ -43,6 +44,7 @@
                                 <tbody>
                                     @foreach ($mapel as $item_mapel)
                                         <tr>
+                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -101,7 +103,10 @@
                                     <td class="p-4 border border-t-0 border-l-0 border-gray-200 dark:border-zinc-600">
                                         {{ $data->nama }}</td>
                                     <td class="p-4 border border-t-0 border-l-0 border-gray-200 dark:border-zinc-600">
-                                        {{ $data->mata_pelajarans->nama_mata_pelajaran }}</td>
+                                        @foreach ($data->mapels as $mapel)
+                                            {{ $loop->iteration }}. {{ $mapel->nama_mata_pelajaran }} <br>
+                                        @endforeach
+                                    </td>
                                     <td class="p-4 border border-t-0 border-l-0 border-gray-200 dark:border-zinc-600">
                                         {{ $data->jabatan }}</td>
                                     <td class="p-4 border border-t-0 border-l-0 border-gray-200 dark:border-zinc-600">
@@ -160,20 +165,6 @@
                                                                     class="bg-gray-800/5 border border-gray-100 text-gray-900 dark:text-gray-100 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder-gray-400 dark:placeholder:text-zinc-100/60 focus:ring-0"
                                                                     placeholder="Masukan Nama Guru"
                                                                     value="{{ $data->nama }}" required>
-                                                            </div>
-                                                            <div class="mb-3">
-                                                                <label for="mata_pelajaran_id"
-                                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
-                                                                    Mata Pelajaran
-                                                                </label>
-                                                                <select name="mata_pelajaran_id"
-                                                                    class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100">
-                                                                    @foreach ($mapel as $item)
-                                                                        <option value="{{ $item->id }}"
-                                                                            {{ $data->mata_pelajarans->nama_mata_pelajaran == $item->nama_mata_pelajaran ? 'selected' : '' }}>
-                                                                            {{ $item->nama_mata_pelajaran }}</option>
-                                                                    @endforeach
-                                                                </select>
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="jabatan"
@@ -282,8 +273,6 @@
             const worksheetGuru = XLSX.utils.table_to_sheet(tableInputGuru);
             XLSX.utils.book_append_sheet(workbook, worksheetGuru, 'Template Input Guru');
             XLSX.writeFile(workbook, `template-input-guru.xlsx`);
-
-
         })
     </script>
 

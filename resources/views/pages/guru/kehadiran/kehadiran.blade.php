@@ -1,23 +1,27 @@
 @extends('layouts.dashboard')
 @section('table-name')
-    Data Kehadiran Rombel {{ $rombel->nama_rombel }}
+    @if ($rombel)
+        Data Kehadiran Rombel {{ $rombel->nama_rombel }}
+    @endif
 @endsection
 @section('table-role', 'Guru')
 @section('content')
     <div class="grid grid-cols-1 gap-5 bg-white shadow-md">
         <div class="card dark:bg-zinc-800 dark:border-zinc-600">
-            <div class="card-body border-b border-gray-100 dark:border-zinc-600">
-                <div class="grid md:grid-cols-12 gap-3">
-                    <div class="md:col-span-3 flex flex-col justify-end">
-                        <h6 class="mb-3 text-gray-700 text-[16px] dark:text-gray-100 font-medium">Tambah Data Kehadiran
-                        </h6>
-                        <input type="text" id="rombel_id" value="{{ $rombel->id }}" hidden>
-                        <a href="{{ route('guru.kehadiran.show_input', ['id' => $rombel->id]) }}"
-                            class="text-center text-white hover:bg-violet-700 bg-violet-500 py-2 font-normal px-[40px] text-[16px] rounded-md transition-all">
-                            Tambah Data
-                        </a>
-                    </div>
-                    <div class="md:col-span-3 flex flex-col justify-end">
+            @if ($rombel)
+                <div class="card-body border-b border-gray-100 dark:border-zinc-600">
+                    <div class="grid md:grid-cols-12 gap-3">
+                        <div class="md:col-span-3 flex flex-col justify-end">
+                            <h6 class="mb-3 text-gray-700 text-[16px] dark:text-gray-100 font-medium">Tambah Data Kehadiran
+                            </h6>
+                            <input type="text" id="rombel_id" value="{{ $rombel->id }}" hidden>
+                            <a href="{{ route('guru.kehadiran.show_input', ['id' => $rombel->id]) }}"
+                                class="text-center text-white hover:bg-violet-700 bg-violet-500 py-2 font-normal px-[40px] text-[16px] rounded-md transition-all">
+                                Tambah Data
+                            </a>
+                        </div>
+                        <div class="col-span-3"></div>
+                        {{-- <div class="md:col-span-3 flex flex-col justify-end">
                         <h6 class=" text-gray-600 text-[16px] dark:text-gray-100 font-medium">Jika salah memasukan
                             data
                         </h6>
@@ -29,107 +33,117 @@
                             class="text-center text-white hover:bg-red-700 bg-red-500 py-2 font-normal px-[40px] text-[16px] rounded-md transition-all">
                             Hapus Data
                         </a>
-                    </div>
-                    <div class="md:col-span-3">
-                    </div>
-                    <div class="md:col-span-3">
-                        <div class="mb-4">
-                            <label for="example-text-input"
-                                class="block mb-2 font-medium text-gray-700 text-[16px] dark:text-gray-100">Tanggal</label>
-                            <input
-                                class="w-full border-gray-100 rounded placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
-                                type="date" id="tanggal" value="{{ $date }}">
+                    </div> --}}
+                        <div class="md:col-span-3">
+                        </div>
+                        <div class="md:col-span-3">
+                            <div class="mb-4">
+                                <label for="example-text-input"
+                                    class="block mb-2 font-medium text-gray-700 text-[16px] dark:text-gray-100">Tanggal</label>
+                                <input
+                                    class="w-full border-gray-100 rounded placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
+                                    type="date" id="tanggal" value="{{ $date }}">
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="relative overflow-x-auto card-body">
-                <table id="" class="table uppercase w-full pt-4 text-center text-gray-700 dark:text-zinc-100">
-                    <thead>
-                        <tr class="bg-blue-200">
-                            <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
-                                No</th>
-                            <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
-                                Nama Siswa</th>
-                            <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
-                                Kehadiran</th>
-                            <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
-                                Tanggal</th>
-                            <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
-                                Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tabel-container">
-                    </tbody>
-                </table>
-                <div class="mt-4">
-                    <div class="">
+                <div class="relative overflow-x-auto card-body">
+                    <table id="" class="table uppercase w-full pt-4 text-center text-gray-700 dark:text-zinc-100">
+                        <thead>
+                            <tr class="bg-blue-200">
+                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                    No</th>
+                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                    Nama Siswa</th>
+                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                    Kehadiran</th>
+                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                    Tanggal</th>
+                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                    Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabel-container">
+                        </tbody>
+                    </table>
+                    <div class="mt-4">
                         <div class="">
-                            <div class=" mt-2 xs:mt-0  flex justify-between " id="container-pagination">
-                                <!-- Buttons -->
-                                <div class="">
-                                    <button id="btn-previous"
-                                        class="flex items-center  justify-center px-4 h-10 text-base font-medium border-black border-[0.05px] text-black rounded-md hover:bg-gray-50 dark:bg-violet-800 dark:border-violet-700 dark:text-violet-400 dark:hover:bg-violet-700 dark:hover:text-white">
-                                        <svg class="w-3.5 h-3.5 me-2 rtl:rotate-180" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="2" d="M13 5H1m0 0 4 4M1 5l4-4" />
-                                        </svg>
-                                        Sebelumnya
-                                    </button>
+                            <div class="">
+                                <div class=" mt-2 xs:mt-0  flex justify-between " id="container-pagination">
+                                    <!-- Buttons -->
+                                    <div class="">
+                                        <button id="btn-previous"
+                                            class="flex items-center  justify-center px-4 h-10 text-base font-medium border-black border-[0.05px] text-black rounded-md hover:bg-gray-50 dark:bg-violet-800 dark:border-violet-700 dark:text-violet-400 dark:hover:bg-violet-700 dark:hover:text-white">
+                                            <svg class="w-3.5 h-3.5 me-2 rtl:rotate-180" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2" d="M13 5H1m0 0 4 4M1 5l4-4" />
+                                            </svg>
+                                            Sebelumnya
+                                        </button>
+                                    </div>
+                                    <div class="">
+                                        <button id="btn-next"
+                                            class="flex   items-center justify-center px-4 h-10 text-base font-medium text-black  border-black border-[0.05px] border-s  rounded-md hover:bg-gray-50 dark:bg-violet-800 dark:border-violet-700 dark:text-violet-400 dark:hover:bg-violet-700 dark:hover:text-white">
+                                            Selanjutnya
+                                            <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
+                                            </svg>
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="">
-                                    <button id="btn-next"
-                                        class="flex   items-center justify-center px-4 h-10 text-base font-medium text-black  border-black border-[0.05px] border-s  rounded-md hover:bg-gray-50 dark:bg-violet-800 dark:border-violet-700 dark:text-violet-400 dark:hover:bg-violet-700 dark:hover:text-white">
-                                        Selanjutnya
-                                        <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
-                                        </svg>
+                            </div>
+                            <!-- Help text -->
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Modal Destroy --}}
+                <div class="relative z-50 hidden modal" id="modal-id_form_destroy" aria-labelledby="modal-title"
+                    role="dialog" aria-modal="true">
+                    <div class="fixed inset-0 z-50 overflow-y-auto">
+                        <div class="absolute inset-0 transition-opacity bg-black bg-opacity-50 modal-overlay">
+                        </div>
+                        <div class="p-4 mx-auto animate-translate sm:max-w-lg">
+                            <div
+                                class="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl dark:bg-zinc-600">
+                                <div class="bg-white dark:bg-zinc-700">
+                                    <button type="button"
+                                        class="absolute top-3 right-2.5 text-gray-400 border-transparent hover:bg-gray-50/50 hover:text-gray-900 dark:text-gray-100 rounded-lg text-sm px-2 py-1 ltr:ml-auto rtl:mr-auto inline-flex items-center dark:hover:bg-zinc-600"
+                                        data-tw-dismiss="modal">
+                                        <i class="text-xl text-gray-500 mdi mdi-close dark:text-zinc-100/60"></i>
                                     </button>
+                                    <div class="p-5">
+                                        <h3 class="mb-4 text-xl font-medium text-gray-700 dark:text-gray-100">
+                                            Apakah anda ingin
+                                            menghapus data kehadiran hari ini?</h3>
+                                        <form class="space-y-4"
+                                            action="{{ route('guru.kehadiran.destroy', ['rombel_id' => $rombel->id]) }}"
+                                            method="GET">
+                                            @csrf
+                                            <button type="submit"
+                                                class="w-full text-white bg-red-600 border-transparent btn">
+                                                Hapus
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- Help text -->
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-    {{-- Modal Destroy --}}
-    <div class="relative z-50 hidden modal" id="modal-id_form_destroy" aria-labelledby="modal-title" role="dialog"
-        aria-modal="true">
-        <div class="fixed inset-0 z-50 overflow-y-auto">
-            <div class="absolute inset-0 transition-opacity bg-black bg-opacity-50 modal-overlay">
-            </div>
-            <div class="p-4 mx-auto animate-translate sm:max-w-lg">
+                {{-- End Modal Destroy --}}
+            @else
                 <div
-                    class="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl dark:bg-zinc-600">
-                    <div class="bg-white dark:bg-zinc-700">
-                        <button type="button"
-                            class="absolute top-3 right-2.5 text-gray-400 border-transparent hover:bg-gray-50/50 hover:text-gray-900 dark:text-gray-100 rounded-lg text-sm px-2 py-1 ltr:ml-auto rtl:mr-auto inline-flex items-center dark:hover:bg-zinc-600"
-                            data-tw-dismiss="modal">
-                            <i class="text-xl text-gray-500 mdi mdi-close dark:text-zinc-100/60"></i>
-                        </button>
-                        <div class="p-5">
-                            <h3 class="mb-4 text-xl font-medium text-gray-700 dark:text-gray-100">
-                                Apakah anda ingin
-                                menghapus data kehadiran hari ini?</h3>
-                            <form class="space-y-4"
-                                action="{{ route('guru.kehadiran.destroy', ['rombel_id' => $rombel->id]) }}" method="GET">
-                                @csrf
-                                <button type="submit" class="w-full text-white bg-red-600 border-transparent btn">
-                                    Hapus
-                                </button>
-                            </form>
-                        </div>
-                    </div>
+                    class="card-body border-b border-gray-100 dark:border-zinc-600 flex justify-center items-center min-h-[60vh]">
+                    <h1 class="text-lg font-medium capitalize">Anda tidak mengajar sesi 1 hari ini</h1>
                 </div>
-            </div>
+            @endif
         </div>
     </div>
-    {{-- End Modal Destroy --}}
+
     <script>
         $(document).ready(function() {
 

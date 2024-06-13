@@ -29,6 +29,8 @@
                                         <th>
                                             sesi</th>
                                         <th>
+                                            guru</th>
+                                        <th>
                                             mapel</th>
                                         <th>
                                             ruangan</th>
@@ -42,6 +44,7 @@
                                         <tr>
                                             <td>{{ $template['hari'] }}</td>
                                             <td>{{ $template['sesi'] }}</td>
+                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td>{{ $template['rombel'] }}</td>
@@ -63,6 +66,14 @@
                                         @foreach ($ruangan as $data_ruangan)
                                             <th>
                                                 {{ $data_ruangan->nomor_ruangan }}
+                                            </th>
+                                        @endforeach
+                                    </tr>
+                                    <tr>
+                                        <th>Pilih guru -> </th>
+                                        @foreach ($gurus as $data_guru)
+                                            <th>
+                                                {{ $data_guru->nama }}
                                             </th>
                                         @endforeach
                                     </tr>
@@ -122,8 +133,11 @@
                                         <div class="p-4 bg-blue-50">
                                             {{ $item_sesi->nama_sesi }}
                                         </div>
-                                        <div class="p-4 bg-white">
+                                        <div class="p-4 bg-white border-b">
                                             Ruangan
+                                        </div>
+                                        <div class="p-4 bg-white">
+                                            Pengajar
                                         </div>
                                     </td>
                                     @foreach ($jadwal_pelajaran as $data)
@@ -131,19 +145,23 @@
                                             <td
                                                 class="border cursor-pointer border-t-0 rtl:border-l-0 border-gray-200 hover:bg-blue-500 hover:text-blue-500">
                                                 <a class="" data-tw-toggle="modal"
-                                                    data-tw-target="#modal-id_form_edit_{{ $data->id }}">
+                                                    data-tw-target="#modal-id_form_edit_{{ $loop->iteration }}"
+                                                    data-tw-id="{{ $loop->iteration }}">
                                                     <div class="p-4 bg-blue-50">
-                                                        {{ $data->mata_pelajarans->nama_mata_pelajaran ?? '-' }}
+                                                        {{ $data->nama_mata_pelajaran ?? '-' }}
+                                                    </div>
+                                                    <div class="p-4 bg-white border-b">
+                                                        {{ $data->ruangans->nomor_ruangan }}
                                                     </div>
                                                     <div class="p-4 bg-white">
-                                                        {{ $data->ruangans->nomor_ruangan }}
+                                                        {{ $data->gurus->nama }}
                                                     </div>
                                                 </a>
                                             </td>
                                             {{-- Modal Edit --}}
                                             <div class="relative z-50 hidden modal"
-                                                id="modal-id_form_edit_{{ $data->id }}" aria-labelledby="modal-title"
-                                                role="dialog" aria-modal="true">
+                                                id="modal-id_form_edit_{{ $loop->iteration }}"
+                                                aria-labelledby="modal-title" role="dialog" aria-modal="true">
                                                 <div class="fixed inset-0 z-50 overflow-y-auto">
                                                     <div
                                                         class="absolute inset-0 transition-opacity bg-black bg-opacity-50 modal-overlay">
@@ -191,20 +209,35 @@
                                                                                 disabled>
                                                                         </div>
                                                                         <div class="mb-3">
-                                                                            <label for="mata_pelajaran_id"
+                                                                            <label for="guru_id"
+                                                                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
+                                                                                Guru
+                                                                            </label>
+                                                                            <select id="guru_id_{{ $loop->iteration }}"
+                                                                                name="guru_id"
+                                                                                class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100">
+                                                                                <option value="">-</option>
+                                                                                @foreach ($gurus as $item_guru)
+                                                                                    <option value="{{ $item_guru->id }}"
+                                                                                        {{ $item_guru->id == $data->guru_id ? 'selected' : '' }}>
+                                                                                        {{ $item_guru->nama }}
+                                                                                    </option>
+                                                                                @endforeach
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="mb-3">
+                                                                            <label for="nama_mata_pelajaran"
                                                                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
                                                                                 Mata Pelajaran
                                                                             </label>
-                                                                            <select id="mata_pelajaran_id"
-                                                                                name="mata_pelajaran_id"
+                                                                            <select required
+                                                                                id="mapel_select_{{ $loop->iteration }}"
+                                                                                name="nama_mata_pelajaran"
                                                                                 class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100">
-                                                                                <option value="">-</option>
-                                                                                @foreach ($mapel as $item_mapel)
-                                                                                    <option value="{{ $item_mapel->id }}"
-                                                                                        {{ $item_mapel->id == $data->mata_pelajaran_id ? 'selected' : '' }}>
-                                                                                        {{ $item_mapel->nama_mata_pelajaran }}
-                                                                                    </option>
-                                                                                @endforeach
+                                                                                <option
+                                                                                    value="{{ $data->nama_mata_pelajaran }}">
+                                                                                    {{ $data->nama_mata_pelajaran }}
+                                                                                </option>
                                                                             </select>
                                                                         </div>
                                                                         <div class="mb-3">
@@ -319,5 +352,62 @@
             toast('error', '{{ Session::get('error') }}')
         </script>
     @endif
+
+    <script>
+        $(document).ready(function() {
+            function updateMapelDropdown(teacherId, id) {
+                var url = '{{ route('admin.jadwal_pelajaran.get-mapels', ':teacherId') }}';
+                url = url.replace(':teacherId', teacherId);
+                let mapelContainer = $(`#mapel_select_${id}`);
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        mapelContainer.html(`<option value="">-- Pilih Mata Pelajaran --</option>`)
+                        data.map((mapel) => {
+                            mapelContainer.append(
+                                `<option value=${mapel.nama_mata_pelajaran}>${mapel.nama_mata_pelajaran}</option>`
+                            )
+                        })
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('AJAX Error:', status, error);
+                    }
+                });
+            }
+
+
+
+
+
+
+
+            // Reattach event listener every time the modal is shown
+            $('[data-tw-toggle="modal"]').on('click', function() {
+                var modalId = $(this).data('tw-target');
+                let id = $(this).data('tw-id');
+
+                $(document).on("change", `#guru_id_${id}`, function() {
+                    // console.log($(`#guru_id_${id}`));
+                    var teacherId = $(`#guru_id_${id}`).val();
+                    if (teacherId) {
+                        updateMapelDropdown(teacherId, id);
+                    } else {
+                        $('#mapel_select').empty();
+                        $('#mapel_select').append(
+                            '<option value="">-- Pilih Mata Pelajaran --</option>');
+                    }
+                });
+                // $(modalId).on('shown.bs.modal', function() {
+                //     console.log(modalId, id);
+                //     $(`#guru_id_${id}`).trigger('change');
+
+                // });
+
+            });
+        });
+    </script>
 
 @endsection

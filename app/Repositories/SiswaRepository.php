@@ -127,65 +127,15 @@ class SiswaRepository implements SiswaInterface
 
         return $siswas;
     }
-    public function getNotActive()
+    public function getNotActive($angkatan)
     {
         // mencari rombel terbaru setiap siswa
-        $subQuery = DB::table('rombel_siswa')
-            ->select('siswa_id', DB::raw('MAX(tahun_akhir) as tahun_akhir_terbaru'))
-            ->groupBy('siswa_id');
-
-        //mendapatkan data siswa
-        $result = DB::table('siswas')
-            ->joinSub($subQuery, 'latest_rombel', function ($join) {
-                $join->on('siswas.id', '=', 'latest_rombel.siswa_id');
-            })
-            ->join('rombel_siswa', function ($join) {
-                $join->on('siswas.id', '=', 'rombel_siswa.siswa_id')
-                    ->on('rombel_siswa.tahun_akhir', '=', 'latest_rombel.tahun_akhir_terbaru');
-            })
-            ->where('siswas.status_siswa', '!=', 'belum lulus')
-            ->select(
-                'siswas.id',
-                'siswas.nama',
-                'siswas.nis',
-                'siswas.nisn',
-                'siswas.nomor_id',
-                'siswas.jenis_kelamin',
-                'siswas.status_siswa',
-                'siswas.aktivasi_akun',
-                'siswas.updated_at',
-                'rombel_siswa.tahun_awal',
-                'rombel_siswa.tahun_akhir'
-            )
-            ->orderBy('rombel_siswa.tahun_akhir', 'desc')
+        return $this->siswa
+            ->whereRaw('LEFT(nis, 2) = ?', [$angkatan])
+            ->where('status_siswa', '!=', 'belum lulus')
             ->get();
-
-        return $result;
     }
-    public function getNotActiveClear($year)
-    {
-        $year = $year - 5;
-        $subQuery = DB::table('rombel_siswa')
-            ->select('siswa_id', DB::raw('MAX(tahun_akhir) as tahun_akhir_terbaru'))
-            ->groupBy('siswa_id');
 
-        $result = DB::table('siswas')
-            ->joinSub($subQuery, 'latest_rombel', function ($join) {
-                $join->on('siswas.id', '=', 'latest_rombel.siswa_id');
-            })
-            ->join('rombel_siswa', function ($join) {
-                $join->on('siswas.id', '=', 'rombel_siswa.siswa_id')
-                    ->on('rombel_siswa.tahun_akhir', '=', 'latest_rombel.tahun_akhir_terbaru');
-            })
-            ->where('siswas.status_siswa', '!=', 'belum lulus')
-            ->where('rombel_siswa.tahun_akhir', '<', $year)
-            ->select(
-                'siswas.id',
-                'siswas.profil',
-            )
-            ->get();
-        return $result;
-    }
     public function store($data)
     {
         return Excel::import(new SiswaImport, $data['file']);
@@ -244,5 +194,13 @@ class SiswaRepository implements SiswaInterface
             'asal_smp' => $datas['asal_smp'],
             'tahun_lulus_smp' => $datas['tahun_lulus_smp'],
         ]);
+    }
+    public function getAngkatan()
+    {
+        return $this->siswa
+            ->where('status_siswa', '!=', 'belum lulus')
+            ->selectRaw("LEFT(nis, 2) as angkatan")
+            ->distinct()
+            ->get();
     }
 }

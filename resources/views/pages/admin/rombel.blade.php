@@ -1,13 +1,10 @@
 @extends('layouts.dashboard')
-@section('table-name', 'Rombongan Belajar')
+@section('table-name', 'Data Rombongan Belajar')
 @section('table-role', 'Admin')
 @section('content')
     <div class="grid grid-cols-1 md:grid-cols-12 gap-5 bg-white shadow-md">
         <div class="md:col-span-7 order-last md:order-1">
             <div class="card dark:bg-zinc-800 dark:border-zinc-600">
-                <div class="card-body border-b border-gray-100 dark:border-zinc-600">
-                    <h6 class="mb-1 text-gray-600 text-[20px] font-semibold dark:text-gray-100">Data Rombel</h6>
-                </div>
                 <div class="relative overflow-x-auto card-body">
                     <table id="datatable" class="uppercase table w-full pt-4 text-center text-gray-700 dark:text-zinc-100">
                         <thead>

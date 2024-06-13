@@ -34,9 +34,9 @@ class SiswaService
     {
         return $this->siswa->getPivotTahunPembelajaran($id);
     }
-    public function getNotActive()
+    public function getNotActive($angkatan)
     {
-        return $this->siswa->getNotActive();
+        return $this->siswa->getNotActive($angkatan);
     }
     public function getByRombelIdActive($id)
     {
@@ -177,8 +177,8 @@ class SiswaService
         }
     }
 
-    public function getNotActiveClear($year)
+    public function getAngkatan()
     {
-        return $this->siswa->getNotActiveClear($year);
+        return $this->siswa->getAngkatan();
     }
 }

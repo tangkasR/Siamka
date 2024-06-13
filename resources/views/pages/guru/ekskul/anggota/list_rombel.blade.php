@@ -133,8 +133,7 @@
     <!-- Initialize Swiper -->
     <script type="module">
         var swiper = new Swiper(".mySwiper1", {
-            initialSlide: 1,
-            centeredSlides: true,
+            centeredSlides: false,
             grabCursor: true,
             pagination: {
                 el: ".swiper-pagination1",
@@ -152,8 +151,7 @@
             },
         });
         var swiper = new Swiper(".mySwiper2", {
-            initialSlide: 1,
-            centeredSlides: true,
+            centeredSlides: false,
             grabCursor: true,
             pagination: {
                 el: ".swiper-pagination2",
@@ -171,8 +169,7 @@
             },
         });
         var swiper = new Swiper(".mySwiper3", {
-            initialSlide: 1,
-            centeredSlides: true,
+            centeredSlides: false,
             grabCursor: true,
             pagination: {
                 el: ".swiper-pagination3",

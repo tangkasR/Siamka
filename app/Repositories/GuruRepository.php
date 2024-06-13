@@ -18,11 +18,11 @@ class GuruRepository implements GuruInterface
 
     public function getAll()
     {
-        return $this->guru->with('mata_pelajarans')->get();
+        return $this->guru->with('mapels')->get();
     }
     public function getById($id)
     {
-        return $this->guru->with('mata_pelajarans')->where('id', $id)
+        return $this->guru->with('mapels', 'rombels')->where('id', $id)
             ->first();
     }
     public function store($data)

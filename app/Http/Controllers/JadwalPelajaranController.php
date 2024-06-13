@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\GuruService;
 use App\Services\JadwalPelajaranService;
 use App\Services\MataPelajaranService;
 use App\Services\RombelService;
@@ -17,19 +18,22 @@ class JadwalPelajaranController extends Controller
     private $ruangan;
     private $mapel;
     private $sesi;
+    private $guru;
 
     public function __construct(
         RombelService $rombel,
         JadwalPelajaranService $jadwal,
         RuanganService $ruangan,
         MataPelajaranService $mapel,
-        SesiService $sesi
+        SesiService $sesi,
+        GuruService $guru
     ) {
         $this->rombel = $rombel;
         $this->jadwal = $jadwal;
         $this->ruangan = $ruangan;
         $this->mapel = $mapel;
         $this->sesi = $sesi;
+        $this->guru = $guru;
     }
     public function index()
     {
@@ -43,10 +47,11 @@ class JadwalPelajaranController extends Controller
         return view('pages.admin.jadwal_pelajaran.jadwal_pelajaran', [
             'jadwal_pelajaran' => $this->jadwal->getByRombelId($id),
             'ruangan' => $this->ruangan->getAll(),
-            'rombel' => $this->rombel->getOne('id',$id),
+            'rombel' => $this->rombel->getOne('id', $id),
             'mapel' => $this->mapel->getAll(),
             'sesi' => $this->sesi->getAll(),
             'templates' => $this->jadwal->createTemplate($id),
+            'gurus' => $this->guru->getAll(),
         ]);
 
     }
@@ -56,13 +61,13 @@ class JadwalPelajaranController extends Controller
         if ($request->file == null) {
             return back()->with('error', 'Masukan file excel');
         }
-        try {
-            $this->jadwal->store($request->all());
-            return redirect()->back()->with('message', 'Berhasil menambah data');
+        // try {
+        $this->jadwal->store($request->all());
+        return redirect()->back()->with('message', 'Berhasil menambah data');
 
-        } catch (QueryException $er) {
-            return redirect()->back()->with('error', 'Gagal menambah data');
-        }
+        // } catch (QueryException $er) {
+        // return redirect()->back()->with('error', 'Gagal menambah data');
+        // }
     }
     public function update(Request $request, $id)
     {
@@ -82,5 +87,15 @@ class JadwalPelajaranController extends Controller
         } catch (QueryException $e) {
             return back()->with('error', 'Gagal menghapus semua data');
         }
+    }
+
+    public function getMapelsByGuru($guru_id)
+    {
+        // Asumsi bahwa model Teacher dan Subject sudah didefinisikan dan ada relasi many-to-many di antara mereka
+        $guru = $this->guru->getById($guru_id);
+        $mapels = $guru->mapels;
+
+        return response()->json($mapels);
+
     }
 }

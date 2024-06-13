@@ -17,11 +17,12 @@ return new class extends Migration
             $table->foreign('ruangan_id')->references('id')->on('ruangans')->onDelete('restrict');
             $table->unsignedBigInteger('rombel_id');
             $table->foreign('rombel_id')->references('id')->on('rombels')->onDelete('restrict');
-            $table->unsignedBigInteger('mata_pelajaran_id');
-            $table->foreign('mata_pelajaran_id')->references('id')->on('mata_pelajarans')->onDelete('restrict');
+            $table->unsignedBigInteger('guru_id');
+            $table->foreign('guru_id')->references('id')->on('gurus')->onDelete('restrict');
             $table->unsignedBigInteger('sesi_id');
             $table->foreign('sesi_id')->references('id')->on('sesis')->onDelete('restrict');
             $table->String('hari');
+            $table->String('nama_mata_pelajaran');
             $table->timestamps();
         });
     }

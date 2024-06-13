@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\AuthService;
 use App\Services\DateService;
 use App\Services\KehadiranService;
 use App\Services\RombelService;
@@ -15,29 +16,27 @@ class KehadiranController extends Controller
     private $kehadiran;
     private $siswa;
     private $date;
+    private $auth;
 
     public function __construct(
         RombelService $rombel,
         KehadiranService $kehadiran,
         SiswaService $siswa,
-        DateService $date
+        DateService $date,
+        AuthService $auth
     ) {
         $this->rombel = $rombel;
         $this->kehadiran = $kehadiran;
         $this->siswa = $siswa;
         $this->date = $date;
+        $this->auth = $auth;
     }
     public function index()
     {
-        return view('pages.guru.kehadiran.index', [
-            'rombel' => $this->rombel->getAll(),
-        ]);
-    }
-    public function show_siswa($id)
-    {
+        $guru = $this->auth->getUser('guru');
         return view('pages.guru.kehadiran.kehadiran', [
-            'rombel' => $this->rombel->getOne('id', $id),
-            'date' => $this->date->getDate()->format('Y-m-d')
+            'rombel' => $this->rombel->getByGuruIdSesiSatu($guru->id),
+            'date' => $this->date->getDate()->format('Y-m-d'),
         ]);
     }
     public function getKehadiran_guru(Request $request)

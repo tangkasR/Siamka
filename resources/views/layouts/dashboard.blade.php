@@ -156,6 +156,7 @@
     {{-- year picker --}}
     <link rel="stylesheet" href="{{ asset('assets/year_picker/yearpicker.css') }}">
     <script src="{{ asset('assets/year_picker/yearpicker.js') }}"></script>
+
 </head>
 
 <body data-mode="light" data-sidebar-size="lg" class="group">

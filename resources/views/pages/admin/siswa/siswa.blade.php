@@ -89,7 +89,7 @@
                                     class="max-w-[400px] text-left bg-slate-50 border-slate-400 rounded-lg shadow-md border-[0.5px] p-6">
                                     <label for="naik_kelas"
                                         class="block mb-4 text-[16px] font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
-                                        Menaikan semua siswa dari Kelas {{ $rombel->nama_rombel }}
+                                        Menaikkan semua siswa ke Kelas <span id="classname_container"></span>
                                     </label>
                                     <a data-tw-toggle="modal" data-tw-target="#modal_naik_kelas"
                                         class=" text-white px-5 cursor-pointer border-transparent py-2 rounded-md hover:bg-blue-300 bg-red-500">
@@ -103,7 +103,7 @@
                                     class="max-w-[400px] text-right bg-slate-50 border-slate-400 rounded-lg shadow-md border-[0.5px] p-6">
                                     <label for="naik_kelas"
                                         class="block mb-4 text-[16px] font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
-                                        Meluluskan semua siswa sebelumnya di kelas {{ $rombel->nama_rombel }}
+                                        Meluluskan semua siswa di kelas {{ $rombel->nama_rombel }}
                                     </label>
                                     <a data-tw-toggle="modal" data-tw-target="#modal_lulus"
                                         class=" text-white px-5 cursor-pointer border-transparent py-2 rounded-md hover:bg-blue-300 bg-red-500">
@@ -186,22 +186,55 @@
                                     <td class="p-4  border border-t-0 border-l-0 border-gray-200 dark:border-zinc-600">
                                         {{ $data->aktivasi_akun }}</td>
                                     <td
-                                        class="p-4 min-w-[300px] border border-t-0 border-l-0 border-gray-200 dark:border-zinc-600 grid grid-cols-2 gap-2  w-full">
-                                        <a class="btn-show "
-                                            href="{{ route('admin.siswa.detail_siswa', ['id' => $data->id]) }}">
-                                            <i class='bx bx-show'></i> Detail Siswa</a>
-                                        <a class="btn-edit " data-tw-toggle="modal"
-                                            data-tw-target="#modal-id_form_edit_{{ $data->id }}"><i
-                                                class='bx bxs-edit'></i> Ubah</a>
-                                        <a class="btn-delete" data-tw-toggle="modal"
-                                            data-tw-target="#modal-id_move_class_{{ $data->id }}"><i
-                                                class='bx bx-play-circle'></i> Pidah Kelas</a>
-                                        <a class="btn-delete" data-tw-toggle="modal"
-                                            data-tw-target="#modal-id_single_deaktivation_{{ $data->id }}"><i
-                                                class='bx bx-block'></i> Deaktivasi</a>
-                                        <a class="btn-delete" data-tw-toggle="modal"
-                                            data-tw-target="#modal-id_form_destroy_{{ $data->id }}">
-                                            <i class='bx bx-trash'></i> Hapus</a>
+                                        class="p-4 border border-t-0 border-l-0 border-gray-200 dark:border-zinc-600 min-w-[150px] ">
+                                        <div class="relative dropdown min-w-[150px]">
+                                            <button type="button"
+                                                class="py-2 font-medium leading-tight text-white bg-gray-500 border border-gray-500 shadow-md btn dropdown-toggle shadow-gray-100 dark:shadow-zinc-600 hover:bg-gray-600 focus:bg-gray-600 focus:ring focus:ring-gray-200 focus:ring-gray-500/20"
+                                                id="dropdownMenuButton1" data-bs-toggle="dropdown"><i
+                                                    class="text-lg align-middle bx bx-hive ltr:mr-2 rtl:ml-2"></i>Pilih Aksi
+                                                <i class="mdi mdi-chevron-down "></i></button>
+
+                                            <ul class="absolute z-50 float-left py-2 mt-1 text-left list-none bg-white border-none rounded-lg shadow-lg dropdown-menu w-44 bg-clip-padding dark:bg-zinc-700 hidden"
+                                                aria-labelledby="dropdownMenuButton1" data-popper-placement="bottom-start"
+                                                style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(49px, 1636.5px, 0px);">
+                                                <li>
+                                                    <a class="block w-full px-4 py-1 text-sm font-medium text-gray-500 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 dark:text-gray-100 dark:hover:bg-zinc-600/50"
+                                                        href="{{ route('admin.siswa.detail_siswa', ['id' => $data->id]) }}"><i
+                                                            class="text-lg align-middle bx bx-show ltr:mr-2 rtl:ml-2"></i>Detail
+                                                        Siswa</a>
+                                                </li>
+                                                <hr class="my-1 border-gray-50 dark:border-zinc-600">
+                                                <li>
+                                                    <a class="block w-full px-4 py-1 text-sm font-medium text-gray-500 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 dark:text-gray-100 dark:hover:bg-zinc-600/50"
+                                                        data-tw-toggle="modal"
+                                                        data-tw-target="#modal-id_form_edit_{{ $data->id }}"><i
+                                                            class="text-lg align-middle bx bxs-edit ltr:mr-2 rtl:ml-2"></i>
+                                                        Ubah</a>
+                                                </li>
+                                                <hr class="my-1 border-gray-50 dark:border-zinc-600">
+                                                <li>
+                                                    <a class="block w-full px-4 py-1 text-sm font-medium text-gray-500 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 dark:text-gray-100 dark:hover:bg-zinc-600/50"
+                                                        data-tw-toggle="modal"
+                                                        data-tw-target="#modal-id_move_class_{{ $data->id }}"><i
+                                                            class="text-lg align-middle bx bxs-right-arrow-circle ltr:mr-2 rtl:ml-2"></i>Pidah
+                                                        Kelas</a>
+                                                </li>
+                                                <hr class="my-1 border-gray-50 dark:border-zinc-600">
+                                                <li>
+                                                    <a class="block w-full px-4 py-1 text-sm font-medium text-gray-500 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 dark:text-gray-100 dark:hover:bg-zinc-600/50"
+                                                        data-tw-toggle="modal"
+                                                        data-tw-target="#modal-id_single_deaktivation_{{ $data->id }}"><i
+                                                            class="text-lg align-middle bx bx-block ltr:mr-2 rtl:ml-2"></i>Deaktivasi</a>
+                                                </li>
+                                                <hr class="my-1 border-gray-50 dark:border-zinc-600">
+                                                <li>
+                                                    <a class="block w-full px-4 py-1 text-sm font-medium text-gray-500 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 dark:text-gray-100 dark:hover:bg-zinc-600/50"
+                                                        data-tw-toggle="modal"
+                                                        data-tw-target="#modal-id_form_destroy_{{ $data->id }}"><i
+                                                            class="text-lg align-middle bx bx-trash ltr:mr-2 rtl:ml-2"></i>Hapus</a>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </td>
                                 </tr>
 
@@ -564,6 +597,8 @@
                                                     <option value="{{ $data_rombel->id }}" selected>
                                                         {{ $data_rombel->nama_rombel }}
                                                     </option>
+                                                    <input type="text" class="next_class_name"
+                                                        value="{{ $data_rombel->nama_rombel }}" hidden>
                                                 @endif
                                             @endif
                                         @endforeach
@@ -575,6 +610,8 @@
                                                     <option value="{{ $data_rombel->id }}" selected>
                                                         {{ $data_rombel->nama_rombel }}
                                                     </option>
+                                                    <input type="text" class="next_class_name"
+                                                        value="{{ $data_rombel->nama_rombel }}" hidden>
                                                 @endif
                                             @endif
                                         @endforeach
@@ -682,6 +719,12 @@
             XLSX.utils.book_append_sheet(workbook, worksheetSiswa, 'Template Input Siswa');
             XLSX.writeFile(workbook, `template-input-siswa-${nama_rombel}.xlsx`);
         })
+
+        const nextClass = document.querySelectorAll('.next_class_name')
+        const classNameContainer = document.getElementById('classname_container')
+        nextClass.forEach(data => {
+            classNameContainer.innerHTML = `${data.value}`;
+        });
     </script>
 
     @if (session('message'))

@@ -16,11 +16,8 @@ class GuruImport implements ToCollection, WithHeadingRow
     {
         // input guru
         foreach ($rows as $index => $row) {
-            $nama_mapel = $row['mapel'];
-            $mapel = MataPelajaran::where('nama_mata_pelajaran', $nama_mapel)->first();
-            if ($mapel != null) {
+            if ($row['nama'] != '') {
                 $guru = Guru::create([
-                    'mata_pelajaran_id' => $mapel->id,
                     'nama' => $row['nama'],
                     'jabatan' => $row['jabatan'],
                     'nomor_induk_yayasan' => $row['niy'],
@@ -36,6 +33,14 @@ class GuruImport implements ToCollection, WithHeadingRow
                     'ijazah' => '-',
                     'kartu_keluarga' => '-',
                 ]);
+                $nama_mapel1 = $row['mapel1'];
+                $nama_mapel2 = $row['mapel2'];
+                $mapel1 = MataPelajaran::where('nama_mata_pelajaran', $nama_mapel1)->first();
+                $mapel2 = MataPelajaran::where('nama_mata_pelajaran', $nama_mapel2)->first();
+                $guru->mapels()->attach($mapel1);
+                if ($mapel2 != null) {
+                    $guru->mapels()->attach($mapel2);
+                }
             }
         }
 

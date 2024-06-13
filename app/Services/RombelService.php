@@ -19,10 +19,21 @@ class RombelService
     {
         return $this->rombel->getAll();
     }
-
+    public function rombelWithoutGuru($id)
+    {
+        return $this->rombel->rombelWithoutGuru($id);
+    }
+    public function getByGuruId($id)
+    {
+        return $this->rombel->getByGuruId($id);
+    }
     public function getOne($condition, $params)
     {
         return $this->rombel->getOne($condition, $params);
+    }
+    public function getByGuruIdSesiSatu($guru_id)
+    {
+        return $this->rombel->getByGuruIdSesiSatu($guru_id);
     }
     public function getBySiswaId($id)
     {

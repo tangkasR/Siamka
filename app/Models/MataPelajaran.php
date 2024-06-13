@@ -18,7 +18,7 @@ class MataPelajaran extends Model
 
     public function gurus()
     {
-        return $this->hasMany(Guru::class, 'mata_pelajaran_id', 'id');
+        return $this->belongsToMany(Guru::class);
     }
 
     public function jadwal_pelajarans()

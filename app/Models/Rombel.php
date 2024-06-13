@@ -17,7 +17,7 @@ class Rombel extends Model
         'nama_rombel',
     ];
 
-    public function gurus()
+    public function guru()
     {
         return $this->belongsTo(Guru::class, 'guru_id', 'id');
     }
@@ -30,5 +30,10 @@ class Rombel extends Model
     public function siswas()
     {
         return $this->belongsToMany(Siswa::class);
+    }
+
+    public function gurus()
+    {
+        return $this->belongsToMany(Guru::class);
     }
 }

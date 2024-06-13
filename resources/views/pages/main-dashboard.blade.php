@@ -441,7 +441,7 @@
                     <div class="grid gap-8 md:grid-cols-3 md:p-8 p-0">
                         <a href="{{ route('siswa.show_jadwal') }}">
                             <div
-                                class="dashboard group relative cursor-pointer overflow-hidden bg-white px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:rounded-lg ">
+                                class="dashboard group relative md:min-h-[360px] lg:min-h-[300px] cursor-pointer overflow-hidden bg-white px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:rounded-lg ">
                                 <span
                                     class="absolute top-10 z-0 h-20 w-20 rounded-full bg-sky-500 transition-all duration-300 group-dashboard:group-hover:scale-[13]"></span>
                                 <div class="relative z-10 mx-auto w-full">
@@ -470,7 +470,7 @@
                         </a>
                         <a href="{{ route('siswa.show_kehadiran') }}">
                             <div
-                                class="dashboard group relative cursor-pointer overflow-hidden bg-white px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:rounded-lg ">
+                                class="dashboard group relative md:min-h-[360px] lg:min-h-[300px] cursor-pointer overflow-hidden bg-white px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:rounded-lg ">
                                 <span
                                     class="absolute top-10 z-0 h-20 w-20 rounded-full bg-sky-500 transition-all duration-300 group-dashboard:group-hover:scale-[13]"></span>
                                 <div class="relative z-10 mx-auto w-full">
@@ -499,7 +499,7 @@
                         </a>
                         <a href="{{ route('siswa.show_nilai') }}">
                             <div
-                                class="dashboard group relative cursor-pointer overflow-hidden bg-white px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:rounded-lg ">
+                                class="dashboard group relative md:min-h-[360px] lg:min-h-[300px] cursor-pointer overflow-hidden bg-white px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:rounded-lg ">
                                 <span
                                     class="absolute top-10 z-0 h-20 w-20 rounded-full bg-sky-500 transition-all duration-300 group-dashboard:group-hover:scale-[13]"></span>
                                 <div class="relative z-10 mx-auto w-full">
@@ -528,7 +528,7 @@
                         </a>
                         <a href="{{ route('siswa.ekskul') }}">
                             <div
-                                class="dashboard group relative cursor-pointer overflow-hidden bg-white px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:rounded-lg ">
+                                class="dashboard group relative md:min-h-[360px] lg:min-h-[300px] cursor-pointer overflow-hidden bg-white px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:rounded-lg ">
                                 <span
                                     class="absolute top-10 z-0 h-20 w-20 rounded-full bg-sky-500 transition-all duration-300 group-dashboard:group-hover:scale-[13]"></span>
                                 <div class="relative z-10 mx-auto w-full">
@@ -557,7 +557,7 @@
                         </a>
                         <a href="{{ route('pengumuman.show_pengumuman') }}">
                             <div
-                                class="dashboard group relative cursor-pointer overflow-hidden bg-white px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:rounded-lg ">
+                                class="dashboard group relative md:min-h-[360px] lg:min-h-[300px] cursor-pointer overflow-hidden bg-white px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:rounded-lg ">
                                 <span
                                     class="absolute top-10 z-0 h-20 w-20 rounded-full bg-sky-500 transition-all duration-300 group-dashboard:group-hover:scale-[13]"></span>
                                 <div class="relative z-10 mx-auto w-full">

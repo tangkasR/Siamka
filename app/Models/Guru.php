@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Ekskul;
+use App\Models\JadwalPelajaran;
 use App\Models\KehadiranGuru;
 use App\Models\MataPelajaran;
 use App\Models\Rombel;
@@ -42,12 +43,12 @@ class Guru extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function mata_pelajarans()
+    public function mapels()
     {
-        return $this->belongsTo(MataPelajaran::class, 'mata_pelajaran_id', 'id');
+        return $this->belongsToMany(MataPelajaran::class);
     }
 
-    public function rombels()
+    public function rombel()
     {
         return $this->hasOne(Rombel::class);
     }
@@ -59,4 +60,13 @@ class Guru extends Authenticatable
     {
         return $this->hasMany(Ekskul::class, 'guru_id', 'id');
     }
+    public function jadwal_pelajarans()
+    {
+        return $this->hasMany(JadwalPelajaran::class, 'guru_id', 'id');
+    }
+    public function rombels()
+    {
+        return $this->belongsToMany(Rombel::class);
+    }
+
 }

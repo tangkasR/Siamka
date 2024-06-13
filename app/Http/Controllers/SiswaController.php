@@ -430,18 +430,24 @@ class SiswaController extends Controller
             'nilai_ekskuls' => $this->nilai_ekskul->rekap($siswa->id),
         ]);
     }
-    public function siswa_not_active()
+    public function siswa_not_active_index()
     {
-        return view('pages.admin.siswa.not_active', [
-            'siswas' => $this->siswa->getNotActive(),
-            'tanggal' => $this->date->getDate()->format('d-m-Y'),
+        return view('pages.admin.siswa.siswa_not_active.index', [
+            'angkatans' => $this->siswa->getAngkatan(),
         ]);
     }
-    public function clear_data()
+    public function siswa_not_active($angkatan)
+    {
+        return view('pages.admin.siswa.siswa_not_active.not_active', [
+            'siswas' => $this->siswa->getNotActive($angkatan),
+            'tanggal' => $this->date->getDate()->format('d-m-Y'),
+            'angkatan' => $angkatan,
+        ]);
+    }
+    public function clear_data($angkatan)
     {
         try {
-            $siswas = $this->siswa->getNotActiveClear($this->date->getDate()->year);
-            // dd($siswas);
+            $siswas = $this->siswa->getNotActive($angkatan);
             if (count($siswas) > 0) {
                 foreach ($siswas as $data) {
                     $path = storage_path('app/public/' . $data->profil);
@@ -457,11 +463,13 @@ class SiswaController extends Controller
                 foreach ($siswas as $data) {
                     $this->siswa->destroy($data->id);
                 }
-                return redirect()->back()
-                    ->with('message', 'Berhasil menghapus semua data siswa yang sudah tidak aktif lebih dari 5 tahun');
+                $message = 'Berhasil menghapus semua data siswa di angkatan ' . $angkatan;
+                return redirect()->route('admin.siswa.siswa_not_active')
+                    ->with('message', $message);
             }
-            return redirect()->back()
-                ->with('error', 'Sudah tidak data siswa yang tidak aktif lebih dari 5 tahun');
+            $message = 'Data siswa di angkatan ' . $angkatan . ' kosong!';
+            return redirect()->route('admin.siswa.siswa_not_active')
+                ->with('error', $message);
         } catch (ValidationException $err) {
             return redirect()->back()
                 ->with('error', $err->getMessage());

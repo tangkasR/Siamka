@@ -2,6 +2,7 @@
 
 namespace App\Imports;
 
+use App\Models\Guru;
 use App\Models\JadwalPelajaran;
 use App\Models\MataPelajaran;
 use App\Models\Rombel;
@@ -29,13 +30,15 @@ class JadwalImport implements ToCollection, WithHeadingRow
             $id_rombel = Rombel::where('nama_rombel', $rombel)->first();
             $id_mapel = MataPelajaran::where('nama_mata_pelajaran', $row['mapel'])->first();
             $id_sesi = Sesi::where('nama_sesi', $row['sesi'])->first();
+            $id_guru = Guru::where('nama', $row['guru'])->first();
             if ($id_ruangan != null && $id_rombel != null && $id_mapel != null && $id_sesi != null && $hari != '') {
                 JadwalPelajaran::create([
                     'ruangan_id' => $id_ruangan->id,
                     'rombel_id' => $id_rombel->id,
-                    'mata_pelajaran_id' => $id_mapel->id,
+                    'guru_id' => $id_guru->id,
                     'sesi_id' => $id_sesi->id,
                     'hari' => $hari,
+                    'nama_mata_pelajaran' => $row['mapel'],
                 ]);
             } else {
                 return redirect()->back();
