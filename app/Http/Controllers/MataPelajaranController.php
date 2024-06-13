@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+use App\Models\MataPelajaran;
 use App\Services\MataPelajaranService;
 use Illuminate\Database\QueryException;
-use Illuminate\Http\Request;
 
 class MataPelajaranController extends Controller
 {
@@ -31,20 +32,20 @@ class MataPelajaranController extends Controller
             return redirect()->back()->with('error', 'Gagal menambah data');
         }
     }
-    public function update(Request $request, $id)
+    public function update(Request $request, MataPelajaran $mapel)
     {
         try {
-            $this->mapel->update($request->all(), $id);
+            $this->mapel->update($request->all(), $mapel);
             return redirect()->back()->with('message', 'Berhasil mengubah data');
 
         } catch (QueryException $er) {
             return redirect()->back()->with('error', 'Gagal mengubah data');
         }
     }
-    public function destroy($id)
+    public function destroy(MataPelajaran $mapel)
     {
         try {
-            $this->mapel->destroy($id);
+            $this->mapel->destroy($mapel);
             return redirect()->back()->with('message', 'Berhasil menghapus data');
         } catch (QueryException $er) {
             return redirect()->back()->with('error', 'Gagal menghapus data');

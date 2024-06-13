@@ -15,7 +15,7 @@ class SesiRepository implements SesiInterface
 
     public function getAll()
     {
-        return $this->sesi->select('id', 'nama_sesi')->get();
+        return $this->sesi->get();
     }
     public function getById($nama)
     {
@@ -27,14 +27,14 @@ class SesiRepository implements SesiInterface
             'nama_sesi' => $data,
         ]);
     }
-    public function update($data, $id)
+    public function update($data, $sesi)
     {
-        return $this->sesi->where('id', $id)->update([
+        return $sesi->update([
             'nama_sesi' => $data,
         ]);
     }
-    public function destroy($id)
+    public function destroy($sesi)
     {
-        return $this->sesi->where('id', $id)->delete();
+        return $sesi->delete();
     }
 }

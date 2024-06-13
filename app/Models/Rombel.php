@@ -3,14 +3,15 @@
 namespace App\Models;
 
 use App\Models\Guru;
-use App\Models\JadwalPelajaran;
+use App\Traits\uuid;
 use App\Models\Siswa;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\JadwalPelajaran;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Rombel extends Model
 {
-    use HasFactory;
+    use HasFactory, uuid;
 
     protected $fillable = [
         'guru_id',
@@ -35,5 +36,10 @@ class Rombel extends Model
     public function gurus()
     {
         return $this->belongsToMany(Guru::class);
+    }
+
+    public function getRouteKeyName(): String
+    {
+        return 'uuid';
     }
 }

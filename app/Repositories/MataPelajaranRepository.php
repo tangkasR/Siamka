@@ -18,7 +18,7 @@ class MataPelajaranRepository implements MataPelajaranInterface
     }
     public function getAll()
     {
-        return $this->mapel->select('id', 'nama_mata_pelajaran')->get();
+        return $this->mapel->get();
     }
     public function getByAttribute($attribute, $data)
     {
@@ -30,14 +30,14 @@ class MataPelajaranRepository implements MataPelajaranInterface
             'nama_mata_pelajaran' => $data,
         ]);
     }
-    public function update($data, $id)
+    public function update($data, $mapel)
     {
-        return $this->mapel->where('id', $id)->update([
+        return $mapel->update([
             'nama_mata_pelajaran' => $data,
         ]);
     }
-    public function destroy($id)
+    public function destroy($mapel)
     {
-        return $this->mapel->where('id', $id)->delete();
+        return $mapel->delete();
     }
 }

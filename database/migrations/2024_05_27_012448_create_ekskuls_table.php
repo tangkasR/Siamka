@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('ekskuls', function (Blueprint $table) {
             $table->id();
+            $table->uuid();
             $table->string('nama_ekskul', 100);
             $table->timestamps();
         });

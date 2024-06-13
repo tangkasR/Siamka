@@ -69,12 +69,12 @@ class KehadiranController extends Controller
         $check_kehadiran = $this->kehadiran->getByRombelId($request->rombel_id, $request->tanggal)->get();
 
         if (count($check_kehadiran) != 0) {
-            return redirect()->route('guru.kehadiran.show_siswa', ['id' => $request->rombel_id])
+            return redirect()->route('guru.kehadiran', ['id' => $request->rombel_id])
                 ->with('error', 'Data Kehadiran hari ini sudah ada!');
         }
 
         $this->kehadiran->store($request->all());
-        return redirect()->route('guru.kehadiran.show_siswa', ['id' => $request->rombel_id])
+        return redirect()->route('guru.kehadiran', ['id' => $request->rombel_id])
             ->with('message', 'Berhasil menambah kehadiran hari ini');
     }
 
@@ -91,7 +91,7 @@ class KehadiranController extends Controller
     {
 
         $this->kehadiran->update($request->all(), $id);
-        return redirect()->route('guru.kehadiran.show_siswa', ['id' => $request->rombel_id])
+        return redirect()->route('guru.kehadiran', ['id' => $request->rombel_id])
             ->with('message', 'Berhasil mengubah data kehadiran');
     }
     public function destroy($rombel_id)

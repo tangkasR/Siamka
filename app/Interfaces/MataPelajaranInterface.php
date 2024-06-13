@@ -8,6 +8,6 @@ interface MataPelajaranInterface
     public function getAll();
     public function getByAttribute($attribute, $data);
     public function store($data);
-    public function update($data, $id);
-    public function destroy($id);
+    public function update($data, $mapel);
+    public function destroy($mapel);
 }

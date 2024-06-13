@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('pengumumans', function (Blueprint $table) {
             $table->id();
+            $table->uuid();
             $table->string('image', 255);
             $table->string('judul', 100);
             $table->longText('deskripsi');

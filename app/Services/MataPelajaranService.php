@@ -23,13 +23,13 @@ class MataPelajaranService
     {
         return $this->handleStore($nama_mata_pelajarans);
     }
-    public function update($data, $id)
+    public function update($data, $mapel)
     {
-        return $this->mapel->update($data['nama_mata_pelajaran'], $id);
+        return $this->mapel->update($data['nama_mata_pelajaran'], $mapel);
     }
-    public function destroy($id)
+    public function destroy($mapel)
     {
-        return $this->mapel->destroy($id);
+        return $this->mapel->destroy($mapel);
     }
     private function handleStore($datas)
     {

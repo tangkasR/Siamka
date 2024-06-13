@@ -15,7 +15,7 @@ class RuanganRepository implements RuanganInterface
 
     public function getAll()
     {
-        return $this->ruangan->select('id', 'nomor_ruangan')->get();
+        return $this->ruangan->get();
     }
     public function store($data)
     {
@@ -23,14 +23,14 @@ class RuanganRepository implements RuanganInterface
             'nomor_ruangan' => $data,
         ]);
     }
-    public function update($data, $id)
+    public function update($data, $ruangan)
     {
-        return $this->ruangan->where('id', $id)->update([
+        return $ruangan->update([
             'nomor_ruangan' => $data,
         ]);
     }
-    public function destroy($id)
+    public function destroy($ruangan)
     {
-        return $this->ruangan->where('id', $id)->delete();
+        return $ruangan->delete();
     }
 }

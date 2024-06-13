@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
-use App\Models\Rombel;
+use App\Traits\uuid;
 use App\Models\Siswa;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Rombel;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Kehadiran extends Model
 {
-    use HasFactory;
+    use HasFactory, uuid;
     protected $fillable = [
         'rombel_id',
         'tanggal',
@@ -23,5 +24,10 @@ class Kehadiran extends Model
     public function siswas()
     {
         return $this->belongsToMany(Siswa::class)->withPivot('kehadiran');
+    }
+
+    public function getRouteKeyName(): String
+    {
+        return 'uuid';
     }
 }

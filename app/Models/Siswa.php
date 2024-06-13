@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\uuid;
 use App\Models\Nilai;
 use App\Models\Ekskul;
 use App\Models\Rombel;
@@ -14,7 +15,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Siswa extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, uuid;
 
     protected $fillable = [
         'nis',
@@ -69,5 +70,10 @@ class Siswa extends Authenticatable
     public function ekskuls()
     {
         return $this->belongsToMany(Ekskul::class);
+    }
+
+    public function getRouteKeyName(): String
+    {
+        return 'uuid';
     }
 }

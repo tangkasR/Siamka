@@ -42,7 +42,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($mapel as $item_mapel)
+                                    @foreach ($mapels as $item_mapel)
                                         <tr>
                                             <td></td>
                                             <td></td>
@@ -120,10 +120,10 @@
                                                 href="{{ route('admin.guru.detail_guru', ['id' => $data->id]) }}">
                                                 <i class='bx bx-show'></i> Detail</a>
                                             <a class="btn-edit" data-tw-toggle="modal"
-                                                data-tw-target="#modal-id_form_edit_{{ $data->id }}"><i
+                                                data-tw-target="#modal-id_form_edit_{{ $loop->iteration }}"><i
                                                     class='bx bxs-edit'></i> Ubah</a>
                                             <a class="btn-delete" data-tw-toggle="modal"
-                                                data-tw-target="#modal-id_form_destroy_{{ $data->id }}">
+                                                data-tw-target="#modal-id_form_destroy_{{ $loop->iteration }}">
                                                 <i class='bx bx-trash'></i> Hapus</a>
                                         </div>
                                     </td>
@@ -131,7 +131,7 @@
                                 </tr>
 
                                 {{-- Modal Edit --}}
-                                <div class="relative z-50 hidden modal" id="modal-id_form_edit_{{ $data->id }}"
+                                <div class="relative z-50 hidden modal" id="modal-id_form_edit_{{ $loop->iteration }}"
                                     aria-labelledby="modal-title" role="dialog" aria-modal="true">
                                     <div class="fixed inset-0 z-50 overflow-y-auto">
                                         <div
@@ -153,9 +153,10 @@
                                                             Ubah
                                                             Data Guru</h3>
                                                         <form class="space-y-4"
-                                                            action="{{ route('admin.guru.update', ['id' => $data->id]) }}"
+                                                            action="{{ route('admin.guru.update', ['guru' => $data]) }}"
                                                             method="POST">
                                                             @csrf
+
                                                             <div class="mb-3">
                                                                 <label for="nama"
                                                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
@@ -187,24 +188,58 @@
                                                                     placeholder="Masukan Nomor Induk Yayasan"
                                                                     value="{{ $data->nomor_induk_yayasan }}" required>
                                                             </div>
-                                                            <div class="mb-3">
-                                                                <label for="username"
-                                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
-                                                                    Username
-                                                                </label>
-                                                                <input type="text" name="username" id="username"
-                                                                    class="bg-gray-800/5 border border-gray-100 text-gray-900 dark:text-gray-100 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder-gray-400 dark:placeholder:text-zinc-100/60 focus:ring-0"
-                                                                    placeholder="Masukan Email Siswa"
-                                                                    value="{{ $data->username }}" required>
+                                                            <div class="grid grid-cols-2 gap-4">
+                                                                <div class="mb-3">
+                                                                    <label for="mapel_id_1"
+                                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
+                                                                        Mata Pelajaran 1
+                                                                    </label>
+                                                                    <select id="mapel_id_1" name="mapel_id_1"
+                                                                        class=" dropdown dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100">
+                                                                        <option value="">- Tidak berubah -</option>
+                                                                        @foreach ($mapels as $mapel)
+                                                                            <option value="{{ $mapel->id }}">
+                                                                                {{ $mapel->nama_mata_pelajaran }}
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label for="mapel_id_2"
+                                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
+                                                                        Mata Pelajaran 2 (opsional)
+                                                                    </label>
+                                                                    <select id="mapel_id_2" name="mapel_id_2"
+                                                                        class=" dropdown dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100">
+                                                                        <option value="">- Tidak berubah -</option>
+                                                                        @foreach ($mapels as $mapel)
+                                                                            <option value="{{ $mapel->id }}">
+                                                                                {{ $mapel->nama_mata_pelajaran }}
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
                                                             </div>
-                                                            <div class="mb-3">
-                                                                <label for="password"
-                                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
-                                                                    Password
-                                                                </label>
-                                                                <input type="text" name="password" id="password"
-                                                                    class="bg-gray-800/5 border border-gray-100 text-gray-900 dark:text-gray-100 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder-gray-400 dark:placeholder:text-zinc-100/60 focus:ring-0"
-                                                                    placeholder="Masukan Password Siswa" required>
+                                                            <div class="grid grid-cols-2 gap-4">
+                                                                <div class="mb-3">
+                                                                    <label for="username"
+                                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
+                                                                        Username
+                                                                    </label>
+                                                                    <input type="text" name="username" id="username"
+                                                                        class="bg-gray-800/5 border border-gray-100 text-gray-900 dark:text-gray-100 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder-gray-400 dark:placeholder:text-zinc-100/60 focus:ring-0"
+                                                                        placeholder="Masukan Email Siswa"
+                                                                        value="{{ $data->username }}" required>
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label for="password"
+                                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
+                                                                        Password
+                                                                    </label>
+                                                                    <input type="text" name="password" id="password"
+                                                                        class="bg-gray-800/5 border border-gray-100 text-gray-900 dark:text-gray-100 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder-gray-400 dark:placeholder:text-zinc-100/60 focus:ring-0"
+                                                                        placeholder="Masukan Password Siswa" required>
+                                                                </div>
                                                             </div>
                                                             <button type="submit"
                                                                 class="w-full text-white mt-3 bg-violet-600 border-transparent btn">
@@ -220,7 +255,7 @@
                                 {{-- End Modal Edit --}}
 
                                 {{-- Modal Destroy --}}
-                                <div class="relative z-50 hidden modal" id="modal-id_form_destroy_{{ $data->id }}"
+                                <div class="relative z-50 hidden modal" id="modal-id_form_destroy_{{ $loop->iteration }}"
                                     aria-labelledby="modal-title" role="dialog" aria-modal="true">
                                     <div class="fixed inset-0 z-50 overflow-y-auto">
                                         <div
@@ -242,7 +277,7 @@
                                                             Apakah anda ingin
                                                             menghapus data {{ $data->nama }}</h3>
                                                         <form class="space-y-4"
-                                                            action="{{ route('admin.guru.destroy', ['id' => $data->id]) }}"
+                                                            action="{{ route('admin.guru.destroy', ['guru' => $data]) }}"
                                                             method="GET">
                                                             @csrf
                                                             <button type="submit"

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Guru;
 use App\Services\AuthService;
 use App\Services\DateService;
 use App\Services\GuruService;
@@ -40,10 +41,9 @@ class GuruController extends Controller
     }
     public function index()
     {
-        // dd($this->guru->getAll());
         return view('pages.admin.guru.guru', [
             'guru' => $this->guru->getAll(),
-            'mapel' => $this->mapel->getAll(),
+            'mapels' => $this->mapel->getAll(),
         ]);
     }
 
@@ -63,20 +63,20 @@ class GuruController extends Controller
             return redirect()->back()->with('error', $err->getMessage());
         }
     }
-    public function update(Request $request, $id)
+    public function update(Request $request, Guru $guru)
     {
         try {
-            $this->guru->update($request->all(), $id);
+            $this->guru->update($request->all(), $guru);
             return redirect()->back()->with('message', 'Berhasil mengubah data');
 
         } catch (QueryException $err) {
             return redirect()->back()->with('error', 'Gagal mengubah data');
         }
     }
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, Guru $guru)
     {
         try {
-            $this->guru->destroy($id);
+            $this->guru->destroy($guru);
             return redirect()->back()->with('message', 'Berhasil menghapus data');
 
         } catch (QueryException $er) {

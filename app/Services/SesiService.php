@@ -23,13 +23,13 @@ class SesiService
     {
         return $this->handleStore($nama_sesis);
     }
-    public function update($data, $id)
+    public function update($data, $sesi)
     {
-        return $this->sesi->update($data['nama_sesi'], $id);
+        return $this->sesi->update($data['nama_sesi'], $sesi);
     }
-    public function destroy($id)
+    public function destroy($sesi)
     {
-        return $this->sesi->destroy($id);
+        return $this->sesi->destroy($sesi);
     }
     private function handleStore($datas)
     {

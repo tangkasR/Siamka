@@ -2,16 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\uuid;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Pengumuman extends Model
 {
-    use HasFactory;
+    use HasFactory, uuid;
     protected $table = 'pengumumans';
     protected $fillable = [
         'image',
         'judul',
         'deskripsi',
     ];
+
+    public function getRouteKeyName(): String
+    {
+        return 'uuid';
+    }
 }

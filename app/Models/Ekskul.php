@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Guru;
+use App\Traits\uuid;
 use App\Models\Siswa;
 use App\Models\NilaiEkskul;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Ekskul extends Model
 {
-    use HasFactory;
+    use HasFactory, uuid;
     protected $fillable = [
         'guru_id',
         'nama_ekskul',
@@ -28,5 +29,10 @@ class Ekskul extends Model
     public function gurus()
     {
         return $this->belongsTo(Guru::class, 'guru_id', 'id');
+    }
+
+    public function getRouteKeyName(): String
+    {
+        return 'uuid';
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Rombel;
 use App\Services\GuruService;
 use App\Services\RombelService;
 use Illuminate\Database\QueryException;
@@ -37,20 +38,20 @@ class RombelController extends Controller
             return redirect()->back()->with('error', 'Gagal menambah data');
         }
     }
-    public function update(Request $request, $id)
+    public function update(Request $request, Rombel $rombel)
     {
         try {
-            $this->rombel->update($request->all(), $id);
+            $this->rombel->update($request->all(), $rombel);
             return redirect()->back()->with('message', 'Berhasil mengubah data');
 
         } catch (QueryException $er) {
             return redirect()->back()->with('error', 'Gagal mengubah data');
         }
     }
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, Rombel $rombel)
     {
         try {
-            $this->rombel->destroy($id);
+            $this->rombel->destroy($rombel);
             return redirect()->back()->with('message', 'Berhasil menghapus data');
 
         } catch (QueryException $er) {

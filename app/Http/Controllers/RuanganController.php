@@ -31,20 +31,20 @@ class RuanganController extends Controller
             return redirect()->back()->with('error', 'Gagal menambah data');
         }
     }
-    public function update(Request $request, $id)
+    public function update(Request $request, Ruangan $ruangan)
     {
         try {
-            $this->ruangan->update($request->all(), $id);
+            $this->ruangan->update($request->all(), $ruangan);
             return redirect()->back()->with('message', 'Berhasil mengubah data');
 
         } catch (QueryException $er) {
             return redirect()->back()->with('error', 'Gagal mengubah data');
         }
     }
-    public function destroy($id)
+    public function destroy(Ruangan $ruangan)
     {
         try {
-            $this->ruangan->destroy($id);
+            $this->ruangan->destroy($ruangan);
             return redirect()->back()->with('message', 'Berhasil menghapus data');
 
         } catch (QueryException $er) {

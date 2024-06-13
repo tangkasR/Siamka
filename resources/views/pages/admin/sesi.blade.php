@@ -28,10 +28,10 @@
                                         class="p-4 border  border-t-0 border-l-0 border-gray-200 dark:border-zinc-600 min-w-[250px] w-[250px]">
                                         <div class="grid grid-cols-2 gap-2">
                                             <a class="btn-edit" data-tw-toggle="modal"
-                                                data-tw-target="#modal-id_form_edit_{{ $data->id }}"><i
+                                                data-tw-target="#modal-id_form_edit_{{ $loop->iteration }}"><i
                                                     class='bx bxs-edit'></i> Ubah</a>
                                             <a class="btn-delete" data-tw-toggle="modal"
-                                                data-tw-target="#modal-id_form_destroy_{{ $data->id }}">
+                                                data-tw-target="#modal-id_form_destroy_{{ $loop->iteration }}">
                                                 <i class='bx bx-trash'></i> Hapus</a>
                                         </div>
                                     </td>
@@ -39,7 +39,7 @@
                                 </tr>
 
                                 {{-- Modal Edit --}}
-                                <div class="relative z-50 hidden modal" id="modal-id_form_edit_{{ $data->id }}"
+                                <div class="relative z-50 hidden modal" id="modal-id_form_edit_{{ $loop->iteration }}"
                                     aria-labelledby="modal-title" role="dialog" aria-modal="true">
                                     <div class="fixed inset-0 z-50 overflow-y-auto">
                                         <div
@@ -61,7 +61,7 @@
                                                             Ubah
                                                             Data Sesi</h3>
                                                         <form class="space-y-4"
-                                                            action="{{ route('admin.sesi.update', ['id' => $data->id]) }} "
+                                                            action="{{ route('admin.sesi.update', ['sesi' => $data]) }} "
                                                             method="POST">
                                                             @csrf
                                                             <div>
@@ -88,7 +88,7 @@
                                 {{-- End Modal Edit --}}
 
                                 {{-- Modal Destroy --}}
-                                <div class="relative z-50 hidden modal" id="modal-id_form_destroy_{{ $data->id }}"
+                                <div class="relative z-50 hidden modal" id="modal-id_form_destroy_{{ $loop->iteration }}"
                                     aria-labelledby="modal-title" role="dialog" aria-modal="true">
                                     <div class="fixed inset-0 z-50 overflow-y-auto">
                                         <div
@@ -110,7 +110,7 @@
                                                             Apakah anda ingin
                                                             menghapus data {{ $data->nama_sesi }}</h3>
                                                         <form class="space-y-4"
-                                                            action="{{ route('admin.sesi.destroy', ['id' => $data->id]) }}"
+                                                            action="{{ route('admin.sesi.destroy', ['sesi' => $data]) }}"
                                                             method="GET">
                                                             @csrf
                                                             <button type="submit"

@@ -6,6 +6,6 @@ interface RuanganInterface
 {
     public function getAll();
     public function store($data);
-    public function update($data, $id);
-    public function destroy($id);
+    public function update($data, $ruangan);
+    public function destroy($ruangan);
 }

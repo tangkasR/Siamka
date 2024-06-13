@@ -3,14 +3,15 @@
 namespace App\Models;
 
 use App\Models\Guru;
-use App\Models\JadwalPelajaran;
+use App\Traits\uuid;
 use App\Models\Nilai;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\JadwalPelajaran;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class MataPelajaran extends Model
 {
-    use HasFactory;
+    use HasFactory, uuid;
 
     protected $fillable = [
         'nama_mata_pelajaran',
@@ -29,5 +30,10 @@ class MataPelajaran extends Model
     public function nilais()
     {
         return $this->hasMany(Nilai::class, 'mata_pelajaran_id', 'id');
+    }
+
+    public function getRouteKeyName(): String
+    {
+        return 'uuid';
     }
 }

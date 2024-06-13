@@ -80,8 +80,8 @@ Route::group(['middleware' => ["must-login"]], function () {
         Route::controller(GuruController::class)->prefix('admin')->name('admin.')->group(function () {
             Route::get('/guru', 'index')->name('guru');
             Route::post('/guru', 'store')->name('guru.store');
-            Route::post('/guru/update/{id}', 'update')->name('guru.update');
-            Route::get('/guru/destroy/{id}', 'destroy')->name('guru.destroy');
+            Route::post('/guru/update/{guru}', 'update')->name('guru.update');
+            Route::get('/guru/destroy/{guru}', 'destroy')->name('guru.destroy');
             Route::get('/guru/detail_guru/{id}', 'detail_guru')->name('guru.detail_guru');
             Route::get('/guru/cetak_kehadiran/{id}', 'cetak_kehadiran')->name('guru.cetak_kehadiran');
         });
@@ -90,24 +90,24 @@ Route::group(['middleware' => ["must-login"]], function () {
         Route::controller(RombelController::class)->prefix('admin')->name('admin.')->group(function () {
             Route::get('/rombel', 'index')->name('rombel');
             Route::post('/rombel', 'store')->name('rombel.store');
-            Route::post('/rombel/update/{id}', 'update')->name('rombel.update');
-            Route::get('/rombel/destroy/{id}', 'destroy')->name('rombel.destroy');
+            Route::post('/rombel/update/{rombel}', 'update')->name('rombel.update');
+            Route::get('/rombel/destroy/{rombel}', 'destroy')->name('rombel.destroy');
         });
 
         // sesi
         Route::controller(SesiController::class)->prefix('admin')->name('admin.')->group(function () {
             Route::get('/sesi', 'index')->name('sesi');
             Route::post('/sesi', 'store')->name('sesi.store');
-            Route::post('/sesi/update/{id}', 'update')->name('sesi.update');
-            Route::get('/sesi/destroy/{id}', 'destroy')->name('sesi.destroy');
+            Route::post('/sesi/update/{sesi}', 'update')->name('sesi.update');
+            Route::get('/sesi/destroy/{sesi}', 'destroy')->name('sesi.destroy');
         });
 
         // ruangan
         Route::controller(RuanganController::class)->prefix('admin')->name('admin.')->group(function () {
             Route::get('/ruangan', 'index')->name('ruangan');
             Route::post('/ruangan', 'store')->name('ruangan.store');
-            Route::post('/ruangan/update/{id}', 'update')->name('ruangan.update');
-            Route::get('/ruangan/destroy/{id}', 'destroy')->name('ruangan.destroy');
+            Route::post('/ruangan/update/{ruangan}', 'update')->name('ruangan.update');
+            Route::get('/ruangan/destroy/{ruangan}', 'destroy')->name('ruangan.destroy');
         });
 
         // pengumuman
@@ -122,8 +122,8 @@ Route::group(['middleware' => ["must-login"]], function () {
         Route::controller(MataPelajaranController::class)->prefix('admin')->name('admin.')->group(function () {
             Route::get('/mapel', 'index')->name('mapel');
             Route::post('/mapel', 'store')->name('mapel.store');
-            Route::post('/mapel/update/{id}', 'update')->name('mapel.update');
-            Route::get('/mapel/destroy/{id}', 'destroy')->name('mapel.destroy');
+            Route::post('/mapel/update/{mapel}', 'update')->name('mapel.update');
+            Route::get('/mapel/destroy/{mapel}', 'destroy')->name('mapel.destroy');
         });
 
         // jadwal pelajaran

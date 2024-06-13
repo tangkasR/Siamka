@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('gurus', function (Blueprint $table) {
             $table->id();
+            $table->uuid();
             $table->unsignedBigInteger('mata_pelajaran_id');
             $table->foreign('mata_pelajaran_id')->references('id')->on('mata_pelajarans')->onDelete('restrict');
             $table->string('nama', 100);

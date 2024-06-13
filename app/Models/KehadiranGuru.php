@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use App\Models\Guru;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\uuid;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class KehadiranGuru extends Model
 {
-    use HasFactory;
+    use HasFactory, uuid;
     protected $fillable = [
         'guru_id',
         'kehadiran',
@@ -18,5 +19,10 @@ class KehadiranGuru extends Model
     public function gurus()
     {
         return $this->belongsTo(Guru::class);
+    }
+
+    public function getRouteKeyName(): String
+    {
+        return 'uuid';
     }
 }

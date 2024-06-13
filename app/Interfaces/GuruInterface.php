@@ -7,7 +7,7 @@ interface GuruInterface
     public function getAll();
     public function getById($id);
     public function store($data);
-    public function update($data, $id);
-    public function destroy($id);
+    public function update($data, $guru);
+    public function destroy($guru);
     public function updateProfil($data, $id);
 }

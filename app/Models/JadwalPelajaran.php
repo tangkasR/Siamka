@@ -3,17 +3,18 @@
 namespace App\Models;
 
 use App\Models\Guru;
-use App\Models\JadwalPelajaran;
-use App\Models\MataPelajaran;
+use App\Models\Sesi;
+use App\Traits\uuid;
 use App\Models\Rombel;
 use App\Models\Ruangan;
-use App\Models\Sesi;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\MataPelajaran;
+use App\Models\JadwalPelajaran;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class JadwalPelajaran extends Model
 {
-    use HasFactory;
+    use HasFactory, uuid;
     protected $fillable = [
         'ruangan_id',
         'rombel_id',
@@ -41,5 +42,10 @@ class JadwalPelajaran extends Model
     public function gurus()
     {
         return $this->belongsTo(Guru::class, 'guru_id', 'id');
+    }
+
+    public function getRouteKeyName(): String
+    {
+        return 'uuid';
     }
 }

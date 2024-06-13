@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('sesis', function (Blueprint $table) {
             $table->id();
+            $table->uuid();
             $table->string('nama_sesi');
             $table->timestamps();
         });

@@ -10,7 +10,7 @@ interface RombelInterface
     public function rombelWithoutGuru($id);
     public function getBySiswaId($id);
     public function store($guru_id, $nama_rombel);
-    public function update($data, $id);
-    public function destroy($id);
+    public function update($data, $rombel);
+    public function destroy($rombel);
     public function getByGuruId($id);
 }

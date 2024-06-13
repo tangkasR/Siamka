@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('kehadirans', function (Blueprint $table) {
             $table->id();
+            $table->uuid();
             $table->unsignedBigInteger('rombel_id');
             $table->foreign('rombel_id')->references('id')->on('rombels')->onDelete('restrict');
             $table->string('tanggal');

@@ -22,11 +22,12 @@ class RombelRepository implements RombelInterface
 
     public function getAll()
     {
-        return DB::table('rombels')
-            ->join('gurus', 'rombels.guru_id', '=', 'gurus.id')
-            ->select('rombels.id', 'rombels.nama_rombel', 'gurus.nama', 'rombels.guru_id')
-            ->orderBy('nama_rombel')
-            ->get();
+        return $this->rombel->with('guru')->get();
+        // return DB::table('rombels')
+        //     ->join('gurus', 'rombels.guru_id', '=', 'gurus.id')
+        //     ->select('rombels.id', 'rombels.nama_rombel', 'gurus.nama', 'rombels.guru_id')
+        //     ->orderBy('nama_rombel')
+        //     ->get();
     }
     public function getOne($condition, $params)
     {
@@ -95,15 +96,15 @@ class RombelRepository implements RombelInterface
             'nama_rombel' => $nama_rombel,
         ]);
     }
-    public function update($data, $id)
+    public function update($data, $rombel)
     {
-        return $this->rombel->where('id', $id)->update([
+        return $rombel->update([
             'guru_id' => $data['guru_id'],
             'nama_rombel' => $data['nama_rombel'],
         ]);
     }
-    public function destroy($id)
+    public function destroy($rombel)
     {
-        return $this->rombel->where('id', $id)->delete();
+        return $rombel->delete();
     }
 }

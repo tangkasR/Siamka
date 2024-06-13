@@ -2,19 +2,20 @@
 
 namespace App\Models;
 
+use App\Traits\uuid;
 use App\Models\Ekskul;
-use App\Models\JadwalPelajaran;
+use App\Models\Rombel;
 use App\Models\KehadiranGuru;
 use App\Models\MataPelajaran;
-use App\Models\Rombel;
+use App\Models\JadwalPelajaran;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class Guru extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, uuid;
 
     protected $fillable = [
         'mata_pelajaran_id',
@@ -67,6 +68,11 @@ class Guru extends Authenticatable
     public function rombels()
     {
         return $this->belongsToMany(Rombel::class);
+    }
+
+    public function getRouteKeyName(): String
+    {
+        return 'uuid';
     }
 
 }

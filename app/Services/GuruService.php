@@ -26,13 +26,13 @@ class GuruService
     {
         return $this->guru->store($data);
     }
-    public function update($data, $id)
+    public function update($data, $guru)
     {
-        return $this->guru->update($data, $id);
+        return $this->guru->update($data, $guru);
     }
-    public function destroy($id)
+    public function destroy($guru)
     {
-        return $this->guru->destroy($id);
+        return $this->guru->destroy($guru);
     }
     public function getById($id)
     {

@@ -19,13 +19,13 @@ class RuanganService
     {
         return $this->handleStore($nomor_ruangans);
     }
-    public function update($data, $id)
+    public function update($data, $ruangan)
     {
-        return $this->ruangan->update($data['nomor_ruangan'], $id);
+        return $this->ruangan->update($data['nomor_ruangan'], $ruangan);
     }
-    public function destroy($id)
+    public function destroy($ruangan)
     {
-        return $this->ruangan->destroy($id);
+        return $this->ruangan->destroy($ruangan);
     }
     private function handleStore($datas)
     {

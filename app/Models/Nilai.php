@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
-use App\Models\MataPelajaran;
+use App\Traits\uuid;
 use App\Models\Siswa;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\MataPelajaran;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Nilai extends Model
 {
-    use HasFactory;
+    use HasFactory, uuid;
     protected $fillable = [
         'siswa_id',
         'mata_pelajaran_id',
@@ -25,5 +26,10 @@ class Nilai extends Model
     public function siswas()
     {
         return $this->belongsTo(Siswa::class, 'siswa_id', 'id');
+    }
+
+    public function getRouteKeyName(): String
+    {
+        return 'uuid';
     }
 }

@@ -47,13 +47,13 @@ class RombelService
     {
         return $this->handleStore($datas);
     }
-    public function update($data, $id)
+    public function update($data, $rombel)
     {
-        return $this->rombel->update($data, $id);
+        return $this->rombel->update($data, $rombel);
     }
-    public function destroy($id)
+    public function destroy($rombel)
     {
-        return $this->rombel->destroy($id);
+        return $this->rombel->destroy($rombel);
     }
     private function handleStore($datas)
     {

@@ -29,10 +29,9 @@ class GuruRepository implements GuruInterface
     {
         return Excel::import(new GuruImport, $data['file']);
     }
-    public function update($data, $id)
+    public function update($data, $guru)
     {
-        return $this->guru->where('id', $id)->update([
-            'mata_pelajaran_id' => $data['mata_pelajaran_id'],
+        return $guru->update([
             'nama' => $data['nama'],
             'jabatan' => $data['jabatan'],
             'nomor_induk_yayasan' => $data['nomor_induk_yayasan'],
@@ -40,9 +39,9 @@ class GuruRepository implements GuruInterface
             'password' => Hash::make($data['password']),
         ]);
     }
-    public function destroy($id)
+    public function destroy($guru)
     {
-        return $this->guru->where('id', $id)->delete();
+        return $guru->delete();
     }
     public function updateProfil($data, $id)
     {

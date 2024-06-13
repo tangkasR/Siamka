@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Sesi;
 use App\Services\SesiService;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -31,20 +32,20 @@ class SesiController extends Controller
         }
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Sesi $sesi)
     {
         try {
-            $this->sesi->update($request->all(), $id);
+            $this->sesi->update($request->all(), $sesi);
             return redirect()->back()->with('message', 'Berhasil mengubah data');
 
         } catch (QueryException $er) {
             return redirect()->back()->with('error', 'Gagal mengubah data');
         }
     }
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, Sesi $sesi)
     {
         try {
-            $this->sesi->destroy($id);
+            $this->sesi->destroy($sesi);
             return redirect()->back()->with('message', 'Berhasil menghapus data');
 
         } catch (QueryException $er) {
