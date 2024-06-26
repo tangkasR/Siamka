@@ -20,64 +20,38 @@ class RombelRepository implements RombelInterface
         $this->date = $date;
     }
 
-    public function getAll()
+    public function getAll($id)
     {
-        return $this->rombel->with('guru')->get();
-        // return DB::table('rombels')
-        //     ->join('gurus', 'rombels.guru_id', '=', 'gurus.id')
-        //     ->select('rombels.id', 'rombels.nama_rombel', 'gurus.nama', 'rombels.guru_id')
-        //     ->orderBy('nama_rombel')
-        //     ->get();
+        return $this->rombel->with('guru')->where('tahun_ajaran_id', $id)->get();
     }
-    public function getOne($condition, $params)
+    public function getRombelGuru($niy, $tahun_ajaran_id)
     {
-        return $this->rombel->where($condition, $params)->with('siswas')->first();
-    }
-    private function translateDayToIndonesian($englishDay)
-    {
-        $days = [
-            'Sunday' => 'minggu',
-            'Monday' => 'senin',
-            'Tuesday' => 'selasa',
-            'Wednesday' => 'rabu',
-            'Thursday' => 'kamis',
-            'Friday' => 'jumat',
-            'Saturday' => 'sabtu',
-        ];
-
-        return $days[$englishDay] ?? $englishDay;
-    }
-    public function getByGuruIdSesiSatu($guru_id)
-    {
-        $sesi = $this->sesi->getByNama('07:00-09:00');
         return DB::table('rombels')
-            ->join('jadwal_pelajarans', 'rombels.id', '=', 'jadwal_pelajarans.rombel_id')
-            ->join('gurus', 'jadwal_pelajarans.guru_id', '=', 'gurus.id')
-            ->where('jadwal_pelajarans.sesi_id', $sesi->id)
-            ->where('jadwal_pelajarans.hari', $this->translateDayToIndonesian($this->date->getDate()->format('l')))
-            ->where('jadwal_pelajarans.guru_id', $guru_id)
+            ->join('guru_rombel', 'rombels.id', 'guru_rombel.rombel_id')
+            ->join('gurus', 'guru_rombel.guru_id', 'gurus.id')
+            ->where('gurus.nomor_induk_yayasan', $niy)
+            ->where('rombels.tahun_ajaran_id', $tahun_ajaran_id)
             ->select('rombels.id', 'rombels.nama_rombel')
-            ->orderBy('nama_rombel')
-            ->first();
+            ->get();
     }
-    public function rombelWithoutGuru($id)
+    public function getOne($rombel)
+    {
+        if (is_object($rombel)) {
+            return $rombel->with('siswas')->first();
+        }
+        return $this->rombel->with('siswas')->where('id', $rombel)->first();
+    }
+
+    public function rombelWithoutGuru($id, $tahun_ajaran_id)
     {
         return DB::table('rombels')
+            ->where('tahun_ajaran_id', $tahun_ajaran_id)
             ->leftJoin('guru_rombel', function ($join) use ($id) {
                 $join->on('rombels.id', '=', 'guru_rombel.rombel_id')
                     ->where('guru_rombel.guru_id', '=', $id);
             })
             ->whereNull('guru_rombel.guru_id')
             ->select('rombels.*')
-            ->get();
-    }
-    public function getByGuruId($id)
-    {
-        return DB::table('rombels')
-            ->leftJoin('guru_rombel', 'rombels.id', '=', 'guru_rombel.rombel_id')
-            ->where('guru_rombel.guru_id', $id)
-            ->select('rombels.*')
-            ->orderBy('rombels.nama_rombel')
             ->get();
     }
     public function getBySiswaId($id)
@@ -89,10 +63,11 @@ class RombelRepository implements RombelInterface
             ->select('rombels.nama_rombel', 'rombels.id')
             ->get();
     }
-    public function store($guru_id, $nama_rombel)
+    public function store($guru_id, $nama_rombel, $tahun_ajaran_id)
     {
         return $this->rombel->create([
             'guru_id' => $guru_id,
+            'tahun_ajaran_id' => $tahun_ajaran_id,
             'nama_rombel' => $nama_rombel,
         ]);
     }

@@ -15,9 +15,9 @@ class NilaiEkskulService
     {
         return $this->nilai_ekskul->getAll($ekskul_id);
     }
-    public function checkNilaiWithSemester($ekskul_id, $semester)
+    public function checkNilaiWithSemester($ekskul_id, $tahun_ajaran_id)
     {
-        return $this->nilai_ekskul->checkNilaiWithSemester($ekskul_id, $semester);
+        return $this->nilai_ekskul->checkNilaiWithSemester($ekskul_id, $tahun_ajaran_id);
     }
     public function store($datas)
     {
@@ -31,9 +31,9 @@ class NilaiEkskulService
     {
         return $this->nilai_ekskul->destroy($condition, $params);
     }
-    public function rekap($siswa_id)
+    public function rekap($nis)
     {
-        $nilaiEkskuls = $this->nilai_ekskul->getBySiswaId($siswa_id); // Menggunakan method getBySiswaId untuk mendapatkan nilai ekskul berdasarkan siswa_id
+        $nilaiEkskuls = $this->nilai_ekskul->getBySiswaNis($nis); // Menggunakan method getBySiswaId untuk mendapatkan nilai ekskul berdasarkan siswa_id
         $rekap = [];
 
         // Mengumpulkan semua semester yang ada
@@ -71,7 +71,7 @@ class NilaiEkskulService
     private function handleStore($datas)
     {
         foreach ($datas['siswa_id'] as $key => $siswa_id) {
-            $this->nilai_ekskul->store($siswa_id, $datas['ekskul_id'], $datas['nilai'][$key], $datas['semester']);
+            $this->nilai_ekskul->store($siswa_id, $datas['ekskul_id'], $datas['nilai'][$key], $datas['tahun_ajaran_id'], $datas['semester']);
         }
     }
 }

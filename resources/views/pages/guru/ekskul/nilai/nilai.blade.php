@@ -3,70 +3,86 @@
     <span class="capitalize">Daftar Nilai Ekskul {{ $ekskul->nama_ekskul }}</span>
 @endsection
 @section('table-role', 'Guru')
+@section('back')
+    <div class="font-medium  border border-slate-500 bg-slate-500 text-white rounded-full  me-3">
+        <a href="{{ route('guru.show_ekskul', ['tahun' => $tahun, 'semester' => $semester]) }}"
+            class="flex justify-center items-center"><i class='bx bx-chevron-left text-[30px]'></i></a>
+    </div>
+@endsection
 @section('content')
     <div class="grid grid-cols-12 gap-6 bg-white shadow-md">
         <div class="col-span-12">
             <div class="card dark:bg-zinc-800 dark:border-zinc-600">
                 <div class="card-body border-b border-gray-100 dark:border-zinc-600 pt-6">
-                    <div class="grid md:grid-cols-12">
-                        <div class="md:col-span-2">
-                            <h6 class=" text-gray-600 text-[16px] font-medium dark:text-gray-100">
-                                Tambah Nilai Semua Siswa
-                            </h6>
-                            <a href="{{ route('guru.tambah_nilai', ['ekskul_id' => $ekskul->id]) }}"
-                                class="mt-3 text-white bg-violet-500 border-transparent btn w-full">
-                                Tambah Nilai Semua Siswa
-                            </a>
-                        </div>
-                    </div>
+                    <a type="submit"
+                        href="{{ route('guru.tambah_nilai', ['tahun_ajaran_id' => Crypt::encrypt($tahun_ajaran_id), 'ekskul' => $ekskul]) }}"
+                        class="ms-auto w-fit md:mt-0 mt-6 cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md flex items-center gap-2">
+                        <span>Tambah Data</span> <i class='bx bxs-plus-circle text-[25px]'></i>
+                    </a>
                 </div>
                 <div class="relative overflow-x-auto card-body">
                     <table id="datatable" class="text-center table w-full pt-4 text-gray-700 dark:text-zinc-100 capitalize">
                         <thead>
-                            <tr class="bg-blue-200">
-                                <th class="p-4 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                            <tr class="bg-blue-100">
+                                <th class="p-4">
                                     No</th>
-                                <th class="p-4 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4">
                                     Nama Siswa</th>
-                                <th class="p-4 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4">
                                     Nama Ekskul</th>
-                                <th class="p-4 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4">
                                     Semester</th>
-                                <th class="p-4 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4">
                                     Nilai</th>
-                                <th class="p-4 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4">
                                     Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($nilais as $data)
                                 <tr class="{{ $loop->iteration % 2 == 0 ? 'bg-blue-50' : 'bg-white' }}">
-                                    <td class="p-4 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
+                                    <td class="p-4">
                                         {{ $loop->iteration }}</td>
-                                    <td class="p-4 border border-t-0 border-l-0  border-gray-200 dark:border-zinc-600">
+                                    <td class="p-4 ">
                                         {{ $data->nama }}</td>
-                                    <td class="p-4 border border-t-0 border-l-0  border-gray-200 dark:border-zinc-600">
+                                    <td class="p-4 ">
                                         {{ $data->nama_ekskul }}</td>
-                                    <td class="p-4 border border-t-0 border-l-0  border-gray-200 dark:border-zinc-600">
+                                    <td class="p-4 ">
                                         {{ $data->semester }}</td>
-                                    <td class="p-4 border border-t-0 border-l-0  border-gray-200 dark:border-zinc-600">
+                                    <td class="p-4 ">
                                         {{ $data->nilai }}</td>
-                                    <td
-                                        class="p-4 border  border-t-0 border-l-0 border-gray-200 dark:border-zinc-600 min-w-[300px] w-[300px]">
-                                        <div class="grid grid-cols-2 gap-4">
-                                            <a class="btn-edit " data-tw-toggle="modal"
-                                                data-tw-target="#modal-id_form_edit_{{ $data->id }}"><i
-                                                    class='bx bxs-edit'></i> Ubah Data</a>
-                                            <a class="btn-delete" data-tw-toggle="modal"
-                                                data-tw-target="#modal-id_form_destroy_{{ $data->id }}"><i
-                                                    class='bx bxs-edit'></i> Hapus Data</a>
+                                    <td class="p-4  ">
+                                        <div class="relative dropdown ">
+                                            <button type="button" class="py-2 font-medium leading-tight  dropdown-toggle"
+                                                id="dropdownMenuButton1" data-bs-toggle="dropdown"><i
+                                                    class='bx bx-menu text-[20px]'></i></button>
+
+                                            <ul class="absolute z-50 float-left py-2 mt-1 text-left list-none bg-white border-none rounded-lg shadow-lg dropdown-menu w-44 bg-clip-padding dark:bg-zinc-700 hidden"
+                                                aria-labelledby="dropdownMenuButton1" data-popper-placement="bottom-start"
+                                                style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(49px, 1636.5px, 0px);">
+                                                <li>
+                                                    <a class="block w-full px-4 py-1 text-sm font-medium text-gray-500 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 dark:text-gray-100 dark:hover:bg-zinc-600/50"
+                                                        data-tw-toggle="modal"
+                                                        data-tw-target="#modal-id_form_edit_{{ $loop->iteration }}">
+                                                        <i class='bx bxs-edit'></i>
+                                                        Ubah
+                                                    </a>
+                                                </li>
+                                                <hr class="my-1 border-gray-50 dark:border-zinc-600">
+                                                <li>
+                                                    <a class="block text-red-500 w-full px-4 py-1 text-sm font-medium  bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 dark:text-gray-100 dark:hover:bg-zinc-600/50"
+                                                        data-tw-toggle="modal"
+                                                        data-tw-target="#modal-id_form_destroy_{{ $loop->iteration }}">
+                                                        <i class='bx bx-trash'></i> Hapus</a>
+                                                </li>
+                                            </ul>
                                         </div>
                                     </td>
 
                                 </tr>
 
                                 {{-- Modal Edit --}}
-                                <div class="relative z-50 hidden modal" id="modal-id_form_edit_{{ $data->id }}"
+                                <div class="relative z-50 hidden modal" id="modal-id_form_edit_{{ $loop->iteration }}"
                                     aria-labelledby="modal-title" role="dialog" aria-modal="true">
                                     <div class="fixed inset-0 z-50 overflow-y-auto">
                                         <div
@@ -166,7 +182,7 @@
                                 {{-- End Modal Edit --}}
 
                                 {{-- Modal Destroy --}}
-                                <div class="relative z-50 hidden modal" id="modal-id_form_destroy_{{ $data->id }}"
+                                <div class="relative z-50 hidden modal" id="modal-id_form_destroy_{{ $loop->iteration }}"
                                     aria-labelledby="modal-title" role="dialog" aria-modal="true">
                                     <div class="fixed inset-0 z-50 overflow-y-auto">
                                         <div

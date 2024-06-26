@@ -14,25 +14,33 @@ class EkskulService
         $this->ekskul = $ekskul;
         $this->siswa = $siswa;
     }
-    public function getAll($id)
+    public function getAll($id, $tahun_ajaran_id)
     {
-        return $this->ekskul->getAll($id);
+        return $this->ekskul->getAll($id, $tahun_ajaran_id);
     }
-    public function getById($id)
+    public function getAllDatas($tahun_ajaran_id)
     {
-        return $this->ekskul->getById($id);
+        return $this->ekskul->getAllDatas($tahun_ajaran_id);
+    }
+    public function getById($ekskul)
+    {
+        return $this->ekskul->getById($ekskul);
     }
     public function getMemberList($id)
     {
         return $this->ekskul->getMemberList($id);
     }
-    public function getSiswaNonMember($rombel_id, $ekskul_id)
+    public function getMemberListNotActive($id)
     {
-        return $this->ekskul->getSiswaNonMember($rombel_id, $ekskul_id);
+        return $this->ekskul->getMemberListNotActive($id);
+    }
+    public function getSiswaNonMember($rombel, $ekskul)
+    {
+        return $this->ekskul->getSiswaNonMember($rombel, $ekskul);
     }
     public function store($datas)
     {
-        return $this->handleStore($datas);
+        return $this->ekskul->store($datas['nama_ekskul'], $datas['guru_id'], $datas['tahun_ajaran_id']);
     }
     public function addMember($datas)
     {
@@ -44,16 +52,19 @@ class EkskulService
     }
     public function destroy($id)
     {
-        $siswas = $this->ekskul->getMemberList($id);
+        $siswas = $this->ekskul->getMemberList($id)->get();
+        return $this->handleDestroy($siswas, $id);
+    }
+    private function handleDestroy($siswas, $id)
+    {
+        $ekskul = $this->ekskul->getById($id);
         foreach ($siswas as $siswa) {
             $siswa = $this->siswa->getById($siswa->id);
-            $ekskul = $this->ekskul->getById($id);
             $ekskul->siswas()->detach($siswa);
             $ekskul->siswas()->attach($siswa, [
                 'status' => 'tidak aktif',
             ]);
         }
-        return $this->ekskul->destroy($id);
     }
     public function activate($id)
     {
@@ -63,7 +74,6 @@ class EkskulService
     {
         $siswa = $this->siswa->getById($datas['siswa_id']);
         $ekskul = $this->ekskul->getById($datas['ekskul_id']);
-        // dd($datas['status']);
         $ekskul->siswas()->detach($siswa);
         $ekskul->siswas()->attach($siswa, [
             'status' => $datas['status'],
@@ -73,22 +83,13 @@ class EkskulService
     {
         return $this->handleDeleteMember($id_siswa, $datas);
     }
-    private function handleStore($datas)
-    {
-        $guru_id = $datas['guru_id'];
-        foreach ($datas['nama_ekskul'] as $data) {
-            $this->ekskul->store($data, $guru_id);
-        }
-    }
     private function handleAddMember($datas)
     {
         $ekskul = $this->ekskul->getById($datas['ekskul_id']);
 
         foreach ($datas['siswa_id'] as $id) {
             $siswa = $this->siswa->getById($id);
-            $siswa->ekskuls()->attach($ekskul, [
-                'status' => 'aktif',
-            ]);
+            $siswa->ekskuls()->attach($ekskul);
         }
     }
     private function handleDeleteMember($id_siswa, $datas)
@@ -96,5 +97,10 @@ class EkskulService
         $siswa = $this->siswa->getById($id_siswa);
         $ekskul = $this->ekskul->getById($datas['ekskul_id']);
         $ekskul->siswas()->detach($siswa);
+    }
+
+    public function getEkskulSiswa($nis)
+    {
+        return $this->ekskul->getEkskulSiswa($nis);
     }
 }

@@ -37,10 +37,9 @@ class JadwalPelajaranService
     {
         return $this->jadwal->destroyAllByRombelId($id);
     }
-    public function createTemplate($rombel_id)
+    public function createTemplate($rombel)
     {
         $sesi = $this->sesi->getAll();
-        $rombel = $this->rombel->getOne('id', $rombel_id);
         $hari = [
             'senin',
             'selasa',
@@ -57,12 +56,15 @@ class JadwalPelajaranService
                     array_push($templates, [
                         'hari' => $data,
                         'sesi' => $item_sesi->nama_sesi,
-                        'rombel' => $rombel->nama_rombel,
+                        'rombel' => $rombel->id,
                     ]);
                 }
             }
             $temp_hari = $data;
         }
         return $templates;
+    }
+    public function getByGuruIdSesiSatu($guru_id, $tahun_ajaran_id){
+        return $this->jadwal->getByGuruIdSesiSatu($guru_id, $tahun_ajaran_id);
     }
 }

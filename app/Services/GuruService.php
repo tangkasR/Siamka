@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Interfaces\GuruInterface;
 use App\Services\AuthService;
+use App\Services\MataPelajaranService;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
 
@@ -11,16 +12,18 @@ class GuruService
 {
     private $guru;
     private $auth;
+    private $mapel;
 
-    public function __construct(GuruInterface $guru, AuthService $auth)
+    public function __construct(GuruInterface $guru, AuthService $auth, MataPelajaranService $mapel)
     {
         $this->guru = $guru;
         $this->auth = $auth;
+        $this->mapel = $mapel;
     }
 
-    public function getAll()
+    public function getAll($id)
     {
-        return $this->guru->getAll();
+        return $this->guru->getAll($id);
     }
     public function store($data)
     {
@@ -28,15 +31,24 @@ class GuruService
     }
     public function update($data, $guru)
     {
+        if (isset($data['mapel_id_1'])) {
+            $guru->mapels()->detach();
+            $mapel_1 = $this->mapel->getOne($data['mapel_id_1']);
+            $guru->mapels()->attach($mapel_1->id);
+        }
+        if (isset($data['mapel_id_2'])) {
+            $mapel_2 = $this->mapel->getOne($data['mapel_id_2']);
+            $guru->mapels()->attach($mapel_2);
+        }
         return $this->guru->update($data, $guru);
     }
     public function destroy($guru)
     {
         return $this->guru->destroy($guru);
     }
-    public function getById($id)
+    public function getById($guru)
     {
-        return $this->guru->getById($id);
+        return $this->guru->getById($guru);
     }
     public function profil($guru)
     {
@@ -94,5 +106,39 @@ class GuruService
 
         $new_file->storeAs('public/' . $new_file_name);
         return $new_file_name;
+    }
+    public function aktivasi($id)
+    {
+        return $this->guru->aktivasi($id);
+    }
+    public function deaktivasi($id)
+    {
+        return $this->guru->deaktivasi($id);
+    }
+    public function aktivasi_all($id)
+    {
+        return $this->handleAktivasiAll($id);
+    }
+    private function handleAktivasiAll($id)
+    {
+        $gurus = $this->getAll($id);
+        foreach ($gurus as $guru) {
+            $this->aktivasi($guru->id);
+        }
+    }
+    public function deaktivasi_all($id)
+    {
+        return $this->handleDeaktivasiAll($id);
+    }
+    private function handleDeaktivasiAll($id)
+    {
+        $gurus = $this->getAll($id);
+        foreach ($gurus as $guru) {
+            $this->deaktivasi($guru->id);
+        }
+    }
+    public function totalGuru()
+    {
+        return $this->guru->totalGuru();
     }
 }

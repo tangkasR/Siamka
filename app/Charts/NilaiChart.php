@@ -30,13 +30,25 @@ class NilaiChart
     {
         $user = $this->auth->getUser('siswa');
 
+        // Default data for 6 semesters
+        $defaultData = [0, 0, 0, 0, 0, 0, 0];
+
         if ($user) {
+            // Get UTS and UAS data
+            $utsData = $this->nilai->getDataUts_chart($user->nis);
+            $uasData = $this->nilai->getDataUas_chart($user->nis);
+
+            // Ensure $utsData and $uasData are arrays with default values for missing semesters
+            $utsData = is_array($utsData) ? array_replace($defaultData, $utsData) : $defaultData;
+            $uasData = is_array($uasData) ? array_replace($defaultData, $uasData) : $defaultData;
+
             return $this->chart->areaChart()
-                ->setTitle('Pencapaian Nilai')
+                ->setTitle('Pencapaian Nilai Mata Pelajaran')
                 ->setSubtitle('Rata-Rata UTS dan UAS')
-                ->addData('UTS', $this->nilai->getDataUts_chart($user->id))
-                ->addData('UAS', $this->nilai->getDataUas_chart($user->id))
-                ->setXAxis(['',
+                ->addData('UTS', $utsData)
+                ->addData('UAS', $uasData)
+                ->setXAxis([
+                    '',
                     'Semester 1',
                     'Semester 2',
                     'Semester 3',

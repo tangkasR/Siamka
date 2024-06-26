@@ -10,23 +10,25 @@ class KehadiranGuruService
 {
     private $kehadiran_guru;
     private $date;
+    private $tahun_ajaran;
 
-    public function __construct(KehadiranGuruInterface $kehadiran_guru, DateService $date)
+    public function __construct(KehadiranGuruInterface $kehadiran_guru, DateService $date, TahunAjaranService $tahun_ajaran)
     {
         $this->kehadiran_guru = $kehadiran_guru;
         $this->date = $date;
+        $this->tahun_ajaran = $tahun_ajaran;
     }
-    public function getData($guru_id, $bulan, $tahun)
+    public function getData($niy, $bulan, $tahun)
     {
-        return $this->kehadiran_guru->getData($guru_id, $bulan, $tahun);
+        return $this->kehadiran_guru->getData($niy, $bulan, $tahun);
     }
     public function getYear()
     {
         return $this->kehadiran_guru->getYear();
     }
-    public function rekapKehadiranGuru($guru_id, $tahun)
+    public function rekapKehadiranGuru($niy, $tahun)
     {
-        return $this->kehadiran_guru->rekapKehadiranGuru($guru_id, $tahun);
+        return $this->kehadiran_guru->rekapKehadiranGuru($niy, $tahun);
     }
     public function checkAbsensi($guru_id)
     {
@@ -43,7 +45,17 @@ class KehadiranGuruService
             throw ValidationException::withMessages(['error' => 'Anda diluar lingkungan sekolah, dan berada dijarak ' . $distance . ' m']);
         }
 
-        return $this->kehadiran_guru->store($datas, $this->date->getDate());
+        $year = $this->date->getDate()->year;
+        $month = $this->date->getDate()->month;
+        if ($month < 7) {
+            $tahun = $year - 1 . '-' . $year;
+            $semester = 'genap';
+        } else {
+            $tahun = $year . '-' . $year + 1;
+            $semester = 'ganjil';
+        }
+        $tahun_ajaran_id = $this->tahun_ajaran->getId($tahun, $semester);
+        return $this->kehadiran_guru->store($datas, $this->date->getDate(), $tahun_ajaran_id);
     }
 
     private function distance($datas)
@@ -75,5 +87,14 @@ class KehadiranGuruService
         $distance = $earthRadius * $c;
 
         return $distance * 1000;
+    }
+    public function AbsenKeluar()
+    {
+        $tanggal = $this->date->getDate();
+        return $this->kehadiran_guru->AbsenKeluar($tanggal);
+    }
+    public function rataRataJamKerja()
+    {
+        return $this->kehadiran_guru->rataRataJamKerja();
     }
 }

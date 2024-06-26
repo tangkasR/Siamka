@@ -5,10 +5,12 @@ namespace App\Interfaces;
 interface KehadiranGuruInterface
 {
 
-    public function getData($guru_id, $bulan, $tahun);
+    public function getData($niy, $bulan, $tahun);
     public function getYear();
-    public function rekapKehadiranGuru($guru_id, $tahun);
+    public function rekapKehadiranGuru($niy, $tahun);
     public function checkAbsensi($guru_id, $tanggal);
     public function setLatLongSekolah();
-    public function store($datas, $tanggal);
+    public function store($datas, $tanggal, $tahun_ajaran_id);
+    public function AbsenKeluar($tanggal);
+    public function rataRataJamKerja();
 }

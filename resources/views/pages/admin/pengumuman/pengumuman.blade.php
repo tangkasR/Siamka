@@ -63,59 +63,76 @@
                     </div>
                     <table id="datatable" class="text-center table w-full pt-4 text-gray-700 dark:text-zinc-100">
                         <thead>
-                            <tr class="bg-blue-200">
-                                <th class="p-4 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                            <tr class="bg-blue-100">
+                                <th class="p-4">
                                     No</th>
-                                <th class="p-4 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4">
                                     Gambar</th>
-                                <th class="p-4 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4">
                                     Judul</th>
-                                <th class="p-4 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4">
                                     Deskripsi</th>
-                                <th class="p-4 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
-                                    Aksi</th>
+                                <th class="p-4">
+                                </th>
 
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($pengumumans as $data)
                                 <tr class="{{ $loop->iteration % 2 == 0 ? 'bg-blue-50' : 'bg-white' }}">
-                                    <td class="p-4 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
+                                    <td class="p-4">
                                         {{ $loop->iteration }}</td>
-                                    <td class="p-4 border border-t-0 border-l-0 border-gray-200 dark:border-zinc-600">
-                                        <div class="block w-[100px] h-[100px] bg-cover bg-center col-span-5 rounded-2xl"
+                                    <td class="p-4">
+                                        <div class="mx-auto block w-[100px] h-[100px] bg-cover bg-center col-span-5 rounded-2xl"
                                             style="background-image: url('{{ $data->image != '-' ? asset('storage/' . $data->image) : asset('assets/img/attention-default.jpg') }}')">
-
                                         </div>
-
                                     </td>
-                                    <td class="p-4 border border-t-0 border-l-0 border-gray-200 dark:border-zinc-600">
+                                    <td class="p-4">
                                         {{ $data->judul }}</td>
-                                    <td
-                                        class=" p-4 border border-t-0 border-l-0 max-w-[100px]  border-gray-200 dark:border-zinc-600">
-                                        <div class="line-clamp-3 text-left max-h-[100px]">
+                                    <td class="p-4">
+                                        <div class="line-clamp-3 max-h-[100px] text-center">
                                             {!! $data->deskripsi !!}
                                         </div>
                                     </td>
-                                    <td
-                                        class="p-4 border border-t-0 border-l-0 border-gray-200 dark:border-zinc-600 min-w-[300px] w-[300px]">
-                                        <div class="grid grid-cols-2 gap-2">
-                                            <a class="btn-show"
-                                                href="{{ route('pengumuman.detail', ['id' => $data->id]) }}"><i
-                                                    class='bx bx-show'></i> Detail</a>
-                                            <a class="btn-edit" data-tw-toggle="modal"
-                                                data-tw-target="#modal-id_form_edit_{{ $data->id }}"><i
-                                                    class='bx bxs-edit'></i> Ubah</a>
-                                            <a class="btn-delete" data-tw-toggle="modal"
-                                                data-tw-target="#modal-id_form_destroy_{{ $data->id }}">
-                                                <i class='bx bx-trash'></i> Hapus</a>
+                                    <td class="p-4">
+                                        <div class="relative dropdown ">
+                                            <button type="button" class="py-2 font-medium leading-tight  dropdown-toggle"
+                                                id="dropdownMenuButton1" data-bs-toggle="dropdown"><i
+                                                    class='bx bx-menu text-[20px]'></i></button>
+
+                                            <ul class="absolute z-50 float-left py-2 mt-1 text-left list-none bg-white border-none rounded-lg shadow-lg dropdown-menu w-44 bg-clip-padding dark:bg-zinc-700 hidden"
+                                                aria-labelledby="dropdownMenuButton1" data-popper-placement="bottom-start"
+                                                style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(49px, 1636.5px, 0px);">
+                                                <li>
+                                                    <a class="block w-full px-4 py-1 text-sm font-medium text-gray-500 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 dark:text-gray-100 dark:hover:bg-zinc-600/50"
+                                                        href="{{ route('pengumuman.detail', ['pengumuman' => $data]) }}">
+                                                        <i class='bx bx-show'></i>
+                                                        Detail
+                                                    </a>
+                                                </li>
+                                                <hr class="my-1 border-gray-50 dark:border-zinc-600">
+                                                <li>
+                                                    <a class="block w-full px-4 py-1 text-sm font-medium text-gray-500 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 dark:text-gray-100 dark:hover:bg-zinc-600/50"
+                                                        data-tw-toggle="modal"
+                                                        data-tw-target="#modal-id_form_edit_{{ $loop->iteration }}">
+                                                        <i class='bx bxs-edit'></i>
+                                                        Ubah
+                                                    </a>
+                                                </li>
+                                                <hr class="my-1 border-gray-50 dark:border-zinc-600">
+                                                <li>
+                                                    <a class="block text-red-500 w-full px-4 py-1 text-sm font-medium  bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 dark:text-gray-100 dark:hover:bg-zinc-600/50"
+                                                        data-tw-toggle="modal"
+                                                        data-tw-target="#modal-id_form_destroy_{{ $loop->iteration }}">
+                                                        <i class='bx bx-trash'></i> Hapus</a>
+                                                </li>
+                                            </ul>
                                         </div>
                                     </td>
-
                                 </tr>
 
                                 {{-- Modal Edit --}}
-                                <div class="relative z-50 hidden modal" id="modal-id_form_edit_{{ $data->id }}"
+                                <div class="relative z-50 hidden modal" id="modal-id_form_edit_{{ $loop->iteration }}"
                                     aria-labelledby="modal-title" role="dialog" aria-modal="true">
                                     <div class="fixed inset-0 z-50 overflow-y-auto">
                                         <div
@@ -191,7 +208,7 @@
                                 {{-- End Modal Edit --}}
 
                                 {{-- Modal Destroy --}}
-                                <div class="relative z-50 hidden modal" id="modal-id_form_destroy_{{ $data->id }}"
+                                <div class="relative z-50 hidden modal" id="modal-id_form_destroy_{{ $loop->iteration }}"
                                     aria-labelledby="modal-title" role="dialog" aria-modal="true">
                                     <div class="fixed inset-0 z-50 overflow-y-auto">
                                         <div

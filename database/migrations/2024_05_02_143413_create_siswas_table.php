@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('siswas', function (Blueprint $table) {
             $table->id();
             $table->uuid();
-            $table->string('nis', 20)->unique();
-            $table->string('nisn', 20)->unique();
-            $table->string('nomor_id', 20)->unique();
+            $table->string('nis', 20);
+            $table->string('nisn', 20);
+            $table->string('nomor_id', 20);
             $table->string('nama', 100);
             $table->string('jenis_kelamin', 5);
             $table->string('nik', 20);
@@ -31,7 +31,7 @@ return new class extends Migration
             $table->string('no_hp_orang_tua', 30);
             $table->string('asal_smp', 100);
             $table->string('tahun_lulus_smp', 10);
-            $table->string('username', 20)->unique();
+            $table->string('username', 20);
             $table->string('password', 20);
             $table->string('status_siswa', 20);
             $table->string('aktivasi_akun', 20);

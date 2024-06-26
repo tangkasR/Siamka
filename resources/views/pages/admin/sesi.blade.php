@@ -8,31 +8,47 @@
                 <div class="relative overflow-x-auto card-body">
                     <table id="datatable" class="text-center table w-full pt-4 text-gray-700 dark:text-zinc-100">
                         <thead>
-                            <tr class="bg-blue-200">
-                                <th class="p-4 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                            <tr class="bg-blue-100">
+                                <th class="p-4">
                                     No</th>
-                                <th class="p-4 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4">
                                     Sesi</th>
-                                <th class="p-4 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
-                                    Aksi</th>
+                                <th class="p-4">
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($sesi as $data)
                                 <tr class="{{ $loop->iteration % 2 == 0 ? 'bg-blue-50' : 'bg-white' }}">
-                                    <td class="p-4 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
+                                    <td class="p-4">
                                         {{ $loop->iteration }}</td>
-                                    <td class="p-4 border border-t-0 border-l-0 border-gray-200 dark:border-zinc-600">
+                                    <td class="p-4">
                                         {{ $data->nama_sesi }}</td>
-                                    <td
-                                        class="p-4 border  border-t-0 border-l-0 border-gray-200 dark:border-zinc-600 min-w-[250px] w-[250px]">
-                                        <div class="grid grid-cols-2 gap-2">
-                                            <a class="btn-edit" data-tw-toggle="modal"
-                                                data-tw-target="#modal-id_form_edit_{{ $loop->iteration }}"><i
-                                                    class='bx bxs-edit'></i> Ubah</a>
-                                            <a class="btn-delete" data-tw-toggle="modal"
-                                                data-tw-target="#modal-id_form_destroy_{{ $loop->iteration }}">
-                                                <i class='bx bx-trash'></i> Hapus</a>
+                                    <td class="p-4">
+                                        <div class="relative dropdown ">
+                                            <button type="button" class="py-2 font-medium leading-tight  dropdown-toggle"
+                                                id="dropdownMenuButton1" data-bs-toggle="dropdown"><i
+                                                    class='bx bx-menu text-[20px]'></i></button>
+
+                                            <ul class="absolute z-50 float-left py-2 mt-1 text-left list-none bg-white border-none rounded-lg shadow-lg dropdown-menu w-44 bg-clip-padding dark:bg-zinc-700 hidden"
+                                                aria-labelledby="dropdownMenuButton1" data-popper-placement="bottom-start"
+                                                style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(49px, 1636.5px, 0px);">
+                                                <li>
+                                                    <a class="block w-full px-4 py-1 text-sm font-medium text-gray-500 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 dark:text-gray-100 dark:hover:bg-zinc-600/50"
+                                                        data-tw-toggle="modal"
+                                                        data-tw-target="#modal-id_form_edit_{{ $loop->iteration }}">
+                                                        <i class='bx bxs-edit'></i>
+                                                        Ubah
+                                                    </a>
+                                                </li>
+                                                <hr class="my-1 border-gray-50 dark:border-zinc-600">
+                                                <li>
+                                                    <a class="block text-red-500 w-full px-4 py-1 text-sm font-medium  bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 dark:text-gray-100 dark:hover:bg-zinc-600/50"
+                                                        data-tw-toggle="modal"
+                                                        data-tw-target="#modal-id_form_destroy_{{ $loop->iteration }}">
+                                                        <i class='bx bx-trash'></i> Hapus</a>
+                                                </li>
+                                            </ul>
                                         </div>
                                     </td>
 
@@ -105,6 +121,12 @@
                                                             class="text-xl text-gray-500 mdi mdi-close dark:text-zinc-100/60"></i>
                                                     </button>
                                                     <div class="p-5">
+                                                        <div class="w-full">
+                                                            <div
+                                                                class="mx-auto p-2 bg-red-50 rounded-full text-red-500 font-medium w-fit mb-3">
+                                                                <i class='bx bx-trash text-[40px] '></i>
+                                                            </div>
+                                                        </div>
                                                         <h3
                                                             class="mb-4 text-xl font-medium text-gray-700 dark:text-gray-100">
                                                             Apakah anda ingin

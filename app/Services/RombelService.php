@@ -15,33 +15,26 @@ class RombelService
         $this->rombel = $rombel;
         $this->guru = $guru;
     }
-    public function getAll()
+    public function getAll($id)
     {
-        return $this->rombel->getAll();
+        return $this->rombel->getAll($id);
     }
-    public function rombelWithoutGuru($id)
+    public function rombelWithoutGuru($id, $tahun_ajaran_id)
     {
-        return $this->rombel->rombelWithoutGuru($id);
+        return $this->rombel->rombelWithoutGuru($id, $tahun_ajaran_id);
     }
-    public function getByGuruId($id)
+    public function getOne($rombel)
     {
-        return $this->rombel->getByGuruId($id);
+        return $this->rombel->getOne($rombel);
     }
-    public function getOne($condition, $params)
-    {
-        return $this->rombel->getOne($condition, $params);
-    }
-    public function getByGuruIdSesiSatu($guru_id)
-    {
-        return $this->rombel->getByGuruIdSesiSatu($guru_id);
-    }
+
     public function getBySiswaId($id)
     {
         return $this->rombel->getBySiswaId($id);
     }
-    public function getGuruBukanWaliKelas()
+    public function getGuruBukanWaliKelas($id)
     {
-        return $this->handleGuruBukanWaliKelas();
+        return $this->handleGuruBukanWaliKelas($id);
     }
     public function store($datas)
     {
@@ -59,15 +52,15 @@ class RombelService
     {
         $index = 0;
         foreach ($datas['nama_rombel'] as $nama_rombel) {
-            $this->rombel->store($datas['guru_id'][$index], $nama_rombel);
+            $this->rombel->store($datas['guru_id'][$index], $nama_rombel, $datas['tahun_ajaran_id']);
             $index++;
         }
     }
-    private function handleGuruBukanWaliKelas()
+    private function handleGuruBukanWaliKelas($id)
     {
-        $gurus = $this->guru->getAll();
+        $gurus = $this->guru->getAll($id);
         $guru_wali_kelas = [];
-        $rombels = $this->rombel->getAll();
+        $rombels = $this->rombel->getAll($id);
         foreach ($rombels as $rombel) {
             array_push($guru_wali_kelas, $rombel->guru_id);
         }
@@ -82,5 +75,9 @@ class RombelService
             }
         }
         return $gurus_bukan_wali_kelas;
+    }
+    public function getRombelGuru($niy, $tahun_ajaran_id)
+    {
+        return $this->rombel->getRombelGuru($niy, $tahun_ajaran_id);
     }
 }

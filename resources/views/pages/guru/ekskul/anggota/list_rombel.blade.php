@@ -1,6 +1,12 @@
 @extends('layouts.dashboard')
 @section('table-name', 'Data Ekstrakurikuler')
 @section('table-role', 'Guru')
+@section('back')
+    <div class="font-medium  border border-slate-500 bg-slate-500 text-white rounded-full  me-3">
+        <a href="{{ route('guru.ekskul.daftar_anggota', ['tahun' => $tahun, 'semester' => $semester, 'id' => Crypt::encrypt($ekskul->id)]) }}"
+            class="flex justify-center items-center"><i class='bx bx-chevron-left text-[30px]'></i></a>
+    </div>
+@endsection
 @section('content')
     <div class="grid grid-cols-12 gap-6 bg-white shadow-md">
         <div class="col-span-12">
@@ -9,7 +15,7 @@
                     <h1 class="text-[20px] font-semibold text-gray-700">Daftar Rombongan Belajar</h1>
                 </div>
                 <hr class="text-[2px] my-[20px] text-black w-full" />
-                <div class="relative overflow-x-auto card-body mb-[50px] h-[100%]">
+                <div class="relative overflow-x-auto card-body mb-[50px]">
                     {{-- Data Kelas X --}}
                     <div class="grid grid-cols-1 mb-10">
                         <div class="swiper mySwiper1">
@@ -18,20 +24,19 @@
                                     @if (explode(' ', $data->nama_rombel)[0] == 'X')
                                         <div class="swiper-slide">
                                             <div
-                                                class="card dark:bg-zinc-800 dark:border-zinc-600 bg-blue-50 border-blue-50 border-2 hover:border-violet-300  hover:border-2 hover:bg-blue-200 ">
-                                                <div class="card-body  ">
-                                                    <i class='mb-6 bx bxs-calendar text-[30px] text-gray-600'></i>
+                                                class="hover:scale-98  card bg-blue-50 border-blue-300 border-2  transition-all">
+                                                <div class="card-body">
                                                     <h6
-                                                        class="mb-6 text-slate-700 text-[30px] dark:text-gray-100 font-bold">
+                                                        class="mb-3 text-slate-700 text-[25px] dark:text-gray-100 font-bold">
                                                         {{ $data->nama_rombel }}
                                                     </h6>
                                                     <p class="text-slate-600 card-text dark:text-zinc-100 mb-2">
-                                                        Silahkan pilih kelas dengan menekan tombol dibawah!
+                                                        Silahkan pilih rombel dengan menekan tombol dibawah!
                                                     </p>
                                                     <div class="">
-                                                        <a href="{{ route('guru.ekskul.show-siswa', ['id' => $id, 'rombel_id' => $data->id]) }}"
-                                                            class="hover:bg-violet-700
-                                                            block text-center text-white border-transparent shadow btn bg-violet-300  shadow-violet-300 dark:shadow-zinc-600">
+                                                        <a href="{{ route('guru.ekskul.show-siswa', ['tahun' => $tahun, 'semester' => $semester, 'ekskul' => $ekskul, 'rombel' => $data]) }}"
+                                                            class="hover:bg-blue-700
+                                                                block text-center text-white border-transparent shadow btn bg-blue-500  shadow-blue-500 dark:shadow-zinc-600">
                                                             Pilih
                                                         </a>
                                                     </div>
@@ -47,7 +52,6 @@
                         </div>
                     </div>
                     {{-- End Data Kelas X --}}
-
                     {{-- Data Kelas XI --}}
                     <div class="grid grid-cols-1 mb-10">
                         <div class="swiper mySwiper2">
@@ -56,20 +60,19 @@
                                     @if (explode(' ', $data->nama_rombel)[0] == 'XI')
                                         <div class="swiper-slide">
                                             <div
-                                                class="card dark:bg-zinc-800 dark:border-zinc-600 bg-blue-50 border-blue-50 border-2 hover:border-violet-300  hover:border-2 hover:bg-blue-200 ">
-                                                <div class="card-body  ">
-                                                    <i class='mb-6 bx bxs-calendar text-[30px] text-gray-600'></i>
+                                                class="card hover:scale-98 duration-300 bg-blue-50 border-blue-300 border-2  transition-all">
+                                                <div class="card-body">
                                                     <h6
-                                                        class="mb-6 text-slate-700 text-[30px] dark:text-gray-100 font-bold">
+                                                        class="mb-3 text-slate-700 text-[25px] dark:text-gray-100 font-bold">
                                                         {{ $data->nama_rombel }}
                                                     </h6>
                                                     <p class="text-slate-600 card-text dark:text-zinc-100 mb-2">
-                                                        Silahkan pilih kelas dengan menekan tombol dibawah!
+                                                        Silahkan pilih rombel dengan menekan tombol dibawah!
                                                     </p>
                                                     <div class="">
-                                                        <a href="{{ route('guru.ekskul.show-siswa', ['id' => $id, 'rombel_id' => $data->id]) }}"
-                                                            class="hover:bg-violet-700
-                                                            block text-center text-white border-transparent shadow btn bg-violet-300  shadow-violet-300 dark:shadow-zinc-600">
+                                                        <a href="{{ route('guru.ekskul.show-siswa', ['tahun' => $tahun, 'semester' => $semester, 'ekskul' => $ekskul, 'rombel' => $data]) }}"
+                                                            class="hover:bg-blue-700
+                                                                block text-center text-white border-transparent shadow btn bg-blue-500  shadow-blue-500 dark:shadow-zinc-600">
                                                             Pilih
                                                         </a>
                                                     </div>
@@ -81,33 +84,31 @@
                             </div>
                         </div>
                         <div class="mt-3 mx-auto">
-                            <div class="swiper-pagination2"></div>
+                            <div class="swiper-pagination2 "></div>
                         </div>
                     </div>
                     {{-- End Data Kelas XI --}}
-
                     {{-- Data Kelas XII --}}
-                    <div class="grid grid-cols-1">
+                    <div class="grid grid-cols-1 mb-10">
                         <div class="swiper mySwiper3">
                             <div class="swiper-wrapper">
                                 @foreach ($rombels as $data)
                                     @if (explode(' ', $data->nama_rombel)[0] == 'XII')
                                         <div class="swiper-slide">
                                             <div
-                                                class="card dark:bg-zinc-800 dark:border-zinc-600 bg-blue-50 border-blue-50 border-2 hover:border-violet-300  hover:border-2 hover:bg-blue-200 ">
-                                                <div class="card-body  ">
-                                                    <i class='mb-6 bx bxs-calendar text-[30px] text-gray-600'></i>
+                                                class="card hover:scale-98 duration-300 bg-blue-50 border-blue-300 border-2  transition-all">
+                                                <div class="card-body">
                                                     <h6
-                                                        class="mb-6 text-slate-700 text-[30px] dark:text-gray-100 font-bold">
+                                                        class="mb-3 text-slate-700 text-[25px] dark:text-gray-100 font-bold">
                                                         {{ $data->nama_rombel }}
                                                     </h6>
                                                     <p class="text-slate-600 card-text dark:text-zinc-100 mb-2">
-                                                        Silahkan pilih kelas dengan menekan tombol dibawah!
+                                                        Silahkan pilih rombel dengan menekan tombol dibawah!
                                                     </p>
                                                     <div class="">
-                                                        <a href="{{ route('guru.ekskul.show-siswa', ['id' => $id, 'rombel_id' => $data->id]) }}"
-                                                            class="hover:bg-violet-700
-                                                            block text-center text-white border-transparent shadow btn bg-violet-300  shadow-violet-300 dark:shadow-zinc-600">
+                                                        <a href="{{ route('guru.ekskul.show-siswa', ['tahun' => $tahun, 'semester' => $semester, 'ekskul' => $ekskul, 'rombel' => $data]) }}"
+                                                            class="hover:bg-blue-700
+                                                                block text-center text-white border-transparent shadow btn bg-blue-500  shadow-blue-500 dark:shadow-zinc-600">
                                                             Pilih
                                                         </a>
                                                     </div>
@@ -119,7 +120,7 @@
                             </div>
                         </div>
                         <div class="mt-3 mx-auto">
-                            <div class="swiper-pagination3"></div>
+                            <div class="swiper-pagination3 "></div>
                         </div>
                     </div>
                     {{-- End Data Kelas XII --}}

@@ -23,13 +23,13 @@ class KehadiranService
     {
         return $this->kehadiran->getYear();
     }
-    public function getMonthlyAttendance($siswa_id, $tahun)
+    public function getMonthlyAttendance($nis, $tahun)
     {
-        return $this->kehadiran->getMonthlyAttendance($siswa_id, $tahun);
+        return $this->kehadiran->getMonthlyAttendance($nis, $tahun);
     }
-    public function getBySiswaId($siswa_id, $bulan, $tahun)
+    public function getBySiswaId($nis, $bulan, $tahun)
     {
-        return $this->kehadiran->getBySiswaId($siswa_id, $bulan, $tahun);
+        return $this->kehadiran->getBySiswaId($nis, $bulan, $tahun);
     }
     public function getByRombelId($rombel_id, $tanggal)
     {
@@ -59,7 +59,7 @@ class KehadiranService
             ]);
         }
 
-        $kehadiran = $this->kehadiran->store($datas['rombel_id'], $datas['tanggal']);
+        $kehadiran = $this->kehadiran->store($datas['rombel_id'], $datas['tahun_ajaran_id'], $datas['tanggal']);
 
         foreach ($data_kehadiran as $data) {
             $siswa = $this->siswa->getById($data['siswa_id']);
@@ -73,7 +73,7 @@ class KehadiranService
     private function handleUpdate($datas, $id)
     {
         $kehadiran = $this->kehadiran->getById($id);
-        $siswa = $this->siswa->getByNama($datas['nama_siswa']);
+        $siswa = $this->siswa->getById($datas['siswa_id']);
         $kehadiran->siswas()->detach($siswa);
         $kehadiran->siswas()->attach($siswa, [
             'kehadiran' => $datas['daftar_kehadiran'],
@@ -82,5 +82,14 @@ class KehadiranService
     public function clearData($year)
     {
         return $this->kehadiran->clearData($year);
+    }
+    public function checkKehadiran($tanggal, $rombel_id)
+    {
+        return $this->kehadiran->checkKehadiran($tanggal, $rombel_id);
+    }
+
+    public function getTahunAjaranNow()
+    {
+        return $this->kehadiran->getTahunAjaranNow();
     }
 }

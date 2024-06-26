@@ -18,7 +18,9 @@ class Siswa
     public function handle(Request $request, Closure $next): Response
     {
         if (auth()->guard('siswa')->check()) {
-            return $next($request);
+            if (auth()->guard('siswa')->user()->aktivasi_akun == 'aktif') {
+                return $next($request);
+            }
         }
         return redirect()->back();
     }

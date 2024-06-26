@@ -4,7 +4,9 @@ namespace App\Interfaces;
 
 interface SiswaInterface
 {
-    public function getById($id);
+    public function getById($siswa);
+    public function getSiswa($id);
+    public function getSiswaAdmin($id);
     public function getByNama($nama);
     public function getByRombelIdActive($id);
     public function getByRombelIdNextGrade($id);
@@ -19,4 +21,6 @@ interface SiswaInterface
     public function update_profil($datas, $id);
     public function getPivotTahunPembelajaran($id);
     public function getAngkatan();
+    public function keluar($id);
+    public function getSiswaPerAngkatan();
 }

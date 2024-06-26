@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use App\Traits\uuid;
-use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Crypt;
+use Laravel\Sanctum\HasApiTokens;
+use Throwable;
 
 class Admin extends Authenticatable
 {
@@ -40,5 +42,21 @@ class Admin extends Authenticatable
     public function getRouteKeyName(): String
     {
         return 'uuid';
+    }
+
+    public function getRouteKey()
+    {
+        return Crypt::encrypt($this->uuid);
+    }
+    public function resolveRouteBinding($value, $field = null)
+    {
+        try {
+            $decrypted = Crypt::decrypt($value);
+            $field = $field ?? $this->getRouteKeyName();
+
+            return parent::resolveRouteBinding($decrypted, $field);
+        } catch (Throwable $er) {
+            abort(404);
+        }
     }
 }

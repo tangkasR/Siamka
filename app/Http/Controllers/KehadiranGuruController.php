@@ -33,6 +33,14 @@ class KehadiranGuruController extends Controller
         $guru = $this->auth->getUser('guru');
         $tahun = $this->date->getDate()->year;
 
+        $checkAbsen = false;
+        if (count($this->kehadiran_guru->checkAbsensi($guru->id)) > 0) {
+            $checkAbsen = true;
+            if ($this->kehadiran_guru->checkAbsensi($guru->id)[0]->total_jam != 0) {
+                $checkAbsen = false;
+            }
+        }
+        $bulan_now = $this->date->getDate()->format('Y-m');
         if ($request->ajax()) {
             $tahun = $request->tahun;
             return view('pages.guru.data_kehadiran', [
@@ -40,9 +48,11 @@ class KehadiranGuruController extends Controller
                 'tanggal' => $this->date->getDate()->format('d-m-Y'),
                 'bulan' => $this->date->getDate()->month,
                 'tahun' => $this->date->getDate()->year,
-                'rekaps' => $this->kehadiran_guru->rekapKehadiranGuru($guru->id, $tahun),
+                'rekaps' => $this->kehadiran_guru->rekapKehadiranGuru($guru->nomor_induk_yayasan, $tahun),
                 'years' => $this->kehadiran_guru->getYear(),
                 'latlong' => $latlong,
+                'checkAbsen' => $checkAbsen,
+                'bulan_now' => $bulan_now,
             ]);
         }
         return view('pages.guru.kehadiran', [
@@ -50,14 +60,16 @@ class KehadiranGuruController extends Controller
             'tanggal' => $this->date->getDate()->format('d-m-Y'),
             'bulan' => $this->date->getDate()->month,
             'tahun' => $this->date->getDate()->year,
-            'rekaps' => $this->kehadiran_guru->rekapKehadiranGuru($guru->id, $tahun),
+            'rekaps' => $this->kehadiran_guru->rekapKehadiranGuru($guru->nomor_induk_yayasan, $tahun),
             'years' => $this->kehadiran_guru->getYear(),
             'latlong' => $latlong,
+            'checkAbsen' => $checkAbsen,
+            'bulan_now' => $bulan_now,
         ]);
     }
     public function getData(Request $request)
     {
-        $kehadirans = $this->kehadiran_guru->getData($request->guru_id, $request->bulan, $request->tahun);
+        $kehadirans = $this->kehadiran_guru->getData($request->niy, $request->bulan, $request->tahun);
         return response($kehadirans);
 
     }
@@ -75,5 +87,9 @@ class KehadiranGuruController extends Controller
         }
 
     }
-
+    public function absen_keluar()
+    {
+        $this->kehadiran_guru->AbsenKeluar();
+        return back();
+    }
 }

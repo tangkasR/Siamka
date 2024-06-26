@@ -1,6 +1,12 @@
 @extends('layouts.dashboard')
 @section('table-name', 'Detail Guru')
 @section('table-role', 'Admin')
+@section('back')
+    <div class="font-medium  border border-slate-500 bg-slate-500 text-white rounded-full  me-3">
+        <a href="{{ route('admin.guru.detail_guru', ['tahun' => $tahun, 'semester' => $semester, 'guru' => $guru]) }}"
+            class="flex justify-center items-center"><i class='bx bx-chevron-left text-[30px]'></i></a>
+    </div>
+@endsection
 @section('content')
     <div class="grid grid-cols-12 gap-6 bg-white shadow-md">
         <div class="col-span-12">
@@ -17,13 +23,19 @@
                     </div>
                     <div class="relative overflow-x-auto card-body md:px-[20px]">
                         <table id=""
-                            class="table uppercase w-full pt-4 text-center text-gray-700 dark:text-zinc-100">
+                            class="table capitalize w-full pt-4 text-center text-gray-700 dark:text-zinc-100">
                             <thead>
                                 <tr class="bg-blue-200">
                                     <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
                                         No</th>
                                     <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
                                         Kehadiran</th>
+                                    <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                        Jam Masuk</th>
+                                    <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                        Jam Keluar</th>
+                                    <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                        Total Jam Per Hari</th>
                                     <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
                                         Tanggal</th>
                                 </tr>
@@ -78,9 +90,6 @@
                             <div class="col-span-3">
                             </div>
                             <div class="col-span-2">
-                                <p for="example-text-input"
-                                    class=" block font-medium text-gray-700 dark:text-gray-100 text-[16px] mb-2">
-                                    Pilih Tahun</p>
                                 <select id="tahun_rekap" name="tahun_rekap"
                                     class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100">
                                     @foreach ($years as $item)
@@ -108,7 +117,7 @@
                             </div>
                         </div>
                         <div class="relative overflow-x-auto card-body md:px-[20px]" id="template_pdf">
-                            <table class="table uppercase w-full pt-4 text-center text-gray-700 dark:text-zinc-100"
+                            <table class="table capitalize w-full pt-4 text-center text-gray-700 dark:text-zinc-100"
                                 id="table_rekap_kehadiran">
                                 <thead>
                                     <tr class="bg-blue-200">
@@ -118,6 +127,8 @@
                                             Bulan</th>
                                         <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
                                             Total Kehadiran</th>
+                                        <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                            Total Jam Per Bulan</th>
                                     </tr>
                                 </thead>
                                 <tbody id="container_rekap">
@@ -131,9 +142,12 @@
         </div>
     </div>
 
-    <input type="text" name="guru_id" value="{{ $guru->id }}" id="guru_id" hidden>
+    <input type="text" name="" value="{{ $guru->nomor_induk_yayasan }}" id="niy" hidden>
+    <input type="text" name="" value="{{ $guru->id }}" id="guru_id" hidden>
     <input type="text" name="" value="{{ $bulan }}" id="bulan" hidden>
     <input type="text" name="" value="{{ $tahun }}" id="tahun" hidden>
+    <input type="text" name="" value="{{ $tahun_ajaran }}" id="tahun_ajaran" hidden>
+    <input type="text" name="" value="{{ $semester }}" id="semester" hidden>
 
 
     <script>
@@ -157,11 +171,12 @@
                 type: "GET",
                 url: url,
                 data: {
-                    'guru_id': $('#guru_id').val(),
+                    'niy': $('#niy').val(),
                     'bulan': $('#bulan').val(),
                     'tahun': $('#tahun').val(),
                 },
                 success: function(response) {
+                    console.log(response);
                     container.innerHTML = ''
                     if (response.data.length != 0) {
                         createTable(response)
@@ -242,6 +257,7 @@
                         url: url,
                         data: getDatas(),
                         success: function(response) {
+
                             container.innerHTML = ''
                             if (response.data.length != 0) {
                                 createTable(response)
@@ -260,13 +276,14 @@
 
 
             function getDatas() {
+                let niy = $('#niy').val()
                 let bulan = $('#month').val()
                 tahun = bulan.split('-')[0]
                 bulan = bulan.split('-')[1]
-                bulan = bulan.slice(1)
-                let guru_id = $('#guru_id').val()
+                bulan = +bulan - 1 + 1
+                console.log(bulan)
                 let datas = {
-                    'guru_id': guru_id,
+                    'niy': niy,
                     'bulan': bulan,
                     'tahun': tahun,
                 }
@@ -278,10 +295,15 @@
                 let row = ''
                 let index = datas.from
                 for (let i = 0; i < datas.data.length; i++) {
-                    let date = datas.data[i].tanggal
-                    let tahun = date.split('-')[0]
-                    let bulan = date.split('-')[1]
-                    let tanggal = date.split('-')[2]
+                    let dateStr = datas.data[i].tanggal;
+                    let date = new Date(dateStr);
+                    let options = {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    };
+                    let formattedDate = date.toLocaleDateString('id-ID', options);
 
                     row = `
                         <tr class="${(i + 1) % 2 == 0 ? 'bg-blue-50' : 'bg-white'}">
@@ -290,7 +312,13 @@
                             <td class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
                                 ${datas.data[i].kehadiran}</td>
                             <td class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
-                                ${tanggal}-${bulan}-${tahun}</td>
+                                ${datas.data[i].jam_masuk}</td>
+                            <td class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
+                                ${datas.data[i].jam_keluar}</td>
+                            <td class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
+                                ${datas.data[i].total_jam}</td>
+                            <td class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
+                                ${formattedDate}</td>
                         </tr>
                     `;
                     container.innerHTML += row
@@ -304,10 +332,19 @@
             function filter_rekap(id_select) {
                 $(id_select).on('change', function() {
                     let tahun_rekap = $('#tahun_rekap').val()
+                    let niy = $('#niy').val()
                     let guru_id = $('#guru_id').val()
+                    let tahun_ajaran = $('#tahun_ajaran').val()
+                    let semester = $('#semester').val()
+
+                    console.log('ini filter tahun')
+
                     let container_rekap = $('#container_rekap')
-                    let urlTemplate = `{{ route('admin.guru.cetak_kehadiran', ['id' => '__GURU_ID__']) }}`;
-                    url = urlTemplate.replace("__GURU_ID__", guru_id);
+                    let urlTemplate =
+                        `{{ route('admin.guru.filter_kehadiran', ['tahun' => '__tahun__', 'semester' => '__semester__']) }}`;
+                    url = urlTemplate.replace("__tahun__", tahun_ajaran)
+                        .replace(
+                            "__semester__", semester);
                     $.ajaxSetup({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -317,7 +354,9 @@
                         type: "GET",
                         url: url,
                         data: {
-                            'tahun': tahun_rekap
+                            'tahun': tahun_rekap,
+                            'niy': niy,
+                            'guru_id': guru_id
                         },
                         success: function(response) {
                             container_rekap.html('')

@@ -30,6 +30,7 @@ return new class extends Migration
             $table->string('kartu_keluarga', 255);
             $table->string('username');
             $table->string('password');
+            $table->string('status_akun');
             $table->timestamps();
         });
     }

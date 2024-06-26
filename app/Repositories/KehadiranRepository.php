@@ -22,7 +22,7 @@ class KehadiranRepository implements KehadiranInterface
     {
         return $this->kehadiran->with('siswas')->where('id', $id)->first();
     }
-    public function getMonthlyAttendance($siswa_id, $tahun)
+    public function getMonthlyAttendance($nis, $tahun)
     {
         return DB::table('kehadirans')
             ->join('kehadiran_siswa', 'kehadirans.id', '=', 'kehadiran_siswa.kehadiran_id')
@@ -35,7 +35,7 @@ class KehadiranRepository implements KehadiranInterface
                 DB::raw('SUM(CASE WHEN kehadiran_siswa.kehadiran = "izin" THEN 1 ELSE 0 END) as izin'),
                 DB::raw('SUM(CASE WHEN kehadiran_siswa.kehadiran = "alpa" THEN 1 ELSE 0 END) as alpa')
             )
-            ->where('kehadiran_siswa.siswa_id', '=', $siswa_id)
+            ->where('siswas.nis', '=', $nis)
             ->whereYear('kehadirans.tanggal', $tahun)
             ->groupBy(DB::raw('YEAR(kehadirans.tanggal)'), DB::raw('MONTH(kehadirans.tanggal)'))
             ->orderBy('year')
@@ -46,15 +46,15 @@ class KehadiranRepository implements KehadiranInterface
     {
         return $this->kehadiran->selectRaw('YEAR(tanggal) as year')
             ->distinct()
-            ->orderBy('year', 'asc')
+            ->orderBy('year', 'desc')
             ->get();
     }
-    public function getBySiswaId($siswa_id, $bulan, $tahun)
+    public function getBySiswaId($nis, $bulan, $tahun)
     {
         return DB::table('kehadirans')
             ->join('kehadiran_siswa', 'kehadirans.id', '=', 'kehadiran_siswa.kehadiran_id')
             ->join('siswas', 'siswas.id', '=', 'kehadiran_siswa.siswa_id')
-            ->where('kehadiran_siswa.siswa_id', '=', $siswa_id)
+            ->where('siswas.nis', '=', $nis)
             ->whereYear('kehadirans.tanggal', '=', $tahun)
             ->whereMonth('kehadirans.tanggal', '=', $bulan)
             ->select(
@@ -77,14 +77,16 @@ class KehadiranRepository implements KehadiranInterface
                 'kehadiran_siswa.kehadiran',
                 'kehadirans.tanggal',
                 'kehadiran_siswa.siswa_id',
-                'kehadirans.id'
-            );
+                'kehadirans.id',
+                'kehadiran_siswa.siswa_id'
+            )->orderBy('siswas.nama');
     }
 
-    public function store($rombel_id, $tanggal)
+    public function store($rombel_id, $tahun_ajaran_id, $tanggal)
     {
         return $this->kehadiran->create([
             'rombel_id' => $rombel_id,
+            'tahun_ajaran_id' => $tahun_ajaran_id,
             'tanggal' => $tanggal,
         ]);
     }
@@ -106,5 +108,20 @@ class KehadiranRepository implements KehadiranInterface
     public function clearData($year)
     {
         return $this->kehadiran->whereYear('tanggal', '<', $year)->delete();
+    }
+    public function checkKehadiran($tanggal, $rombel_id)
+    {
+        return $this->kehadiran->where('tanggal', $tanggal)->where('rombel_id', $rombel_id)->get();
+    }
+    public function getTahunAjaranNow()
+    {
+        $today = $this->date->getDate();
+        $month = $today->month;
+        $year = $today->year;
+        if ($month > 0 && $month < 7) {
+            return $tahun_ajaran = $year - 1 . '-' . $year;
+        } else {
+            return $tahun_ajaran = $year . '-' . $year + 1;
+        }
     }
 }

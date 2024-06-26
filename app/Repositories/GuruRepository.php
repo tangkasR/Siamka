@@ -16,18 +16,22 @@ class GuruRepository implements GuruInterface
         $this->guru = $guru;
     }
 
-    public function getAll()
+    public function getAll($id)
     {
-        return $this->guru->with('mapels')->get();
+        return $this->guru->with('mapels')->where('tahun_ajaran_id', $id)->get();
     }
-    public function getById($id)
+    public function getById($guru)
     {
-        return $this->guru->with('mapels', 'rombels')->where('id', $id)
-            ->first();
+
+        if (is_object($guru)) {
+            return $guru->with('mapels', 'rombels')->first();
+        }
+        $guru = $this->guru->with('mapels', 'rombel')->where('id', $guru)->first();
+        return $guru;
     }
     public function store($data)
     {
-        return Excel::import(new GuruImport, $data['file']);
+        return Excel::import(new GuruImport($data['tahun'], $data['semester']), $data['file']);
     }
     public function update($data, $guru)
     {
@@ -56,5 +60,38 @@ class GuruRepository implements GuruInterface
             'kartu_keluarga' => $data['kartu_keluarga'],
             'profil' => $data['profil'],
         ]);
+    }
+
+    public function aktivasi($id)
+    {
+        $guru = $this->guru->where('id', $id);
+
+        return $guru->update([
+            'username' => $guru->first()->nomor_induk_yayasan,
+            'status_akun' => 'aktif',
+        ]);
+    }
+    public function deaktivasi($id)
+    {
+        return $this->guru->where('id', $id)->update([
+            'username' => '-',
+            'status_akun' => 'tidak aktif',
+        ]);
+    }
+    public function totalGuru()
+    {
+        return $this->guru
+            ->selectRaw('tahun_ajaran_id, COUNT(*) as total_guru')
+            ->groupBy('tahun_ajaran_id')
+            ->with('tahun_ajaran')
+            ->get()
+            ->map(function ($guru) {
+                return [
+                    'tahun_ajaran' => $guru->tahun_ajaran->tahun_ajaran,
+                    'semester' => $guru->tahun_ajaran->semester,
+                    'total_guru' => $guru->total_guru,
+                ];
+            })
+            ->sortBy('tahun_ajaran');
     }
 }

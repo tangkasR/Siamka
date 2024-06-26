@@ -27,16 +27,16 @@
             </div>
             <div class="card-body border-b border-gray-100 dark:border-zinc-600">
                 <div class="relative overflow-x-auto card-body px-[20px]">
-                    <table id="" class="table uppercase w-full pt-4 text-center text-gray-700 dark:text-zinc-100">
+                    <table id="" class="table capitalize w-full pt-4 text-center text-gray-700 dark:text-zinc-100">
                         <thead>
                             <tr class="bg-blue-200">
-                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4 ">
                                     No</th>
-                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4 ">
                                     Nama Siswa</th>
-                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4 ">
                                     Kehadiran</th>
-                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4 ">
                                     Tanggal</th>
                             </tr>
                         </thead>
@@ -92,9 +92,6 @@
                             </h2>
                         </div>
                         <div class="md:col-span-2" id="selectYear">
-                            <p for="example-text-input"
-                                class=" block font-medium text-gray-700 dark:text-gray-100 text-[16px] mb-2">
-                                Pilih Tahun</p>
                             <select id="tahun_rekap" name="tahun_rekap"
                                 class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100">
                                 @foreach ($years as $item)
@@ -128,8 +125,8 @@
                         </div>
                         <div class="col-span-3">
                             <p class="mb-2">Kelas: {{ $rombel->nama_rombel }}</p>
-                            <p>Tahun Pembelajaran:
-                                {{ $tahun_pembelajaran->tahun_awal }}/{{ $tahun_pembelajaran->tahun_akhir }}</p>
+                            <p>Tahun Ajaran: {{ $tahun_ajaran }}
+                            </p>
                         </div>
                         <div class="col-span-5">
                             <p>Kompetensi Keahlian: {{ $siswa->kompetensi_keahlian }}</p>
@@ -138,20 +135,20 @@
                 </div>
                 <div class="relative overflow-x-auto card-body">
                     <table id="table_rekap"
-                        class="text-center uppercase table w-full pt-4 text-gray-700 dark:text-zinc-100">
+                        class="text-center  table w-full pt-4 text-gray-700 dark:text-zinc-100 capitalize">
                         <thead>
                             <tr class="bg-blue-200">
-                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4 ">
                                     Tahun</th>
-                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4 ">
                                     Bulan</th>
-                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4 ">
                                     Hadir</th>
-                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4 ">
                                     Sakit</th>
-                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4 ">
                                     Izin</th>
-                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4 ">
                                     Alpa</th>
                             </tr>
                         </thead>
@@ -163,7 +160,7 @@
             </div>
         </div>
     </div>
-
+    <input type="text" value="{{ $siswa->nis }}" id="nis" hidden>
     <script>
         $(document).ready(function() {
 
@@ -287,15 +284,18 @@
                 let month = ''
                 let year = ''
                 let value = $('#month').val()
+                let nis = $('#nis').val()
                 if (value != '') {
                     let month_ = value.split('-')[1]
-                    month = month_.slice(1)
+                    month = +month_ - 1 + 1
+                    console.log(month);
                     year = value.split('-')[0]
                     changeMonth(month)
                 }
                 let datas = {
                     'month': month,
                     'year': year,
+                    'nis': nis,
                 }
                 return datas
             }
@@ -341,13 +341,13 @@
                     }
                     row = `
                 <tr class="${(i + 1) % 2 == 0 ? 'bg-blue-50' : 'bg-white'}">
-                    <td class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
+                    <td class="p-4">
                         ${index}</td>
-                    <td class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
+                    <td class="p-4">
                         ${datas.data[i].nama}</td>
-                    <td class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
+                    <td class="p-4">
                         ${datas.data[i].kehadiran}</td>
-                    <td class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
+                    <td class="p-4">
                         ${tanggal}-${bulan}-${tahun}</td>
                 </tr>
                 `;

@@ -169,9 +169,12 @@
                         <div
                             class="grid grid-cols-1 p-6  bg-white mb-3  shadow-sm rounded-md border-[0.5px] border-gray-50">
                             <div class="md:flex items-center justify-between px-[2px]">
-                                <h4 class="text-[25px] font-medium text-gray-800 mb-sm-0 grow dark:text-gray-100 mb-2 md:mb-0"
-                                    style="line-height: 32px">
-                                    @yield('table-name')</h4>
+                                <div class="flex items-center">
+                                    @yield('back')
+                                    <h4 class="text-[25px] font-medium text-gray-800 mb-sm-0 grow dark:text-gray-100 mb-2 md:mb-0"
+                                        style="line-height: 32px">
+                                        @yield('table-name')</h4>
+                                </div>
                                 <nav class="flex" aria-label="Breadcrumb">
                                     <ol class="inline-flex items-center space-x-1 ltr:md:space-x-3 rtl:md:space-x-0">
                                         <li class="inline-flex items-center">

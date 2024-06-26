@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Rombel;
 use App\Services\AuthService;
 use App\Services\DateService;
+use App\Services\JadwalPelajaranService;
 use App\Services\KehadiranService;
 use App\Services\RombelService;
 use App\Services\SiswaService;
+use App\Services\TahunAjaranService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
@@ -17,26 +20,43 @@ class KehadiranController extends Controller
     private $siswa;
     private $date;
     private $auth;
+    private $tahun_ajaran;
+    private $jadwal;
 
     public function __construct(
         RombelService $rombel,
         KehadiranService $kehadiran,
         SiswaService $siswa,
         DateService $date,
-        AuthService $auth
+        AuthService $auth,
+        TahunAjaranService $tahun_ajaran,
+        JadwalPelajaranService $jadwal
     ) {
         $this->rombel = $rombel;
         $this->kehadiran = $kehadiran;
         $this->siswa = $siswa;
         $this->date = $date;
         $this->auth = $auth;
+        $this->tahun_ajaran = $tahun_ajaran;
+        $this->jadwal = $jadwal;
     }
-    public function index()
+    public function index($tahun, $semester)
     {
         $guru = $this->auth->getUser('guru');
+        $tahun_ajaran_id = $this->tahun_ajaran->getId($tahun, $semester);
+        $jadwal = $this->jadwal->getByGuruIdSesiSatu($guru->id, $tahun_ajaran_id);
+        $kehadirans = [];
+        $rombel = null;
+        if ($jadwal) {
+            $rombel = $jadwal->rombels;
+            $kehadirans = $this->kehadiran->getByRombelId($rombel->id, $this->date->getDate()->format('Y-m-d'))->get();
+        }
         return view('pages.guru.kehadiran.kehadiran', [
-            'rombel' => $this->rombel->getByGuruIdSesiSatu($guru->id),
-            'date' => $this->date->getDate()->format('Y-m-d'),
+            'rombel' => $rombel,
+            'date' => $this->date->getDate()->format('d/m/Y'),
+            'kehadirans' => $kehadirans,
+            'tahun' => $tahun,
+            'semester' => $semester,
         ]);
     }
     public function getKehadiran_guru(Request $request)
@@ -53,28 +73,30 @@ class KehadiranController extends Controller
             ->paginate(5);
         return response($kehadiran);
     }
-    public function show_input($id)
+    public function show_input($tahun, $semester, $id)
     {
+        $tahun_ajaran_id = $this->tahun_ajaran->getId($tahun, $semester);
         return view('pages.guru.kehadiran.tambah_kehadiran', [
-            'rombel' => $this->rombel->getOne('id', $id),
+            'rombel' => $this->rombel->getOne($id),
             'date' => $this->date->getDate()->format('Y-m-d'),
-            'siswas' => $this->siswa->getByRombelIdActive($id),
-
+            'siswas' => $this->siswa->getSiswa($id),
+            'tahun' => $tahun,
+            'semester' => $semester,
+            'tahun_ajaran_id' => $tahun_ajaran_id,
         ]);
     }
 
     public function store(Request $request)
     {
-
-        $check_kehadiran = $this->kehadiran->getByRombelId($request->rombel_id, $request->tanggal)->get();
+        $check_kehadiran = $this->kehadiran->checkKehadiran($request->tanggal, $request->rombel_id);
 
         if (count($check_kehadiran) != 0) {
-            return redirect()->route('guru.kehadiran', ['id' => $request->rombel_id])
+            return redirect()->route('guru.kehadiran', ['tahun' => $request->tahun_ajaran, 'semester' => $request->semester, 'id' => $request->rombel_id])
                 ->with('error', 'Data Kehadiran hari ini sudah ada!');
         }
 
         $this->kehadiran->store($request->all());
-        return redirect()->route('guru.kehadiran', ['id' => $request->rombel_id])
+        return redirect()->route('guru.kehadiran', ['tahun' => $request->tahun_ajaran, 'semester' => $request->semester, 'id' => $request->rombel_id])
             ->with('message', 'Berhasil menambah kehadiran hari ini');
     }
 
@@ -91,7 +113,7 @@ class KehadiranController extends Controller
     {
 
         $this->kehadiran->update($request->all(), $id);
-        return redirect()->route('guru.kehadiran', ['id' => $request->rombel_id])
+        return redirect()->route('guru.kehadiran', ['tahun' => $request->tahun, 'semester' => $request->semester, 'id' => $request->rombel_id])
             ->with('message', 'Berhasil mengubah data kehadiran');
     }
     public function destroy($rombel_id)
@@ -104,5 +126,35 @@ class KehadiranController extends Controller
             return redirect()->back()
                 ->with('error', $err->getMessage());
         }
+    }
+
+    public function admin_show_kehadiran($tahun, $semester)
+    {
+        $tahun_ajaran_id = $this->tahun_ajaran->getId($tahun, $semester);
+        $rombel = $this->rombel->getAll($tahun_ajaran_id);
+        return view('pages.admin.kehadiran.index', [
+            'rombel' => $rombel,
+            'tahun' => $tahun,
+            'semester' => $semester,
+        ]);
+    }
+    public function admin_detail_kehadiran($tahun, $semester, Rombel $rombel)
+    {
+        $tanggal = $this->date->getDate()->format('Y-m-d');
+
+        $tahun_ajaran_id = $this->tahun_ajaran->getId($tahun, $semester);
+        $rombel = $this->rombel->getOne($rombel->id);
+        return view('pages.admin.kehadiran.detail_kehadiran', [
+            'tahun' => $tahun,
+            'semester' => $semester,
+            'rombel' => $rombel,
+            'tahun_ajaran_id' => $tahun_ajaran_id,
+            'tanggal' => $tanggal,
+        ]);
+    }
+    public function admin_get_kehadiran(Request $request)
+    {
+        $kehadirans = $this->kehadiran->getByRombelId($request->rombel_id, $request->tanggal)->get();
+        return response($kehadirans);
     }
 }

@@ -1,10 +1,16 @@
 @extends('layouts.dashboard')
 @section('table-name', 'Data Siswa')
 @section('table-role', 'Admin')
+@section('back')
+    <div class="font-medium  border border-slate-500 bg-slate-500 text-white rounded-full  me-3">
+        <a href="{{ route('tahun_ajaran.index', 'siswa') }}" class="flex justify-center items-center"><i
+                class='bx bx-chevron-left text-[30px]'></i></a>
+    </div>
+@endsection
 @section('content')
     <div class="grid grid-cols-12 gap-6 bg-white shadow-md">
         <div class="col-span-12">
-            <div class="card dark:bg-zinc-800 dark:border-zinc-600">
+            <div class="card ">
                 <div class="px-[30px] pt-[20px]">
                     <h1 class="text-[18px] font-medium text-gray-700 leading-5">Silahkan pilih rombongan belajar untuk
                         melihat data
@@ -20,20 +26,19 @@
                                     @if (explode(' ', $data->nama_rombel)[0] == 'X')
                                         <div class="swiper-slide">
                                             <div
-                                                class="card dark:bg-zinc-800 dark:border-zinc-600   bg-blue-50 border-blue-300 border-2 hover:border-violet-300  hover:border-2 hover:shadow-lg hover:shadow-violet-300 transition-all">
-                                                <div class="card-body  ">
-                                                    <i class='mb-6 bx bxs-calendar text-[30px] text-gray-600'></i>
+                                                class="hover:scale-98  card bg-blue-50 border-blue-300 border-2  transition-all">
+                                                <div class="card-body">
                                                     <h6
-                                                        class="mb-6 text-slate-700 text-[30px] dark:text-gray-100 font-bold">
+                                                        class="mb-3 text-slate-700 text-[25px] dark:text-gray-100 font-bold">
                                                         {{ $data->nama_rombel }}
                                                     </h6>
                                                     <p class="text-slate-600 card-text dark:text-zinc-100 mb-2">
                                                         Silahkan pilih rombel dengan menekan tombol dibawah!
                                                     </p>
                                                     <div class="">
-                                                        <a href="{{ route('admin.siswa.show_siswa', ['id' => $data->id]) }}"
-                                                            class="hover:bg-violet-700
-                                                            block text-center text-white border-transparent shadow btn bg-violet-300  shadow-violet-300 dark:shadow-zinc-600">
+                                                        <a href="{{ route('admin.siswa.show_siswa', ['tahun' => $tahun, 'semester' => $semester, 'rombel' => $data]) }}"
+                                                            class="hover:bg-blue-700
+                                                            block text-center text-white border-transparent shadow btn bg-blue-500  shadow-blue-500 dark:shadow-zinc-600">
                                                             Pilih
                                                         </a>
                                                     </div>
@@ -57,20 +62,19 @@
                                     @if (explode(' ', $data->nama_rombel)[0] == 'XI')
                                         <div class="swiper-slide">
                                             <div
-                                                class="card dark:bg-zinc-800 dark:border-zinc-600   bg-blue-50 border-blue-300 border-2 hover:border-violet-300  hover:border-2 hover:shadow-lg hover:shadow-violet-300 transition-all">
-                                                <div class="card-body  ">
-                                                    <i class='mb-6 bx bxs-calendar text-[30px] text-gray-600'></i>
+                                                class="card hover:scale-98 duration-300 bg-blue-50 border-blue-300 border-2  transition-all">
+                                                <div class="card-body">
                                                     <h6
-                                                        class="mb-6 text-slate-700 text-[30px] dark:text-gray-100 font-bold">
+                                                        class="mb-3 text-slate-700 text-[25px] dark:text-gray-100 font-bold">
                                                         {{ $data->nama_rombel }}
                                                     </h6>
                                                     <p class="text-slate-600 card-text dark:text-zinc-100 mb-2">
                                                         Silahkan pilih rombel dengan menekan tombol dibawah!
                                                     </p>
                                                     <div class="">
-                                                        <a href="{{ route('admin.siswa.show_siswa', ['id' => $data->id]) }}"
-                                                            class="hover:bg-violet-700
-                                                            block text-center text-white border-transparent shadow btn bg-violet-300  shadow-violet-300 dark:shadow-zinc-600">
+                                                        <a href="{{ route('admin.siswa.show_siswa', ['tahun' => $tahun, 'semester' => $semester, 'rombel' => $data]) }}"
+                                                            class="hover:bg-blue-700
+                                                            block text-center text-white border-transparent shadow btn bg-blue-500  shadow-blue-500 dark:shadow-zinc-600">
                                                             Pilih
                                                         </a>
                                                     </div>
@@ -94,20 +98,19 @@
                                     @if (explode(' ', $data->nama_rombel)[0] == 'XII')
                                         <div class="swiper-slide">
                                             <div
-                                                class="card dark:bg-zinc-800 dark:border-zinc-600   bg-blue-50 border-blue-300 border-2 hover:border-violet-300  hover:border-2 hover:shadow-lg hover:shadow-violet-300 transition-all">
-                                                <div class="card-body  ">
-                                                    <i class='mb-6 bx bxs-calendar text-[30px] text-gray-600'></i>
+                                                class="card hover:scale-98 duration-300 bg-blue-50 border-blue-300 border-2  transition-all">
+                                                <div class="card-body">
                                                     <h6
-                                                        class="mb-6 text-slate-700 text-[30px] dark:text-gray-100 font-bold">
+                                                        class="mb-3 text-slate-700 text-[25px] dark:text-gray-100 font-bold">
                                                         {{ $data->nama_rombel }}
                                                     </h6>
                                                     <p class="text-slate-600 card-text dark:text-zinc-100 mb-2">
                                                         Silahkan pilih rombel dengan menekan tombol dibawah!
                                                     </p>
                                                     <div class="">
-                                                        <a href="{{ route('admin.siswa.show_siswa', ['id' => $data->id]) }}"
-                                                            class="hover:bg-violet-700
-                                                            block text-center text-white border-transparent shadow btn bg-violet-300  shadow-violet-300 dark:shadow-zinc-600">
+                                                        <a href="{{ route('admin.siswa.show_siswa', ['tahun' => $tahun, 'semester' => $semester, 'rombel' => $data]) }}"
+                                                            class="hover:bg-blue-700
+                                                            block text-center text-white border-transparent shadow btn bg-blue-500  shadow-blue-500 dark:shadow-zinc-600">
                                                             Pilih
                                                         </a>
                                                     </div>
@@ -123,7 +126,6 @@
                         </div>
                     </div>
                     {{-- End Data Kelas XII --}}
-
                 </div>
             </div>
         </div>

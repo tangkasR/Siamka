@@ -3,58 +3,25 @@
     Data Nilai Rombel {{ $rombel->nama_rombel }}
 @endsection
 @section('table-role', 'Guru')
+@section('back')
+    <div class="font-medium  border border-slate-500 bg-slate-500 text-white rounded-full  me-3">
+        <a href="{{ route('guru.nilai', ['tahun' => $tahun, 'semester' => $semester, 'rombel' => $rombel]) }}"
+            class="flex justify-center items-center"><i class='bx bx-chevron-left text-[30px]'></i></a>
+    </div>
+@endsection
 @section('content')
     <div class="grid grid-cols-1 gap-5 bg-white shadow-md">
         <div class="card dark:bg-zinc-800 dark:border-zinc-600">
             <div class="card-body border-b border-gray-100 dark:border-zinc-600">
-                <div class="grid md:grid-cols-12 gap-4 items-end">
-                    <div class="md:col-span-2 flex flex-col justify-end">
-                        <h6 class="mb-3 text-gray-700 text-15 dark:text-gray-100 font-semibold">Tambah Data Nilai</h6>
-                        <input type="text" id="rombel_id" value="{{ $rombel->id }}" hidden>
-                        <a href="{{ route('guru.nilai.show_input', ['id' => $rombel->id]) }}"
-                            class=" text-white text-center hover:bg-violet-600 bg-violet-400 py-2 font-normal px-[40px] text-[16px] rounded-md transition-all">
-                            Tambah Data
-                        </a>
+                <div class="flex justify-between items-center gap-4">
+                    <div>
+                        <h1 class="text-[18px] font-medium capitalize">Tahun Ajaran
+                            {{ str_replace('-', '/', $tahun) }},
+                            Semester
+                            {{ $semester }}</h1>
                     </div>
-                    <div class="md:col-span-2 flex flex-col justify-end">
-                        <h6 class="mb-3 text-gray-600 text-[16px] dark:text-gray-100 font-medium">Jika salah memasukan
-                            data, silahkan hapus sesuai tipe ujian, semester, mata pelajaran!
-                        </h6>
-                        <input type="text" id="rombel_id" value="{{ $rombel->id }}" hidden>
-                        <a data-tw-toggle="modal" data-tw-target="#modal-id_form_destroy"
-                            class="text-center text-white hover:bg-red-700 bg-red-500 py-2 font-normal px-[40px] text-[16px] rounded-md transition-all">
-                            Hapus Data
-                        </a>
-                    </div>
-                    <div class="col-span-2"></div>
-                    <div class="md:col-span-6 grid grid-cols-3 gap-3 mt-6 md:mt-0">
-                        <div class="">
-                            <label for=""
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
-                                Semester
-                            </label>
-                            <select id="semester" name="semester"
-                                class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
-                                required>
-                                @if (explode(' ', $rombel->nama_rombel)[0] == 'X')
-                                    <option value="1" selected>Semester 1</option>
-                                    <option value="2">Semester 2</option>
-                                @endif
-                                @if (explode(' ', $rombel->nama_rombel)[0] == 'XI')
-                                    <option value="3" selected>Semester 3</option>
-                                    <option value="4">Semester 4</option>
-                                @endif
-                                @if (explode(' ', $rombel->nama_rombel)[0] == 'XII')
-                                    <option value="5" selected>Semester 5</option>
-                                    <option value="6">Semester 6</option>
-                                @endif
-                            </select>
-                        </div>
-                        <div class="">
-                            <label for=""
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
-                                Tipe Ujian
-                            </label>
+                    <div class="flex items-center gap-4">
+                        <div class="w-[200px]">
                             <select id="tipe_ujian"
                                 class=" dropdown dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100">
                                 <option value="uts">
@@ -65,11 +32,7 @@
                                 </option>
                             </select>
                         </div>
-                        <div class="">
-                            <label for="mapel_id"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
-                                Mata Pelajaran
-                            </label>
+                        <div class="w-[200px]">
                             <select id="mapel_id"
                                 class=" dropdown dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100">
                                 @foreach ($mapel as $data_mapel)
@@ -79,27 +42,50 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="relative dropdown">
+                            <button type="button"
+                                class="dropdown-toggle flex gap-2 justify-center items-center cursor-pointer text-center w-[180px] border border-blue-500 bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-all duration-300"
+                                id="dropdownMenuButton1" data-bs-toggle="dropdown"><span>Kelola Data Nilai</span><i
+                                    class='bx bxs-plus-circle text-[20px]'></i></button>
+
+                            <ul class="absolute z-50 float-left py-2 mt-1 text-left list-none bg-white border-none rounded-lg shadow-lg dropdown-menu w-44 bg-clip-padding dark:bg-zinc-700 hidden"
+                                aria-labelledby="dropdownMenuButton1" data-popper-placement="bottom-start"
+                                style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(49px, 1636.5px, 0px);">
+                                <li>
+                                    <a class="cursor-pointer block w-full px-4 py-1 text-sm font-medium text-blue-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 "
+                                        href="{{ route('guru.nilai.show_input', ['tahun' => $tahun, 'semester' => $semester, 'rombel' => $rombel]) }}">
+                                        Tambah Nilai
+                                    </a>
+                                </li>
+                                <hr class="my-1 border-gray-50 dark:border-zinc-600">
+                                <li>
+                                    <a class="cursor-pointer block text-red-700 w-full px-4 py-1 text-sm font-medium  bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 "
+                                        data-tw-toggle="modal" data-tw-target="#modal-id_form_destroy">
+                                        Hapus Nilai</a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="relative overflow-x-auto card-body">
-                <table id="" class="table uppercase w-full pt-4 text-center text-gray-700 dark:text-zinc-100">
+                <table id="" class="table capitalize w-full pt-4 text-center text-gray-700 dark:text-zinc-100">
                     <thead>
                         <tr class="bg-blue-200">
-                            <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                            <th class="p-4 pr-8">
                                 No</th>
-                            <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                            <th class="p-4 pr-8">
                                 Nama Siswa</th>
-                            <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                            <th class="p-4 pr-8">
                                 Mata Pelajaran</th>
-                            <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                            <th class="p-4 pr-8">
                                 Semester</th>
-                            <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                            <th class="p-4 pr-8">
                                 Tipe Ujian</th>
-                            <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                            <th class="p-4 pr-8">
                                 Nilai</th>
-                            <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
-                                Aksi</th>
+                            <th class="p-4 pr-8">
+                            </th>
                         </tr>
                     </thead>
                     <tbody id="tabel-container">
@@ -196,16 +182,28 @@
                                         class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
                                         required>
                                         @if (explode(' ', $rombel->nama_rombel)[0] == 'X')
-                                            <option value="1" selected>Semester 1</option>
-                                            <option value="2">Semester 2</option>
+                                            @if ($semester == 'ganjil')
+                                                <option value="1">Semester Ganjil</option>
+                                            @endif
+                                            @if ($semester == 'genap')
+                                                <option value="2">Semester Genap</option>
+                                            @endif
                                         @endif
                                         @if (explode(' ', $rombel->nama_rombel)[0] == 'XI')
-                                            <option value="3" selected>Semester 3</option>
-                                            <option value="4">Semester 4</option>
+                                            @if ($semester == 'ganjil')
+                                                <option value="3">Semester Ganjil</option>
+                                            @endif
+                                            @if ($semester == 'genap')
+                                                <option value="4">Semester Genap</option>
+                                            @endif
                                         @endif
                                         @if (explode(' ', $rombel->nama_rombel)[0] == 'XII')
-                                            <option value="5" selected>Semester 5</option>
-                                            <option value="6">Semester 6</option>
+                                            @if ($semester == 'ganjil')
+                                                <option value="5">Semester Ganjil</option>
+                                            @endif
+                                            @if ($semester == 'genap')
+                                                <option value="6">Semester Genap</option>
+                                            @endif
                                         @endif
                                     </select>
                                 </div>
@@ -241,8 +239,35 @@
             </div>
         </div>
     </div>
-    {{-- End Modal Destroy --}}
 
+    @if (explode(' ', $rombel->nama_rombel)[0] == 'X')
+        @if ($semester == 'ganjil')
+            <input value="1" id="semester" hidden />
+        @endif
+        @if ($semester == 'genap')
+            <input value="2" id="semester" hidden />
+        @endif
+    @endif
+    @if (explode(' ', $rombel->nama_rombel)[0] == 'XI')
+        @if ($semester == 'ganjil')
+            <input value="3" id="semester" hidden />
+        @endif
+        @if ($semester == 'genap')
+            <input value="4" id="semester"hidden />
+        @endif
+    @endif
+    @if (explode(' ', $rombel->nama_rombel)[0] == 'XII')
+        @if ($semester == 'ganjil')
+            <input value="5" id="semester" hidden />
+        @endif
+        @if ($semester == 'genap')
+            <input value="6" id="semester" hidden />
+        @endif
+    @endif
+    <input type="text" id="tahun_ajaran_" value="{{ $tahun }}" hidden>
+    <input type="text" id="semester_" value="{{ $semester }}" hidden>
+    <input type="text" id="rombel_id" value="{{ $rombel->id }}" hidden>
+    <input type="text" id="tahun_ajaran_id" value="{{ $tahun_ajaran_id }}" hidden>
     <script type="module">
         $(document).ready(function() {
             let page = 1;
@@ -268,6 +293,7 @@
                 url: url,
                 data: getDatas(),
                 success: function(response) {
+                    console.log(response);
                     if (response.data.length != 0) {
                         createTable(response)
                     }
@@ -363,12 +389,14 @@
                 let rombel_id = $('#rombel_id').val()
                 let semester = $('#semester').val()
                 let mapel_id = $('#mapel_id').val()
+                let tahun_ajaran_id = $('#tahun_ajaran_id').val()
 
                 let datas = {
                     'tipe_ujian': tipe_ujian,
                     'semester': semester,
                     'rombel_id': rombel_id,
                     'mapel_id': mapel_id,
+                    'tahun_ajaran_id': tahun_ajaran_id,
                 }
                 return datas
             }
@@ -377,26 +405,37 @@
                 let row = ''
                 let index = datas.from
                 let rombel_id = $('#rombel_id').val()
+                let tahun_ = $('#tahun_ajaran_').val()
+                let semester_ = $('#semester_').val()
 
                 const baseUrl =
-                    "{{ route('guru.nilai.show_update', ['id' => ':id', 'rombel_id' => ':rombel_id']) }}";
+                    "{{ route('guru.nilai.show_update', ['tahun' => ':tahun', 'semester' => ':semester', 'id' => ':id', 'rombel_id' => ':rombel_id']) }}";
                 for (let i = 0; i < datas.data.length; i++) {
-                    let url_edit = baseUrl.replace(':id', datas.data[i].id).replace(':rombel_id', rombel_id);
+                    let semester = '';
+                    let url_edit = baseUrl.replace(':tahun', tahun_).replace(':semester', semester_).replace(':id',
+                        btoa(datas.data[i].id)).replace(':rombel_id', btoa(
+                        rombel_id));
+                    if (datas.data[i].semester % 2 == 0) {
+                        semester = 'genap'
+                    } else {
+                        semester = 'ganjil'
+                    }
+
                     row = `
                     <tr class="${(i + 1) % 2 == 0 ? 'bg-blue-50' : 'bg-white'}">
-                        <td class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
+                        <td class="p-4 pr-8">
                             ${index}</td>
-                        <td class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
+                        <td class="p-4 pr-8">
                             ${datas.data[i].nama}</td>
-                        <td class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
+                        <td class="p-4 pr-8">
                             ${datas.data[i].nama_mata_pelajaran}</td>
-                        <td class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
-                            ${datas.data[i].semester}</td>
-                        <td class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
+                        <td class="p-4 pr-8">
+                            ${semester}</td>
+                        <td class="p-4 pr-8 capitalize">
                             ${datas.data[i].tipe_ujian}</td>
-                        <td class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
+                        <td class="p-4 pr-8">
                             ${datas.data[i].nilai}</td>
-                        <td class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600 min-w-[150px] w-[150px]">
+                        <td class="p-4 pr-8  min-w-[150px] w-[150px]">
                             <a href="${url_edit}"
                                 class="btn-edit"
                                 data-tw-toggle="modal"><i class='bx bxs-edit'></i> Ubah</a>

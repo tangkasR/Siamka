@@ -2,16 +2,19 @@
 
 namespace App\Models;
 
-use App\Traits\uuid;
 use App\Models\Ekskul;
-use App\Models\Rombel;
+use App\Models\JadwalPelajaran;
 use App\Models\KehadiranGuru;
 use App\Models\MataPelajaran;
-use App\Models\JadwalPelajaran;
-use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Notifications\Notifiable;
+use App\Models\Rombel;
+use App\Models\TahunAjaran;
+use App\Traits\uuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Crypt;
+use Laravel\Sanctum\HasApiTokens;
+use Throwable;
 
 class Guru extends Authenticatable
 {
@@ -33,6 +36,8 @@ class Guru extends Authenticatable
         'kartu_keluarga',
         'username',
         'password',
+        'tahun_ajaran_id',
+        'status_akun',
     ];
 
     protected $hidden = [
@@ -43,6 +48,11 @@ class Guru extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function tahun_ajaran()
+    {
+        return $this->belongsTo(TahunAjaran::class, 'tahun_ajaran_id', 'id');
+    }
 
     public function mapels()
     {
@@ -73,6 +83,22 @@ class Guru extends Authenticatable
     public function getRouteKeyName(): String
     {
         return 'uuid';
+    }
+
+    public function getRouteKey()
+    {
+        return Crypt::encrypt($this->uuid);
+    }
+    public function resolveRouteBinding($value, $field = null)
+    {
+        try {
+            $decrypted = Crypt::decrypt($value);
+            $field = $field ?? $this->getRouteKeyName();
+
+            return parent::resolveRouteBinding($decrypted, $field);
+        } catch (Throwable $er) {
+            abort(404);
+        }
     }
 
 }

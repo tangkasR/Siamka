@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MataPelajaran;
+use App\Models\Nilai;
+use App\Models\Rombel;
 use App\Services\AuthService;
 use App\Services\GuruService;
 use App\Services\MataPelajaranService;
 use App\Services\NilaiService;
 use App\Services\RombelService;
 use App\Services\SiswaService;
+use App\Services\TahunAjaranService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Validation\ValidationException;
 
 class NilaiController extends Controller
@@ -19,6 +24,7 @@ class NilaiController extends Controller
     private $mapel;
     private $siswa;
     private $guru;
+    private $tahun_ajaran;
 
     public function __construct(
         RombelService $rombel,
@@ -26,7 +32,8 @@ class NilaiController extends Controller
         NilaiService $nilai,
         MataPelajaranService $mapel,
         SiswaService $siswa,
-        GuruService $guru
+        GuruService $guru,
+        TahunAjaranService $tahun_ajaran
     ) {
         $this->rombel = $rombel;
         $this->auth = $auth;
@@ -34,62 +41,77 @@ class NilaiController extends Controller
         $this->mapel = $mapel;
         $this->siswa = $siswa;
         $this->guru = $guru;
+        $this->tahun_ajaran = $tahun_ajaran;
     }
-    public function index()
+    public function index($tahun, $semester)
     {
-        $guru_id = $this->auth->getUser('guru')->id;
+
+        $guru_ = $this->auth->getUser('guru');
+        $guru = $this->guru->getById($guru_->id);
+        $tahun_ajaran_id = $this->tahun_ajaran->getId($tahun, $semester);
         return view('pages.guru.nilai.index', [
-            'rombel' => $this->rombel->getByGuruId($guru_id),
+            'rombel' => $this->rombel->getRombelGuru($guru->nomor_induk_yayasan, $tahun_ajaran_id),
+            'tahun' => $tahun,
+            'semester' => $semester,
         ]);
     }
-    public function show_siswa($id)
+    public function show_siswa($tahun, $semester, $rombel)
     {
-        $guru_id = $this->auth->getUser('guru')->id;
-        $guru = $this->guru->getById($guru_id);
+        $guru_ = $this->auth->getUser('guru');
+        $guru = $this->guru->getById($guru_->id);
         return view('pages.guru.nilai.nilai', [
-            'rombel' => $this->rombel->getOne('id', $id),
+            'rombel' => $this->rombel->getOne(Crypt::decrypt($rombel)),
             'mapel' => $guru->mapels,
-            'guru' => $this->auth->getUser('guru'),
+            'guru' => $guru,
+            'nilais' => [],
+            'tahun' => $tahun,
+            'semester' => $semester,
+            'tahun_ajaran_id' => $this->tahun_ajaran->getId($tahun, $semester),
         ]);
     }
     public function getNilai_guru(Request $request)
     {
-        $guru = $this->auth->getUser('guru');
-        $nilai = $this->nilai->get_nilai_with_rombel_id_and_mapel_id($request->rombel_id, $guru->mata_pelajaran_id)
+        $nilai = $this->nilai->getNilai($request->rombel_id, $request->mapel_id, $request->tahun_ajaran_id)
             ->paginate(5);
         return response($nilai);
     }
     public function filter(Request $request)
     {
         $guru = auth()->guard('guru')->user();
-        $nilai = $this->nilai->get_nilai_with_rombel_id_and_mapel_id_and_tipe_ujian(
+        $nilai = $this->nilai->getNilaiByParams(
             $request->rombel_id,
             $request->mapel_id,
             $request->tipe_ujian,
-            $request->semester
+            $request->semester,
+            $request->tahun_ajaran_id
         )->paginate(5);
         return response($nilai);
     }
 
-    public function show_input($id)
+    public function show_input($tahun, $semester, Rombel $rombel)
     {
-        $guru_id = $this->auth->getUser('guru')->id;
-        $guru = $this->guru->getById($guru_id);
+        // dd($this->siswa->getSiswa($rombel->id));
+        $guru_ = $this->auth->getUser('guru');
+        $guru = $this->guru->getById($guru_->id);
         return view('pages.guru.nilai.tambah_nilai', [
             'guru' => $guru,
-            'rombel' => $this->rombel->getOne('id', $id),
+            'rombel' => $this->rombel->getOne($rombel->id),
             'mapel' => $guru->mapels,
-            'siswas' => $this->siswa->getByRombelIdActive($id),
+            'siswas' => $this->siswa->getSiswa($rombel->id),
+            'tahun' => $tahun,
+            'semester' => $semester,
+            'tahun_ajaran_id' => $this->tahun_ajaran->getId($tahun, $semester),
         ]);
     }
 
     public function store(Request $request)
     {
-        $checkSiswa = $this->nilai->get_nilai_with_rombel_id_and_mapel_id_and_tipe_ujian(
+        $checkSiswa = $this->nilai->getNilaiByParams(
             $request->rombel_id,
             $request->mata_pelajaran_id,
             $request->tipe_ujian,
-            $request->semester
+            $request->semester,
+            $request->tahun_ajaran_id
         )->get();
 
         if (count($checkSiswa) > 0) {
@@ -105,25 +127,30 @@ class NilaiController extends Controller
                 ->with('error', 'Masukan semua nilai Siswa!');
         }
         $this->nilai->store($request->all());
-        return redirect()->route('guru.nilai.show_siswa', ['id' => $request->rombel_id])
+        return redirect()->route('guru.nilai.show_siswa', ['tahun' => $request->tahun_ajaran_, 'semester' => $request->semester_, 'rombel' => Crypt::encrypt($request->rombel_id)])
             ->with('message', 'Berhasil menambah data nilai');
     }
-    public function show_update($id, $rombel_id)
+    public function show_update($tahun, $semester, $id, $rombel_id)
     {
-        $nilai = $this->nilai->getNilaiByParams('id', $id)->first();
+        $id = base64_decode($id);
+        $rombel_id = base64_decode($rombel_id);
+        $nilai = $this->nilai->getNilaiById($id);
         return view('pages.guru.nilai.ubah-nilai', [
             'data' => $nilai,
+            'rombel' => $this->rombel->getOne($rombel_id),
             'rombel_id' => $rombel_id,
+            'tahun' => $tahun,
+            'semester' => $semester,
         ]);
     }
-    public function update(Request $request, $id)
+    public function update(Request $request, Nilai $nilai)
     {
         try {
-            $this->nilai->update($request->all(), $id);
-            return redirect()->route('guru.nilai.show_siswa', ['id' => $request->rombel_id])
+            $this->nilai->update($request->all(), $nilai);
+            return redirect()->route('guru.nilai.show_siswa', ['tahun' => $request->tahun_ajaran_, 'semester' => $request->semester_, 'rombel' => Crypt::encrypt($request->rombel_id)])
                 ->with('message', 'Berhasil mengubah data nilai');
         } catch (QueryException $er) {
-            return redirect()->route('guru.nilai.show_siswa', ['id' => $request->rombel_id])
+            return redirect()->route('guru.nilai.show_siswa', ['tahun' => $request->tahun_ajaran_, 'semester' => $request->semester_, 'rombel' => Crypt::encrypt($request->rombel_id)])
                 ->with('message', 'Gagal mengubah data nilai');
         }
     }
@@ -135,5 +162,40 @@ class NilaiController extends Controller
         } catch (ValidationException $er) {
             return redirect()->back()->with('error', $er->getMessage());
         }
+    }
+
+    public function admin_show_nilai($tahun, $semester)
+    {
+        $tahun_ajaran_id = $this->tahun_ajaran->getId($tahun, $semester);
+        $rombel = $this->rombel->getAll($tahun_ajaran_id);
+        return view('pages.admin.nilai.index', [
+            'rombel' => $rombel,
+            'tahun' => $tahun,
+            'semester' => $semester,
+        ]);
+    }
+    public function admin_detail_nilai($tahun, $semester, Rombel $rombel)
+    {
+        $tahun_ajaran_id = $this->tahun_ajaran->getId($tahun, $semester);
+        $rombel = $this->rombel->getOne($rombel->id);
+        return view('pages.admin.nilai.detail_nilai', [
+            'tahun' => $tahun,
+            'semester' => $semester,
+            'rombel' => $rombel,
+            'tahun_ajaran_id' => $tahun_ajaran_id,
+            'gurus' => $rombel->gurus,
+        ]);
+    }
+    public function admin_get_nilai(Request $request)
+    {
+        $mapel = MataPelajaran::where('nama_mata_pelajaran', $request->nama_mapel)->first();
+        $nilai = $this->nilai->getNilaiByParams(
+            $request->rombel_id,
+            $mapel->id,
+            $request->tipe_ujian,
+            $request->semester,
+            $request->tahun_ajaran_id
+        )->get();
+        return response($nilai);
     }
 }

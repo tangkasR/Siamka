@@ -5,15 +5,15 @@
     <div class="grid grid-cols-12 gap-6 bg-white shadow-md">
         <div class="col-span-12">
             <div class="card dark:bg-zinc-800 dark:border-zinc-600">
-                <form class="" action="{{ route('guru.nilai_ekskul.store', ['ekskul_id' => $ekskul->id]) }}"
-                    method="POST">
+                <form class="" action="{{ route('guru.nilai_ekskul.store', ['ekskul' => $ekskul]) }}" method="POST">
                     @csrf
+                    <input type="text" value="{{ $tahun_ajaran_id }}" name="tahun_ajaran_id" hidden>
+                    <div class="px-[30px] pt-[20px]">
+                        <h2 class=" text-gray-800 text-[18px] font-medium">Silahkan masukan nilai ekskul <span
+                                class="text-violet-700 font-bold  ms-1 capitalize">{{ $ekskul->nama_ekskul }}</span></h2>
+                    </div>
                     <div class="px-[30px] pt-[20px] grid md:grid-cols-3 gap-4 items-start">
                         <div class="">
-                            <h2 class="mb-3 text-gray-800 text-[20px] font-semibold">Daftar Siswa Di <br> Ekskul <span
-                                    class="text-violet-700 font-bold  ms-1 capitalize">{{ $ekskul->nama_ekskul }}</span></h2>
-                        </div>
-                        <div class="md:p-6 md:border-[2px] md:border-gray-100 rounded-md">
                             <label for="semester"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
                                 Semester
@@ -22,16 +22,20 @@
                                 class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
                                 required>
                                 <option value="">Pilih Semester</option>
-                                <option value="1">Semester 1</option>
-                                <option value="2">Semester 2</option>
-                                <option value="3">Semester 3</option>
-                                <option value="4">Semester 4</option>
-                                <option value="5">Semester 5</option>
-                                <option value="6">Semester 6</option>
+                                @if ($semester == 'ganjil')
+                                    <option value="1">Semester 1</option>
+                                    <option value="3">Semester 3</option>
+                                    <option value="5">Semester 5</option>
+                                @endif
+                                @if ($semester == 'genap')
+                                    <option value="2">Semester 2</option>
+                                    <option value="4">Semester 4</option>
+                                    <option value="6">Semester 6</option>
+                                @endif
 
                             </select>
                         </div>
-                        <div class="md:p-6 md:border-[2px] md:border-gray-100 rounded-md">
+                        <div class="">
                             <label for="ekskul_id"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
                                 Nama Ekskul
@@ -70,7 +74,7 @@
                                 @endforeach
                             </div>
                             <button type="submit"
-                                class="px-10 py-2 rounded-md mt-5 hover:bg-violet-600 bg-violet-400 text-[16px] font-medium text-white ">Simpan</button>
+                                class="px-10 py-2 rounded-md mt-5 hover:bg-blue-700 bg-blue-500 text-[16px] font-medium text-white btn">Simpan</button>
                         </div>
                         <!-- end grid -->
                     </div>

@@ -1,205 +1,162 @@
 @extends('layouts.dashboard')
 @section('table-name', 'Detail Guru')
 @section('table-role', 'Admin')
+@section('back')
+    <div class="font-medium  border border-slate-500 bg-slate-500 text-white rounded-full  me-3">
+        <a href="{{ route('admin.guru', ['tahun' => $tahun, 'semester' => $semester]) }}"
+            class="flex justify-center items-center"><i class='bx bx-chevron-left text-[30px]'></i></a>
+    </div>
+@endsection
 @section('content')
-    <div class="md:max-w-4xl max-w-2xl flex items-center h-auto lg:h-screen flex-wrap mx-auto md:my-32 mt-32 lg:my-0 py-10">
-        <div id="profile"
-            class="w-full rounded-lg lg:rounded-l-lg lg:rounded-r-none shadow-2xl bg-white md:mt-[40px] lg:mx-0">
-            <div class="p-4 md:p-12 lg:text-left">
+    <div class=" lg:my-0 md:p-10  min-h-screen bg-white ">
+        <div class="md:flex md:justify-between items-end">
+            <div class="md:flex  md:gap-6 items-center p-6  md:p-0">
                 <div id="profile-photo-mobile"
-                    class="block  rounded-full shadow-xl mx-auto md:-mt-[120px] -mt-[150px] md:min-w-[300px] md:min-h-[300px] h-[200px] w-[200px]   bg-cover bg-center z-50 border-2 border-slate-600"
+                    class="block md:mx-0 mx-auto  rounded-full shadow-xl h-[200px] w-[200px] bg-cover bg-center "
                     style="background-image: url('{{ $guru->profil != '-' ? asset('storage/' . $guru->profil) : asset('assets/img/profil-default.jpg') }}')">
+                    <div class="w-full h-full relative">
+                        <div class="absolute -bottom-2 w-full  text-center py-2 px-6 rounded-full"
+                            style="background-color: rgb(237, 233, 254)">
+                            <p class="text-[16px] font-medium capitalize">{{ $guru->jabatan }}</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="w-full flex justify-center flex-col items-center md:mt-10 mt-6 ">
-                    <input type="text" value="{{ $guru->nama }}" name="nama"
-                        class="border-none bg-transparent text-3xl font-medium capitalize text-center outline-none appearance-none focus:ring-0"
-                        disabled>
-                    <div class="mx-auto lg:mx-0 w-1/2 pt-2 border-b-2 border-violet-200 "></div>
-                </div>
-                <div class="mt-8 w-full mx-auto py-6 px-3">
-                    <div class="md:grid md:grid-cols-2 md:gap-5">
-                        <div class="relative z-0 w-full mb-8">
-                            <div class="md:col-span-3 grid grid-cols-2 mt-3 md:mt-6 gap-4">
-                                <div class="py-2">
-                                    <a href="{{ route('admin.guru.cetak_kehadiran', ['id' => $guru->id]) }}"
-                                        class="w-full  py-1 border px-5  border-slate-900   font-medium
-                                            hover:bg-gray-700 hover:text-white text-slate-900 bg-slate-50
-                                            rounded-md text-[14px]">
-                                        Cetak Kehadiran
-                                    </a>
-                                </div>
-                            </div>
-                            <label for="floating_email"
-                                class="peer-focus:font-medium absolute text-[16px] text-gray-500 font-medium dark:text-gray-400 duration-300 transform -translate-y-7 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-7">
-                                Rekap Kehadiran</label>
-                        </div>
+                <div class="text-left md:mt-0 mt-6">
+                    <div class="mb-3">
+                        <span class="font-semibold text-[24px] capitalize">{{ $guru->nama }} </span>
                     </div>
-                    <div class="md:grid md:grid-cols-2 md:gap-5">
-                        <div class="relative z-0 w-full mb-10 ">
-                            <div
-                                class="grid grid-cols-12 capitalize   w-full text-[16px] text-gray-900 font-medium bg-transparent border-0 border-b-2 border-violet-200 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer">
-                                @foreach ($guru->mapels as $mapel)
-                                    <input type="text" id="" name=""
-                                        class="bg-transparent border-0 col-span-6 appearance-none py-2.5 px-3 ring-0 mt-[1px]"
-                                        value="{{ $mapel->nama_mata_pelajaran }}" disabled />
-                                @endforeach
-                            </div>
-                            <label for="floating_email"
-                                class="peer-focus:font-medium absolute text-[16px] text-gray-500 font-medium dark:text-gray-400 duration-300 transform -translate-y-7 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-7">
-                                Mata Pelajaran</label>
-                        </div>
-                        <div class="relative z-0 w-full mb-10">
-                            <input type="text" id="floating_email"
-                                class="capitalize block py-2.5 px-0 w-full text-[14px] text-gray-900 font-medium bg-transparent border-0 border-b-2 border-violet-200 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                value="{{ $guru->jabatan }}" disabled />
-                            <label for="floating_email"
-                                class="peer-focus:font-medium absolute text-[16px] text-gray-500 font-medium dark:text-gray-400 duration-300 transform -translate-y-7 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-7">
-                                Jabatan</label>
-                        </div>
-                    </div>
-                    <div class="md:grid md:grid-cols-2 md:gap-5">
-                        <div class="relative z-0 w-full mb-10">
-                            <input type="text" id="floating_email"
-                                class="block py-2.5 px-0 w-full text-[14px] text-gray-900 font-medium bg-transparent border-0 border-b-2 border-violet-200 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                value="{{ $guru->username }}" disabled />
-                            <label for="floating_email"
-                                class="peer-focus:font-medium absolute text-[16px] text-gray-500 font-medium dark:text-gray-400 duration-300 transform -translate-y-7 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-7">
-                                Username</label>
-                        </div>
-                        <div class="relative z-0 w-full mb-10">
-                            <input type="text" id="floating_email"
-                                class="block py-2.5 px-0 w-full text-[14px] text-gray-900 font-medium bg-transparent border-0 border-b-2 border-violet-200 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                value="{{ $guru->jenis_kelamin == 'L' ? 'Laki-Laki' : 'Perempuan' }}" disabled />
-                            <label for="floating_email"
-                                class="peer-focus:font-medium absolute text-[16px] text-gray-500 font-medium dark:text-gray-400 duration-300 transform -translate-y-7 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-7">
-                                Jenis Kelamin</label>
-                        </div>
-                    </div>
-                    <div class="md:grid md:grid-cols-2 md:gap-5">
-                        <div class="relative z-0 w-full mb-10 ">
-                            <input type="text" id="floating_email" name="tempat_tanggal_lahir"
-                                class="capitalize block py-2.5 px-0 w-full text-[14px] text-gray-900 font-medium bg-transparent border-0 border-b-2 border-violet-200 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                value="{{ $guru->tempat_tanggal_lahir }}" disabled />
-                            <label for="floating_email"
-                                class="peer-focus:font-medium absolute text-[16px] text-gray-500 font-medium dark:text-gray-400 duration-300 transform -translate-y-7 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-7">
-                                Tempat Tanggal Lahir</label>
-                        </div>
-                        <div class="relative z-0 w-full mb-10">
-                            <input type="text" id="floating_email" name="alamat"
-                                class="capitalize block py-2.5 px-0 w-full text-[14px] text-gray-900 font-medium bg-transparent border-0 border-b-2 border-violet-200 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                value="{{ $guru->alamat }}" disabled />
-                            <label for="floating_email"
-                                class="peer-focus:font-medium absolute text-[16px] text-gray-500 font-medium dark:text-gray-400 duration-300 transform -translate-y-7 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-7">
-                                Alamat</label>
-                        </div>
-                    </div>
-                    <div class="md:grid md:grid-cols-2 md:gap-5">
-                        <div class="relative z-0 w-full mb-10 ">
-                            <input type="text" id="floating_email" name="pendidikan_terakhir"
-                                class="capitalize block py-2.5 px-0 w-full text-[14px] text-gray-900 font-medium bg-transparent border-0 border-b-2 border-violet-200 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                value="{{ $guru->pendidikan_terakhir }}" disabled />
-                            <label for="floating_email"
-                                class="peer-focus:font-medium absolute text-[16px] text-gray-500 font-medium dark:text-gray-400 duration-300 transform -translate-y-7 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-7">
-                                Pendidikan Terakhir</label>
-                        </div>
-                        <div class="relative z-0 w-full mb-10">
-                            <input type="text" id="floating_email" name="no_hp"
-                                class="capitalize block py-2.5 px-0 w-full text-[14px] text-gray-900 font-medium bg-transparent border-0 border-b-2 border-violet-200 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                value="{{ $guru->no_hp }}" disabled />
-                            <label for="floating_email"
-                                class="peer-focus:font-medium absolute text-[16px] text-gray-500 font-medium dark:text-gray-400 duration-300 transform -translate-y-7 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-7">
-                                No Handphone</label>
-                        </div>
-                    </div>
-                    <div class="md:grid md:grid-cols-3 md:gap-5 ">
-                        <div class="">
-                            <div class="relative z-0 w-full mb-10 col-span-9 pt-5">
-                                <label for="floating_email"
-                                    class="peer-focus:font-medium absolute text-[16px] text-gray-500 font-medium dark:text-gray-400 duration-300 transform -translate-y-7 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-7">
-                                    KTP</label>
-                                <a class="hover:text-blue-600  left-0 peer-focus:font-medium absolute md:text-[20px] text-[16px] cursor-pointer  text-gray-500 font-medium dark:text-gray-400 duration-300 transform scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 md:peer-focus:-translate-y-8"
-                                    data-tw-toggle="modal" data-tw-target="#modal_view_ktp">
-                                    <i class='bx bx-show'></i> Lihat File KTP</a>
-                            </div>
-                        </div>
-                        <div class="">
-                            <div class="relative z-0 w-full mb-10 col-span-9 pt-5">
-                                <label for="floating_email"
-                                    class="peer-focus:font-medium absolute text-[16px] text-gray-500 font-medium dark:text-gray-400 duration-300 transform -translate-y-7 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-7">
-                                    Ijazah</label>
-                                <a class=" hover:text-blue-600  left-0 peer-focus:font-medium absolute md:text-[20px] text-[16px] cursor-pointer  text-gray-500 font-medium dark:text-gray-400 duration-300 transform scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 md:peer-focus:-translate-y-8"
-                                    data-tw-toggle="modal" data-tw-target="#modal_view_ijazah">
-                                    <i class='bx bx-show'></i> Lihat File Ijazah</a>
-                            </div>
-                        </div>
-                        <div class="">
-                            <div class="relative z-0 w-full mb-10 col-span-9 pt-5">
-                                <label for="floating_email"
-                                    class="peer-focus:font-medium absolute text-[16px] text-gray-500 font-medium dark:text-gray-400 duration-300 transform -translate-y-7 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-7">
-                                    Kartu Keluarga</label>
-                                <a class="hover:text-blue-600  left-0 peer-focus:font-medium absolute md:text-[20px] text-[16px] cursor-pointer  text-gray-500 font-medium dark:text-gray-400 duration-300 transform scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 md:peer-focus:-translate-y-8"
-                                    data-tw-toggle="modal" data-tw-target="#modal_view_kartu_keluarga">
-                                    <i class='bx bx-show'></i> Lihat File KK</a>
-                            </div>
-                        </div>
+                    <div class="mb-3">
+                        <span class="font-medium text-[16px] text-gray-500">Kompetensi:
+                            @foreach ($guru->mapels as $index => $mapel)
+                                @if ($index == 1)
+                                    <span class="mx-2">&</span>
+                                @endif
+                                <span class="ms-1">{{ $mapel->nama_mata_pelajaran }}</span>
+                            @endforeach
+                        </span>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+            <div class="p-6 flex gap-2 items-center">
+                <div>
+                    <div class="relative dropdown ">
+                        <button type="button"
+                            class="flex gap-2 items-center dropdown-toggle w-fit border border-blue-600 hover:bg-blue-700 text-blue-600 hover:text-white font-bold py-2 px-6 rounded-md "
+                            id="dropdownMenuButton1" data-bs-toggle="dropdown"><span> Download</span> <i
+                                class='bx bxs-cloud-download text-[20px]'></i></button>
+                        <ul class="absolute text-left z-50 float-left py-2 mt-1  list-none bg-white border-none rounded-lg shadow-lg dropdown-menu w-44 bg-clip-padding dark:bg-zinc-700 hidden"
+                            aria-labelledby="dropdownMenuButton1" data-popper-placement="bottom-start"
+                            style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(49px, 1636.5px, 0px);">
+                            <li>
+                                <form action="{{ route('guru.download_ktp') }}" method="POST">
+                                    @csrf
+                                    <input type="text" name="ktp" value="{{ $guru->ktp }}" id="" hidden>
+                                    <button
+                                        class="text-left block w-full px-4 py-1 text-sm font-medium text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 dark:text-gray-100 dark:hover:bg-zinc-600/50"
+                                        type="submit">
+                                        Download KTP
+                                    </button>
+                                </form>
+                            </li>
+                            <hr class="my-1 border-gray-50 dark:border-zinc-600">
+                            <li>
+                                <form action="{{ route('guru.download_kk') }}" method="POST">
+                                    @csrf
+                                    <input type="text" name="kk" value="{{ $guru->kartu_keluarga }}" id=""
+                                        hidden>
+                                    <button
+                                        class="text-left block text-gray-700  w-full px-4 py-1 text-sm font-medium  bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 dark:text-gray-100 dark:hover:bg-zinc-600/50"
+                                        type="submit">
+                                        Download KK
+                                    </button>
+                                </form>
+                            </li>
+                            <hr class="my-1 border-gray-50 dark:border-zinc-600">
+                            <li>
+                                <form action="{{ route('guru.download_ijazah') }}" method="POST">
+                                    @csrf
+                                    <input type="text" name="ijazah" value="{{ $guru->ijazah }}" id="" hidden>
+                                    <button
+                                        class="text-left block text-gray-700  w-full px-4 py-1 text-sm font-medium  bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 dark:text-gray-100 dark:hover:bg-zinc-600/50"
+                                        type="submit">
+                                        Download Ijazah
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <a href="{{ route('admin.guru.cetak_kehadiran', ['tahun' => $tahun, 'semester' => $semester, 'guru' => $guru]) }}"
+                        class="flex gap-2 items-center w-fit border border-slate-600 hover:bg-slate-700 text-slate-600 hover:text-white font-bold py-2 px-6 rounded-md">
+                        <span>Rekap Kehadiran</span><i class='bx bx-calendar-alt text-[20px]'></i>
+                    </a>
+                </div>
+            </div>
 
-    {{-- Modal ktp --}}
-    <div class="relative z-50 hidden modal" id="modal_view_ktp" aria-labelledby="modal-title" role="dialog"
-        aria-modal="true">
-        <div class="fixed inset-0 z-50 overflow-y-auto">
-            <div class="absolute inset-0 transition-opacity bg-black bg-opacity-50 modal-overlay">
+        </div>
+        <div class="mt-8 w-full mx-auto md:py-6 px-6 pb-0">
+            <div class="md:grid md:grid-cols-2 md:gap-5 mt-3">
+                <div class="relative z-0 w-full mb-10">
+                    <input type="text" id="floating_email"
+                        class="block py-2.5 px-3 w-full text-[16px] text-gray-900 font-medium bg-transparent border-0 border-b-2 border-violet-200 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                        value="{{ $guru->username }}" disabled />
+                    <label for="floating_email"
+                        class="peer-focus:font-medium absolute text-[16px] text-gray-500 font-medium dark:text-gray-400 duration-300 transform -translate-y-7 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-7">
+                        Username</label>
+                </div>
+                <div class="relative z-0 w-full mb-10">
+                    <input type="text" id="floating_email"
+                        class="block py-2.5 px-3 w-full text-[16px] text-gray-900 font-medium bg-transparent border-0 border-b-2 border-violet-200 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                        value="{{ $guru->jenis_kelamin != '-' ? $guru->jenis_kelamin : '-' }}" disabled />
+                    <label for="floating_email"
+                        class="peer-focus:font-medium absolute text-[16px] text-gray-500 font-medium dark:text-gray-400 duration-300 transform -translate-y-7 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-7">
+                        Jenis Kelamin</label>
+                </div>
             </div>
-            <div class="p-x-6 mx-auto animate-translate md:max-w-4xl w-full ">
-                <div
-                    class="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl dark:bg-zinc-600">
-                    <div class="bg-white dark:bg-zinc-700">
-                        <iframe src="{{ url('storage/' . $guru->ktp) }}" class="w-full min-h-[90vh]"
-                            frameborder="0"></iframe>
-                    </div>
+            {{--  --}}
+            <div class="md:grid md:grid-cols-2 md:gap-5">
+                <div class="relative z-0 w-full mb-10">
+                    <input type="text" id="floating_email" name="tempat_tanggal_lahir"
+                        class="capitalize block py-2.5 px-3 w-full text-[16px] text-gray-900 font-medium bg-transparent border-0 border-b-2 border-violet-200 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-violet-400 peer"
+                        value="{{ $guru->tempat_tanggal_lahir }}" disabled />
+                    <label for="floating_email"
+                        class="peer-focus:font-medium absolute text-[16px] text-gray-500 font-medium dark:text-gray-400 duration-300 transform -translate-y-11 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-11">
+                        Tempat Tanggal Lahir</label>
+                </div>
+                <div class="relative z-0 w-full mb-10">
+                    <input type="text" id="floating_email" name="alamat"
+                        class="capitalize block py-2.5 px-3 w-full text-[16px] text-gray-900 font-medium bg-transparent border-0 border-b-2 border-violet-200 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-violet-400 peer"
+                        value="{{ $guru->alamat }}" disabled />
+                    <label for="floating_email"
+                        class="peer-focus:font-medium absolute text-[16px] text-gray-500 font-medium dark:text-gray-400 duration-300 transform -translate-y-11 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-11">
+                        Alamat</label>
+                </div>
+            </div>
+            {{--  --}}
+            <div class="md:grid md:grid-cols-2 md:gap-5">
+                <div class="relative z-0 w-full mb-10">
+                    <input type="text" id="floating_email" name="pendidikan_terakhir"
+                        class="capitalize block py-2.5 px-3 w-full text-[16px] text-gray-900 font-medium bg-transparent border-0 border-b-2 border-violet-200 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-violet-400 peer"
+                        value="{{ $guru->pendidikan_terakhir }}" disabled />
+                    <label for="floating_email"
+                        class="peer-focus:font-medium absolute text-[16px] text-gray-500 font-medium dark:text-gray-400 duration-300 transform -translate-y-11 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-11">
+                        Pendidikan Terakhir</label>
+                </div>
+                <div class="relative z-0 w-full mb-10">
+                    <input type="text" id="floating_email" name="no_hp"
+                        class="capitalize block py-2.5 px-3 w-full text-[16px] text-gray-900 font-medium bg-transparent border-0 border-b-2 border-violet-200 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-violet-400 peer"
+                        value="{{ $guru->no_hp }}" disabled />
+                    <label for="floating_email"
+                        class="peer-focus:font-medium absolute text-[16px] text-gray-500 font-medium dark:text-gray-400 duration-300 transform -translate-y-11 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-11">
+                        No Handphone</label>
                 </div>
             </div>
         </div>
     </div>
-    {{-- End Modal ktp --}}
-    {{-- Modal ijazah --}}
-    <div class="relative z-50 hidden modal" id="modal_view_ijazah" aria-labelledby="modal-title" role="dialog"
-        aria-modal="true">
-        <div class="fixed inset-0 z-50 overflow-y-auto">
-            <div class="absolute inset-0 transition-opacity bg-black bg-opacity-50 modal-overlay">
-            </div>
-            <div class="p-x-6 mx-auto animate-translate md:max-w-4xl w-full ">
-                <div
-                    class="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl dark:bg-zinc-600">
-                    <div class="bg-white dark:bg-zinc-700">
-                        <iframe src="{{ url('storage/' . $guru->ijazah) }}" class="w-full min-h-[90vh]"
-                            frameborder="0"></iframe>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    {{-- End Modal ijazah --}}
-    {{-- Modal kartu keluarga --}}
-    <div class="relative z-50 hidden modal" id="modal_view_kartu_keluarga" aria-labelledby="modal-title" role="dialog"
-        aria-modal="true">
-        <div class="fixed inset-0 z-50 overflow-y-auto">
-            <div class="absolute inset-0 transition-opacity bg-black bg-opacity-50 modal-overlay">
-            </div>
-            <div class="p-x-6 mx-auto animate-translate md:max-w-4xl w-full ">
-                <div
-                    class="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl dark:bg-zinc-600">
-                    <div class="bg-white dark:bg-zinc-700">
-                        <iframe src="{{ url('storage/' . $guru->kartu_keluarga) }}" class="w-full min-h-[90vh]"
-                            frameborder="0"></iframe>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    {{-- End Modal kartu keluarga --}}
+    @if (session('message'))
+        <script>
+            toast('message', '{{ Session::get('message') }}')
+        </script>
+    @endif
 @endsection

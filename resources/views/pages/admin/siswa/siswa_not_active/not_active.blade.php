@@ -29,60 +29,49 @@
                     <table id="datatable" class="text-center table w-full pt-4 text-gray-700 dark:text-zinc-100">
                         <thead>
                             <tr class="bg-blue-200">
-                                <th class="p-4  border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4 ">
                                     No</th>
-                                <th class="p-4  border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4 ">
                                     Nama</th>
-                                <th class="p-4  border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4 ">
                                     NIS</th>
-                                <th class="p-4  border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4 ">
                                     NISN</th>
-                                <th class="p-4  border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4 ">
                                     Nomor Id</th>
-                                <th class="p-4  border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4 ">
                                     Jenis Kelamin</th>
-                                <th class="p-4  border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4 ">
                                     Status Siswa</th>
-                                <th class="p-4  border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4 ">
                                     Status Akun</th>
-                                <th class="p-4  border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4 ">
                                     Tanggal Lulus / Keluar
                                 </th>
-                                <th class="p-4  border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
-                                    Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($siswas as $data)
                                 <tr class="{{ $loop->iteration % 2 == 0 ? 'bg-blue-50' : 'bg-white' }}">
-                                    <td class="p-4  border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
+                                    <td class="p-4 ">
                                         {{ $loop->iteration }}</td>
-                                    <td class="p-4  border border-t-0 border-l-0 border-gray-200 dark:border-zinc-600">
+                                    <td class="p-4  ">
                                         {{ $data->nama }}</td>
 
-                                    <td class="p-4  border border-t-0 border-l-0 border-gray-200 dark:border-zinc-600">
+                                    <td class="p-4  ">
                                         {{ $data->nis }}</td>
-                                    <td class="p-4  border border-t-0 border-l-0 border-gray-200 dark:border-zinc-600">
+                                    <td class="p-4  ">
                                         {{ $data->nisn }}</td>
-                                    <td class="p-4  border border-t-0 border-l-0 border-gray-200 dark:border-zinc-600">
+                                    <td class="p-4  ">
                                         {{ $data->nomor_id }}</td>
-                                    <td class="p-4  border border-t-0 border-l-0 border-gray-200 dark:border-zinc-600">
+                                    <td class="p-4  ">
                                         {{ $data->jenis_kelamin == 'L' ? 'Laki-Laki' : 'Perempuan' }}</td>
-                                    <td
-                                        class="p-4 bg-gray-50 border border-t-0 border-l-0 border-gray-200 dark:border-zinc-600 font-semibold ">
+                                    <td class="p-4   font-semibold text-red-600">
                                         {{ $data->status_siswa }}</td>
-                                    <td class="p-4  border border-t-0 border-l-0 border-gray-200 dark:border-zinc-600">
+                                    <td class="p-4  ">
                                         {{ $data->aktivasi_akun }}</td>
-                                    <td class="p-4  border border-t-0 border-l-0 border-gray-200 dark:border-zinc-600">
+                                    <td class="p-4  ">
                                         {{ $data->updated_at }}</td>
-                                    <td
-                                        class="p-4 min-w-[150px] w-[150px] border border-t-0 border-l-0 border-gray-200 dark:border-zinc-600 ">
-                                        <div class="min-w-[150px]  w-full">
-                                            <a class="btn-show "
-                                                href="{{ route('admin.siswa.detail_siswa', ['id' => $data->id]) }}">
-                                                <i class='bx bx-show'></i> Detail Siswa</a>
-                                        </div>
-                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>

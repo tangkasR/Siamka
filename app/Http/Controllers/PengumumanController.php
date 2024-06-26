@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pengumuman;
 use App\Services\AuthService;
 use App\Services\PengumumanService;
 use Illuminate\Http\Request;
@@ -22,10 +23,10 @@ class PengumumanController extends Controller
             'pengumumans' => $this->pengumuman->getAll(),
         ]);
     }
-    public function detail($id)
+    public function detail(Pengumuman $pengumuman)
     {
         return view('pages.admin.pengumuman.detail_pengumuman', [
-            'pengumuman' => $this->pengumuman->getById($id),
+            'pengumuman' => $this->pengumuman->getById($pengumuman->id),
             'auth' => auth(),
         ]);
     }
@@ -69,10 +70,9 @@ class PengumumanController extends Controller
     public function show_pengumuman(Request $request)
     {
         if ($request->ajax()) {
-            $view = view('pages.pengumuman.data-pengumuman', [
+            return view('pages.pengumuman.data-pengumuman', [
                 'pengumumans' => $this->pengumuman->paginate(4),
             ])->render();
-            return response()->json(['html' => $view]);
         }
         return view('pages.pengumuman.pengumuman', [
             'pengumumans' => $this->pengumuman->paginate(4),

@@ -14,6 +14,10 @@ class DateRepository implements DateInterface
     }
     public function getDate()
     {
-        return $this->date::today()->addMonth(1);
+        return $this->date::today();
+    }
+    public function getTime()
+    {
+        return $this->date::now()->format('H:i:s');
     }
 }

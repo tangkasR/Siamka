@@ -27,6 +27,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(\App\Interfaces\NilaiEkskulInterface::class, \App\Repositories\NilaiEkskulRepository::class);
         $this->app->bind(\App\Interfaces\KehadiranGuruInterface::class, \App\Repositories\KehadiranGuruRepository::class);
         $this->app->bind(\App\Interfaces\DateInterface::class, \App\Repositories\DateRepository::class);
+        $this->app->bind(\App\Interfaces\TahunAjaranInterface::class, \App\Repositories\TahunAjaranRepository::class);
     }
 
     /**

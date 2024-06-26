@@ -9,5 +9,8 @@
         <td class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
             {{ $data->total_kehadiran }}
         </td>
+        <td class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
+            {{ $data->total_jam_per_bulan }}
+        </td>
     </tr>
 @endforeach

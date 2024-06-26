@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Charts\NilaiChart;
+use App\Models\Rombel;
+use App\Models\Siswa;
 use App\Services\AuthService;
 use App\Services\DateService;
+use App\Services\EkskulService;
 use App\Services\JadwalPelajaranService;
 use App\Services\KehadiranService;
 use App\Services\NilaiEkskulService;
@@ -12,8 +15,11 @@ use App\Services\NilaiService;
 use App\Services\RombelService;
 use App\Services\SesiService;
 use App\Services\SiswaService;
+use App\Services\TahunAjaranService;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Validation\ValidationException;
 
 class SiswaController extends Controller
@@ -28,6 +34,8 @@ class SiswaController extends Controller
     private $kehadiran;
     private $nilai_ekskul;
     private $date;
+    private $tahun_ajaran;
+    private $ekskul;
 
     public function __construct(
         SiswaService $siswa,
@@ -40,6 +48,8 @@ class SiswaController extends Controller
         KehadiranService $kehadiran,
         NilaiEkskulService $nilai_ekskul,
         DateService $date,
+        TahunAjaranService $tahun_ajaran,
+        EkskulService $ekskul
     ) {
         $this->siswa = $siswa;
         $this->rombel = $rombel;
@@ -51,45 +61,58 @@ class SiswaController extends Controller
         $this->kehadiran = $kehadiran;
         $this->nilai_ekskul = $nilai_ekskul;
         $this->date = $date;
+        $this->tahun_ajaran = $tahun_ajaran;
+        $this->ekskul = $ekskul;
     }
-    public function index()
+    public function index($tahun, $semester)
     {
+        $tahun_ajaran_id = $this->tahun_ajaran->getId($tahun, $semester);
+
         return view('pages.admin.siswa.index', [
-            'rombel' => $this->rombel->getAll(),
+            'rombel' => $this->rombel->getAll($tahun_ajaran_id),
+            'tahun' => $tahun,
+            'semester' => $semester,
         ]);
     }
-    public function show_siswa(Request $request, $id)
+    public function show_siswa($tahun, $semester, Rombel $rombel)
     {
-        $tahun_awal = $this->date->getDate()->year;
-        $tahun_akhir = $tahun_awal + 1;
-        $tahun_pembelajaran = $tahun_awal . '/' . $tahun_akhir;
+        $tahun_ajaran_id = $this->tahun_ajaran->getId($tahun, $semester);
+        $tahun_ajaran = $this->tahun_ajaran->getById($tahun_ajaran_id);
 
         return view('pages.admin.siswa.siswa', [
-            'siswa' => $this->siswa->getByRombelIdActive($id),
-            'rombel' => $this->rombel->getOne('id', $id),
-            'rombels' => $this->rombel->getAll(),
+            'siswa' => $this->siswa->getSiswaAdmin($rombel->id),
+            'rombel' => $rombel,
+            'rombels' => $this->rombel->getAll($tahun_ajaran_id),
             'admin' => $this->auth->getUser('admin')->username,
-            'tahun_pembelajaran' => $tahun_pembelajaran,
             'tanggal' => $this->date->getDate()->format('d-m-Y'),
+            'tahun_ajaran' => $tahun_ajaran,
         ]);
     }
-    public function detail_siswa($id)
+    public function detail_siswa($tahun, $semester, Rombel $rombel, $id)
     {
-        return view('pages.admin.siswa.show-siswa', [
-            'siswa' => $this->siswa->getById($id),
-        ]);
+
+        try {
+            return view('pages.admin.siswa.show-siswa', [
+                'siswa' => $this->siswa->getById(Crypt::decrypt($id)),
+                'tahun' => $tahun,
+                'semester' => $semester,
+                'rombel' => $rombel,
+            ]);
+        } catch (DecryptException $err) {
+            return abort(404);
+        }
     }
     public function store(Request $request)
     {
+        $rombel = $this->rombel->getOne($request->rombel_id);
         if ($request->file == null) {
             return back()->with('error', 'Masukan file excel');
         }
         try {
             $this->siswa->store($request->all());
-            return redirect()->back()->with('message', 'Berhasil menambah data');
-        } catch (QueryException $er) {
-            dd($er);
-            return redirect()->back()->with('error', 'Gagal menambah data');
+            return redirect()->route('admin.siswa.show_siswa', ['tahun' => $request->tahun, 'semester' => $request->semester, 'rombel' => $rombel])->with('message', 'Berhasil menambah data');
+        } catch (ValidationException $er) {
+            return redirect()->route('admin.siswa.show_siswa', ['tahun' => $request->tahun, 'semester' => $request->semester, 'rombel' => $rombel])->with('error', $er->getMessage());
         }
     }
     public function update(Request $request, $id)
@@ -143,7 +166,6 @@ class SiswaController extends Controller
         return view('pages.siswa.jadwal_pelajaran', [
             'jadwal_pelajaran' => $this->jadwal->getByRombelId($siswa->rombels->last()->id),
             'sesi_perhari' => $this->sesi->getAll(),
-
         ]);
     }
     public function show_kehadiran(Request $request)
@@ -176,31 +198,30 @@ class SiswaController extends Controller
                 $tahun = $request->tahun;
                 return view('pages.Siswa.data-kehadiran', [
                     'bulan' => $bulan,
-                    'kehadirans' => $this->kehadiran->getMonthlyAttendance($siswa->id, $tahun),
+                    'kehadirans' => $this->kehadiran->getMonthlyAttendance($siswa->nis, $tahun),
                     'siswa' => $siswa,
-                    'tahun_pembelajaran' => $this->siswa->getPivotTahunPembelajaran($siswa->id),
                     'rombel' => $this->rombel->getBySiswaId($siswa->id)->last(),
                     'listBulan' => $listBulan,
                     'years' => $this->kehadiran->getYear(),
+                    'tahun_ajaran' => $this->kehadiran->getTahunAjaranNow(),
                 ]);
             }
         }
 
         return view('pages.siswa.kehadiran', [
             'bulan' => $bulan,
-            'kehadirans' => $this->kehadiran->getMonthlyAttendance($siswa->id, $tahun),
+            'kehadirans' => $this->kehadiran->getMonthlyAttendance($siswa->nis, $tahun),
             'siswa' => $siswa,
-            'tahun_pembelajaran' => $this->siswa->getPivotTahunPembelajaran($siswa->id),
             'rombel' => $this->rombel->getBySiswaId($siswa->id)->last(),
             'listBulan' => $listBulan,
             'years' => $this->kehadiran->getYear(),
+            'tahun_ajaran' => $this->kehadiran->getTahunAjaranNow(),
         ]);
     }
     public function get_kehadiran(Request $request)
     {
-        $siswa = $this->auth->getUser('siswa');
         $kehadiran = $this->kehadiran->getBySiswaId(
-            $siswa->id,
+            $request->nis,
             $this->date->getDate()->month,
             $this->date->getDate()->year)
             ->paginate(5);
@@ -208,9 +229,8 @@ class SiswaController extends Controller
     }
     public function filter_kehadiran(Request $request)
     {
-        $siswa = $this->auth->getUser('siswa');
         $kehadiran = $this->kehadiran->getBySiswaId(
-            $siswa->id,
+            $request->nis,
             $request->month,
             $request->year)
             ->paginate(5);
@@ -219,96 +239,72 @@ class SiswaController extends Controller
     public function show_nilai()
     {
         $siswa = $this->auth->getUser('siswa');
+        $nilais = $this->nilai->getByNisSiswa($siswa->nis);
 
-        $tipe_ujian = '';
-        if (count($this->nilai->getNilaiByParams('siswa_id', $siswa->id)->get()) != 0) {
-            $tipe_ujian = $this->nilai->getNilaiByParams('siswa_id', $siswa->id)->first()->tipe_ujian;
-        }
-
-        $data = $this->nilai->getNilaiUasGroupByMapel($siswa->id);
-        $formattedData = [];
+        // Inisialisasi array data
+        $data = [];
         $semesters = [];
-        foreach ($data as $subject => $records) {
-            foreach ($records as $record) {
-                $semesters["SEMESTER {$record->semester}"] = true;
-            }
-        }
-        $semesters = array_keys($semesters);
 
-        foreach ($data as $subject => $records) {
-            $row = ['MATA PELAJARAN' => $subject];
-            foreach ($semesters as $semester) {
-                $row[$semester] = null;
+        // Grupkan data berdasarkan mata pelajaran
+        foreach ($nilais as $nilai) {
+            $mataPelajaranNama = $nilai->nama_mata_pelajaran;
+            $tipeUjian = $nilai->tipe_ujian;
+            $semester = $nilai->semester;
+            $nilaiValue = $nilai->nilai;
+
+            // Tambahkan semester ke array semesters jika belum ada
+            if (!in_array($semester, $semesters)) {
+                $semesters[] = $semester;
             }
-            foreach ($records as $record) {
-                $row["SEMESTER {$record->semester}"] = $record->nilai;
-                $row["tipe_ujian"] = 'UAS';
+
+            if (!isset($data[$mataPelajaranNama])) {
+                $data[$mataPelajaranNama] = [
+                    'uts' => [],
+                    'uas' => [],
+                ];
             }
-            $formattedData[] = $row;
+
+            $data[$mataPelajaranNama][$tipeUjian][$semester] = $nilaiValue;
         }
+        // Urutkan semesters
+        sort($semesters);
+
         return view('pages.siswa.nilai', [
-            'nilai' => [],
-            'tipe_ujian' => $tipe_ujian,
             'chart' => $this->chart->build(),
-            'semesters' => $semesters,
-            'formattedData' => $formattedData,
             'siswa' => $siswa,
             'rombel' => $this->rombel->getBySiswaId($siswa->id)->last(),
-            'tahun_pembelajaran' => $this->siswa->getPivotTahunPembelajaran($siswa->id),
-            'nilai_ekskuls' => $this->nilai_ekskul->rekap($siswa->id),
+            'nilai_ekskuls' => $this->nilai_ekskul->rekap($siswa->nis),
+            'nilais' => $data,
+            'semesters' => $semesters,
         ]);
     }
     public function getNilai(Request $request)
     {
-        $siswa = $this->auth->getUser('siswa');
-        $nilai = $this->nilai->getNilaiByParams('siswa_id', $siswa->id)->paginate(10);
+        $nilai = $this->nilai->getNilaiBySiswa($request->semester, $request->tipe_ujian, $request->nis)->paginate(10);
 
         return response($nilai);
     }
     public function filter_nilai(Request $request)
     {
-        $siswa = $this->auth->getUser('siswa');
-        $nilai = $this->nilai->getNilaiByThreeParams(
-            'siswa_id', $siswa->id,
-            'tipe_ujian', $request->tipe_ujian,
-            'semester', $request->semester
-        )->paginate(10);
+        $nilai = $this->nilai->getNilaiBySiswa($request->semester, $request->tipe_ujian, $request->nis)->paginate(10);
         return response($nilai);
 
     }
-    public function next_grade(Request $request, $rombel_id)
-    {
-        try {
-            $this->siswa->nextGrade($request->all(), $rombel_id);
-            return back()->with('message', 'Berhasil menaikan kelas');
-        } catch (ValidationException $err) {
-            return back()->with('error', $err->getMessage());
-        }
-    }
-    public function lulus($rombel_id)
-    {
-        try {
-            $this->siswa->lulus($rombel_id);
-            return back()->with('message', 'Berhasil meluluskan siswa');
-        } catch (ValidationException $err) {
-            return back()->with('error', $err->getMessage());
-        }
-    }
-    public function tambah_aktivasi($rombel_id)
+    public function tambah_aktivasi(Rombel $rombel)
     {
         return view('pages.admin.siswa.aktivasi', [
-            'siswas' => $this->siswa->getByRombelIdNotActiveAccount($rombel_id),
-            'rombel' => $this->rombel->getOne('id', $rombel_id),
+            'siswas' => $this->siswa->getByRombelIdNotActiveAccount($rombel->id),
+            'rombel' => $this->rombel->getOne($rombel->id),
         ]);
     }
     public function aktivasi(Request $request)
     {
         try {
             $this->siswa->aktivasi($request->all());
-            return redirect()->route('admin.siswa.show_siswa', ['id' => $request->rombel_id])
+            return redirect()->back()
                 ->with('message', 'Berhasil mengaktivasi siswa');
         } catch (ValidationException $err) {
-            return redirect()->route('admin.siswa.show_siswa', ['id' => $request->rombel_id])
+            return redirect()->back()
                 ->with('error', $err->getMessage());
         }
     }
@@ -325,14 +321,25 @@ class SiswaController extends Controller
         return back()->with('message', 'Berhasil mengubah profil siswa');
 
     }
-    public function deaktivasiAll($id)
+    public function aktivasiAll(Rombel $rombel)
     {
         try {
-            $this->siswa->deaktivasiAll($id);
-            return redirect()->route('admin.siswa.show_siswa', ['id' => $id])
+            $this->siswa->aktivasiAll($rombel);
+            return redirect()->back()
+                ->with('message', 'Berhasil aktivasi semua siswa');
+        } catch (ValidationException $err) {
+            return redirect()->back()
+                ->with('error', $err->getMessage());
+        }
+    }
+    public function deaktivasiAll(Rombel $rombel)
+    {
+        try {
+            $this->siswa->deaktivasiAll($rombel);
+            return redirect()->back()
                 ->with('message', 'Berhasil deaktivasi semua siswa');
         } catch (ValidationException $err) {
-            return redirect()->route('admin.siswa.show_siswa', ['id' => $id])
+            return redirect()->back()
                 ->with('error', $err->getMessage());
         }
     }
@@ -347,9 +354,14 @@ class SiswaController extends Controller
                 ->with('error', $err->getMessage());
         }
     }
-    public function rekap_kehadiran(Request $request, $id)
+
+    public function rekap_kehadiran($tahun, $semester, Rombel $rombel, Request $request, $id)
     {
-        $tahun = $this->date->getDate()->year;
+        $tahun_ = $tahun;
+        $semester_ = $semester;
+        $siswa = $this->siswa->getById(Crypt::decrypt($id));
+        $bulan = $this->date->getDate()->month;
+
         $listBulan = [
             ['i' => '1', 'bulan' => 'Januari'],
             ['i' => '2', 'bulan' => 'Februari'],
@@ -364,70 +376,98 @@ class SiswaController extends Controller
             ['i' => '11', 'bulan' => 'November'],
             ['i' => '12', 'bulan' => 'Desember'],
         ];
-        $siswa = $this->siswa->getById($id);
 
-        $bulan = $this->date->getDate()->month;
         foreach ($listBulan as $i) {
             if ($i['i'] == $bulan) {
                 $bulan = $i['bulan'];
             }
         }
-        if ($request->ajax()) {
-            if ($request->tahun) {
-                $tahun = $request->tahun;
-                return view('pages.admin.siswa.data-kehadiran', [
-                    'bulan' => $bulan,
-                    'kehadirans' => $this->kehadiran->getMonthlyAttendance($siswa->id, $tahun),
-                    'siswa' => $siswa,
-                    'tahun_pembelajaran' => $this->siswa->getPivotTahunPembelajaran($siswa->id),
-                    'rombel' => $this->rombel->getBySiswaId($siswa->id)->last(),
-                    'listBulan' => $listBulan,
-                    'years' => $this->kehadiran->getYear(),
-                ]);
-            }
-        }
+        $month_ = $this->date->getDate()->format('Y-m');
         return view('pages.admin.siswa.rekap-kehadiran', [
             'bulan' => $bulan,
-            'kehadirans' => $this->kehadiran->getMonthlyAttendance($siswa->id, $tahun),
+            'kehadirans' => [],
             'siswa' => $siswa,
-            'tahun_pembelajaran' => $this->siswa->getPivotTahunPembelajaran($siswa->id),
-            'rombel' => $this->rombel->getBySiswaId($siswa->id)->last(),
             'listBulan' => $listBulan,
             'years' => $this->kehadiran->getYear(),
+            'tahun_ajaran' => $this->kehadiran->getTahunAjaranNow(),
+            'tahun' => $tahun_,
+            'semester' => $semester_,
+            'rombel' => $rombel,
+            'month_val' => $month_,
         ]);
     }
-    public function rekap_nilai($id)
+    public function getDataRekapKehadiran(Request $request)
     {
-        $data = $this->nilai->getNilaiUasGroupByMapel($id);
-        $formattedData = [];
+        $bulan = $this->date->getDate()->month;
+
+        $listBulan = [
+            ['i' => '1', 'bulan' => 'Januari'],
+            ['i' => '2', 'bulan' => 'Februari'],
+            ['i' => '3', 'bulan' => 'Maret'],
+            ['i' => '4', 'bulan' => 'April'],
+            ['i' => '5', 'bulan' => 'Mei'],
+            ['i' => '6', 'bulan' => 'Juni'],
+            ['i' => '7', 'bulan' => 'Juli'],
+            ['i' => '8', 'bulan' => 'Agustus'],
+            ['i' => '9', 'bulan' => 'September'],
+            ['i' => '10', 'bulan' => 'Oktober'],
+            ['i' => '11', 'bulan' => 'November'],
+            ['i' => '12', 'bulan' => 'Desember'],
+        ];
+
+        foreach ($listBulan as $i) {
+            if ($i['i'] == $bulan) {
+                $bulan = $i['bulan'];
+            }
+        }
+        return view('pages.siswa.data-kehadiran', [
+            'kehadirans' => $this->kehadiran->getMonthlyAttendance($request->nis, $request->tahun),
+            'listBulan' => $listBulan,
+        ]);
+    }
+    public function rekap_nilai($tahun, $semester, Rombel $rombel, $id)
+    {
+        $tahun_ = $tahun;
+        $semester_ = $semester;
+        $siswa = $this->siswa->getById(Crypt::decrypt($id));
+        $nilais = $this->nilai->getByNisSiswa($siswa->nis);
+
+        // Inisialisasi array data
+        $data = [];
         $semesters = [];
-        foreach ($data as $subject => $records) {
-            foreach ($records as $record) {
-                $semesters["Semester {$record->semester}"] = true;
-            }
-        }
-        $semesters = array_keys($semesters);
 
-        foreach ($data as $subject => $records) {
-            $row = ['Mata Pelajaran' => $subject];
-            foreach ($semesters as $semester) {
-                $row[$semester] = null;
-            }
-            foreach ($records as $record) {
-                $row["Semester {$record->semester}"] = $record->nilai;
-                $row["tipe_ujian"] = 'UAS';
-            }
-            $formattedData[] = $row;
-        }
+        // Grupkan data berdasarkan mata pelajaran
+        foreach ($nilais as $nilai) {
+            $mataPelajaranNama = $nilai->nama_mata_pelajaran;
+            $tipeUjian = $nilai->tipe_ujian;
+            $semester = $nilai->semester;
+            $nilaiValue = $nilai->nilai;
 
-        $siswa = $this->siswa->getById($id);
+            // Tambahkan semester ke array semesters jika belum ada
+            if (!in_array($semester, $semesters)) {
+                $semesters[] = $semester;
+            }
+
+            if (!isset($data[$mataPelajaranNama])) {
+                $data[$mataPelajaranNama] = [
+                    'uts' => [],
+                    'uas' => [],
+                ];
+            }
+
+            $data[$mataPelajaranNama][$tipeUjian][$semester] = $nilaiValue;
+        }
+        // Urutkan semesters
+        sort($semesters);
+
         return view('pages.admin.siswa.rekap-nilai', [
-            'semesters' => $semesters,
-            'formattedData' => $formattedData,
             'siswa' => $siswa,
-            'rombel' => $this->rombel->getBySiswaId($siswa->id)->last(),
-            'tahun_pembelajaran' => $this->siswa->getPivotTahunPembelajaran($siswa->id),
             'nilai_ekskuls' => $this->nilai_ekskul->rekap($siswa->id),
+            'nilais' => $data,
+            'semesters' => $semesters,
+            'tahun' => $tahun_,
+            'semester' => $semester_,
+            'rombel' => $rombel,
         ]);
     }
     public function siswa_not_active_index()
@@ -479,7 +519,75 @@ class SiswaController extends Controller
     {
         $siswa = $this->auth->getUser('siswa');
         return view('pages.siswa.ekskul', [
-            'ekskuls' => $this->siswa->getById($siswa->id)->ekskuls,
+            'ekskuls' => $this->ekskul->getEkskulSiswa($siswa->nis),
         ]);
+    }
+
+    public function show_next_grade(Rombel $rombel)
+    {
+        $tahun_awal = $this->date->getDate()->year;
+        $tahun_akhir = $tahun_awal + 1;
+        $tahun_pembelajaran = $tahun_awal . '/' . $tahun_akhir;
+        try {
+            return view('pages.admin.siswa.naik_kelas', [
+                'siswas' => $this->siswa->getByRombelIdNextGrade($rombel->id),
+                'rombel' => $this->rombel->getOne($rombel->id),
+                'rombels' => $this->rombel->getAll(),
+                'tahun_pembelajaran' => $tahun_pembelajaran,
+            ]);
+        } catch (ValidationException $err) {
+            return back()->with('error', $err->getMessage());
+        }
+    }
+    public function next_grade(Request $request)
+    {
+        $rombel = $this->rombel->getOne($request->id_next);
+        try {
+            $this->siswa->nextGrade($request->all());
+            return redirect()->route('admin.siswa.show_siswa', ['rombel' => $rombel])->with('message', 'Berhasil menaikan kelas');
+        } catch (ValidationException $err) {
+            return redirect()->route('admin.siswa.show_siswa', ['rombel' => $rombel])->with('error', $err->getMessage());
+        }
+    }
+    public function show_lulus($tahun, $semester, Rombel $rombel)
+    {
+        try {
+            return view('pages.admin.siswa.lulus', [
+                'siswas' => $this->siswa->getSiswa($rombel->id),
+                'rombel' => $this->rombel->getOne($rombel->id),
+                'tahun' => $tahun,
+                'semester' => $semester,
+            ]);
+        } catch (ValidationException $err) {
+            return back()->with('error', $err->getMessage());
+        }
+    }
+    public function lulus(Request $request)
+    {
+        $siswa = $this->siswa->getById($request->siswa_id[0]);
+        $last_rombel = $siswa->rombels->last();
+        try {
+            $this->siswa->lulus($request->all());
+            return redirect()->route('admin.siswa.show_siswa', ['tahun' => $request->tahun, 'semester' => $request->semester, 'rombel' => $last_rombel])->with('message', 'Berhasil menaikan kelas');
+        } catch (ValidationException $err) {
+            return redirect()->route('admin.siswa.show_siswa', ['tahun' => $request->tahun, 'semester' => $request->semester, 'rombel' => $last_rombel])->with('error', $err->getMessage());
+        }
+    }
+
+    public function tambah_data($tahun, $semester, Rombel $rombel)
+    {
+        $datas = [];
+        return view('pages.admin.siswa.import_data', [
+            'tahun' => $tahun,
+            'semester' => $semester,
+            'datas' => $datas,
+            'rombel' => $rombel,
+        ]);
+    }
+
+    public function keluar($id)
+    {
+        $this->siswa->keluar($id);
+        return back()->with('message', 'Berhasil mengeluarkan siswa');
     }
 }

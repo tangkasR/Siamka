@@ -17,104 +17,152 @@ class NilaiRepository implements NilaiInterface
         $this->nilai = $nilai;
         $this->date = $date;
     }
-    public function getNilaiUasGroupByMapel($id)
-    {
-        return $this->nilai->join('mata_pelajarans', 'nilais.mata_pelajaran_id', '=', 'mata_pelajarans.id')
-            ->where('nilais.siswa_id', $id)
-            ->where('nilais.tipe_ujian', 'uas')
-            ->select('mata_pelajarans.nama_mata_pelajaran', 'mata_pelajarans.id', 'nilais.tipe_ujian', 'nilais.semester', 'nilais.nilai')
-            ->get()
-            ->groupBy('nama_mata_pelajaran');
-    }
-    public function getTotalSemesterUts($id)
-    {
-        return $this->nilai->with('mapels')->where('siswa_id', $id)
-            ->where('tipe_ujian', 'uts')
-            ->select('semester')
-            ->max('semester');
-    }
-    public function getTotalSemesterUas($id)
-    {
-        return $this->nilai->with('mapels')->where('siswa_id', $id)
-            ->where('tipe_ujian', 'uas')
-            ->select('semester')
-            ->max('semester');
-    }
-    public function getNilaiUts($id, $semester)
-    {
-        return $this->nilai->with('mapels')->where('siswa_id', $id)
-            ->where('tipe_ujian', 'uts')
-            ->where('semester', $semester)
-            ->get();
-    }
 
-    public function getNilaiUas($id, $semester)
+    public function getNilaiById($id)
     {
-        return $this->nilai->with('mapels')->where('siswa_id', $id)
-            ->where('tipe_ujian', 'uas')
-            ->where('semester', $semester)
-            ->get();
+        return $this->nilai->where('id', $id)->first();
     }
-    public function getByOneParams($conditional, $params)
+    public function getNilai($rombel_id, $mapel_id, $tahun_ajaran_id)
     {
-        return $this->nilai->with('mapels')
-            ->where($conditional, $params);
-
-    }
-    public function getByThreeParams($conditional_1, $params_1, $conditional_2, $params_2, $conditional_3, $params_3)
-    {
-        return $this->nilai->with('mapels')
-            ->where($conditional_1, $params_1)
-            ->where($conditional_2, $params_2)
-            ->where($conditional_3, $params_3);
-    }
-    public function getByRombelIdAndMapelId($rombel_id, $mapel_id)
-    {
-        return DB::table('nilais')
-            ->join('siswas', 'nilais.siswa_id', '=', 'siswas.id')
+        return $this->nilai->join('siswas', 'nilais.siswa_id', '=', 'siswas.id')
             ->join('mata_pelajarans', 'nilais.mata_pelajaran_id', '=', 'mata_pelajarans.id')
             ->join('rombel_siswa', 'siswas.id', '=', 'rombel_siswa.siswa_id')
-            ->where('rombel_id', '=', $rombel_id)
+            ->where('nilais.tahun_ajaran_id', '=', $tahun_ajaran_id)
+            ->where('rombel_siswa.rombel_id', '=', $rombel_id)
             ->where('mata_pelajarans.id', '=', $mapel_id)
-            ->where('rombel_siswa.tahun_awal', '=', $this->date->getDate()->year)
             ->where('siswas.status_siswa', '=', 'belum lulus')
-            ->select('nilais.id', 'nilais.semester', 'siswas.nama', 'nilais.tipe_ujian', 'nilais.nilai', 'mata_pelajarans.nama_mata_pelajaran')
-        ;
+            ->select(
+                'nilais.id',
+                'nilais.semester',
+                'siswas.nama',
+                'nilais.tipe_ujian',
+                'nilais.nilai',
+                'mata_pelajarans.nama_mata_pelajaran'
+            );
     }
-    public function getByRombelIdAndMapelIdAndTipeUjian($rombel_id, $mapel_id, $tipe_ujian, $semester)
+    public function getNilaiByParams($rombel_id, $mapel_id, $tipe_ujian, $semester, $tahun_ajaran_id)
     {
-        return DB::table('nilais')
-            ->join('siswas', 'nilais.siswa_id', '=', 'siswas.id')
+        return $this->nilai->join('siswas', 'nilais.siswa_id', '=', 'siswas.id')
             ->join('mata_pelajarans', 'nilais.mata_pelajaran_id', '=', 'mata_pelajarans.id')
             ->join('rombel_siswa', 'siswas.id', '=', 'rombel_siswa.siswa_id')
-            ->where('rombel_id', '=', $rombel_id)
-            ->where('mata_pelajarans.id', '=', $mapel_id)
+            ->where('nilais.tahun_ajaran_id', '=', $tahun_ajaran_id)
+            ->where('rombel_siswa.rombel_id', '=', $rombel_id)
+            ->where('nilais.mata_pelajaran_id', '=', $mapel_id)
             ->where('nilais.tipe_ujian', '=', $tipe_ujian)
             ->where('nilais.semester', '=', $semester)
             ->where('siswas.status_siswa', '=', 'belum lulus')
-            ->select('nilais.id', 'nilais.semester', 'siswas.nama', 'nilais.tipe_ujian', 'nilais.nilai', 'mata_pelajarans.nama_mata_pelajaran')
-        ;
+            ->select(
+                'nilais.id',
+                'nilais.semester',
+                'siswas.nama',
+                'nilais.tipe_ujian',
+                'nilais.nilai',
+                'mata_pelajarans.nama_mata_pelajaran'
+            );
     }
-    public function store($siswa_id, $mapel_id, $tipe_ujian, $nilai, $semester)
+
+    public function store($siswa_id, $mapel_id, $tipe_ujian, $nilai, $semester, $tahun_ajaran_id)
     {
         return $this->nilai->create([
             'siswa_id' => $siswa_id,
             'mata_pelajaran_id' => $mapel_id,
+            'tahun_ajaran_id' => $tahun_ajaran_id,
             'tipe_ujian' => $tipe_ujian,
             'nilai' => $nilai,
             'semester' => $semester,
         ]);
     }
-    public function update($data, $id)
+
+    public function update($data, $nilai)
     {
-        $this->nilai->where('id', $id)->update([
+        return $nilai->update([
             'tipe_ujian' => $data['tipe_ujian'],
             'nilai' => $data['nilai'],
         ]);
     }
+
     public function destroy($id)
     {
         return $this->nilai->where('id', $id)->delete();
     }
 
+    public function getNilaiUts($nis, $semester)
+    {
+        return DB::table('nilais')
+            ->join('siswas', 'nilais.siswa_id', 'siswas.id')
+            ->where('siswas.nis', $nis)
+            ->where('nilais.semester', $semester)
+            ->where('nilais.tipe_ujian', 'uts')
+            ->select(
+                'nilais.tipe_ujian',
+                'nilais.semester',
+                'nilais.nilai',
+            )->get();
+    }
+
+    public function getNilaiUas($nis, $semester)
+    {
+        return DB::table('nilais')
+            ->join('siswas', 'nilais.siswa_id', 'siswas.id')
+            ->where('siswas.nis', $nis)
+            ->where('nilais.semester', $semester)
+            ->where('nilais.tipe_ujian', 'uas')
+            ->select(
+                'nilais.tipe_ujian',
+                'nilais.semester',
+                'nilais.nilai',
+            )->get();
+    }
+
+    public function getTotalSemesterUts($nis)
+    {
+        return DB::table('nilais')
+            ->join('siswas', 'nilais.siswa_id', 'siswas.id')
+            ->where('siswas.nis', $nis)
+            ->where('nilais.tipe_ujian', 'uts')
+            ->select(
+                'nilais.semester',
+            )->max('semester');
+    }
+    public function getTotalSemesterUas($nis)
+    {
+        return DB::table('nilais')
+            ->join('siswas', 'nilais.siswa_id', 'siswas.id')
+            ->where('siswas.nis', $nis)
+            ->where('nilais.tipe_ujian', 'uas')
+            ->select(
+                'nilais.semester',
+            )->max('semester');
+    }
+
+    public function getNilaiBySiswa($semester, $tipe_ujian, $nis)
+    {
+        $nilais = DB::table('nilais')
+            ->join('mata_pelajarans', 'nilais.mata_pelajaran_id', 'mata_pelajarans.id')
+            ->join('siswas', 'nilais.siswa_id', 'siswas.id')
+            ->where('siswas.nis', $nis)
+            ->where('nilais.semester', $semester)
+            ->where('nilais.tipe_ujian', $tipe_ujian)
+            ->select(
+                'mata_pelajarans.nama_mata_pelajaran',
+                'nilais.tipe_ujian',
+                'nilais.semester',
+                'nilais.nilai',
+            );
+        return $nilais;
+    }
+    public function getByNisSiswa($nis)
+    {
+        return DB::table('nilais')
+            ->join('siswas', 'nilais.siswa_id', '=', 'siswas.id')
+            ->join('mata_pelajarans', 'nilais.mata_pelajaran_id', '=', 'mata_pelajarans.id')
+            ->where('siswas.nis', $nis)
+            ->select(
+                'mata_pelajarans.nama_mata_pelajaran as nama_mata_pelajaran',
+                'nilais.tipe_ujian',
+                'nilais.semester',
+                'nilais.nilai'
+            )->get();
+    }
+    
 }

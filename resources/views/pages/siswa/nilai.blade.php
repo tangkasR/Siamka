@@ -13,7 +13,7 @@
                     </div>
                 </div>
                 <div class="card-body border-b border-gray-100 dark:border-zinc-600 py-10 ">
-                    <div class="px-[20px] pb-0">
+                    <div class="px-[20px] pb-0 mt-6">
                         <div class=" grid md:grid-cols-12 items-center">
                             <div class="md:col-span-8">
                                 <h2 class=" text-slate-700 text-[20px] font-bold capitalize">Nilai Mata Pelajaran<span
@@ -23,14 +23,9 @@
                             </div>
                             <div class="md:col-span-4 grid grid-cols-2 gap-3 mt-3 md:mt-0">
                                 <div class="">
-                                    <label for=""
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
-                                        Semester
-                                    </label>
                                     <select id="semester" name="semester"
                                         class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
                                         required>
-                                        <option value="">Pilih Semester</option>
                                         <option value="1">Semester 1</option>
                                         <option value="2">Semester 2</option>
                                         <option value="3">Semester 3</option>
@@ -41,10 +36,6 @@
                                     </select>
                                 </div>
                                 <div class="">
-                                    <label for=""
-                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
-                                        Tipe Ujian
-                                    </label>
                                     <select id="tipe_ujian"
                                         class=" dropdown dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100">
                                         <option value="uts">
@@ -58,19 +49,19 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-body p-0">
+                    <div class="card-body p-0 ">
                         <div class="relative overflow-x-scroll card-body  ">
                             <table id=""
-                                class="text-center uppercase table w-full pt-4 text-gray-700 dark:text-zinc-100">
+                                class="text-center capitalize table w-full  text-gray-700 dark:text-zinc-100">
                                 <thead>
                                     <tr class="bg-blue-200">
-                                        <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                        <th class="p-4 ">
                                             Mata Pelajaran</th>
-                                        <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                        <th class="p-4 ">
                                             Tipe Ujian</th>
-                                        <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                        <th class="p-4 ">
                                             Semester</th>
-                                        <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                        <th class="p-4 ">
                                             Nilai</th>
                                     </tr>
                                 </thead>
@@ -127,8 +118,8 @@
                             </div>
                             <div class="col-span-6">
                                 <p class="mb-3">Kelas: {{ $rombel->nama_rombel }}</p>
-                                <p class="">Tahun Pembelajaran:
-                                    {{ $tahun_pembelajaran->tahun_awal }}/{{ $tahun_pembelajaran->tahun_akhir }}</p>
+                                {{-- <p class="">Tahun Pembelajaran:
+                                    {{ $tahun_pembelajaran->tahun_awal }}/{{ $tahun_pembelajaran->tahun_akhir }}</p> --}}
                             </div>
                         </div>
                         <div class=" grid md:grid-cols-12 items-center">
@@ -156,43 +147,34 @@
                             </div>
                         </div>
                     </div>
-                    <div class="relative overflow-x-scroll card-body">
+                    <div class="relative overflow-x-scroll card-body pt-4">
                         <table id="table_nilai_mata_pelajaran"
-                            class="text-center table w-full pt-4 text-gray-700 dark:text-zinc-100 ">
+                            class="text-center table w-full text-gray-700 dark:text-zinc-100 ">
                             <thead>
                                 <tr class="bg-blue-200">
-                                    <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600 ">
+                                    <th class="p-4">
                                         MATA
                                         PELAJARAN</th>
-                                    <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
-                                        TIPE
-                                        UJIAN</th>
                                     @foreach ($semesters as $semester)
-                                        <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
-                                            {{ $semester }}</th>
+                                        <th class="p-4">Semester {{ $semester }} - UTS</th>
+                                        <th class="p-4">Semester {{ $semester }} - UAS</th>
                                     @endforeach
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($formattedData as $data)
+                                @foreach ($nilais as $mataPelajaran => $ujianData)
                                     <tr class="{{ $loop->iteration % 2 == 0 ? 'bg-blue-50' : 'bg-white' }}">
-                                        <td
-                                            class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
-                                            {{ $data['MATA PELAJARAN'] }}</td>
-                                        <td
-                                            class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
-                                            {{ $data['tipe_ujian'] }}</td>
+                                        <td class="p-4">{{ $mataPelajaran }}</td>
                                         @foreach ($semesters as $semester)
-                                            <td
-                                                class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
-                                                {{ $data[$semester] ?? '-' }}</td>
+                                            <td class="p-4">{{ $ujianData['uts'][$semester] ?? '-' }}</td>
+                                            <td class="p-4">{{ $ujianData['uas'][$semester] ?? '-' }}</td>
                                         @endforeach
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
-                    <div class="px-[20px] mt-6">
+                    <div class="px-[20px] mt-20">
                         <h2 class=" text-[20px] font-bold  capitalize">
                             Nilai <span class="text-violet-500">Ekskul</span>
                         </h2>
@@ -203,7 +185,7 @@
                             <thead>
                                 <tr class="bg-blue-200">
                                     @foreach ($nilai_ekskuls[0] as $header)
-                                        <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                        <th class="p-4 ">
                                             {{ $loop->iteration == 1 ? $header : 'Semester ' . $header }}</th>
                                     @endforeach
                                 </tr>
@@ -212,8 +194,7 @@
                                 @foreach (array_slice($nilai_ekskuls, 1) as $row)
                                     <tr class="{{ $loop->iteration % 2 == 0 ? 'bg-blue-50' : 'bg-white' }}">
                                         @foreach ($row as $data)
-                                            <td
-                                                class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
+                                            <td class="p-4 ">
                                                 {{ $data == null ? '-' : $data }}
                                             </td>
                                         @endforeach
@@ -226,7 +207,7 @@
             </div>
         </div>
     </div>
-
+    <input type="text" value="{{ $siswa->nis }}" id="nis" hidden>
     <script type="module">
         $(document).ready(function() {
             let page = 1;
@@ -250,6 +231,7 @@
             $.ajax({
                 type: "GET",
                 url: url,
+                data: getDatas(),
                 success: function(response) {
                     if (response.data.length != 0) {
                         createTable(response)
@@ -345,9 +327,12 @@
             function getDatas() {
                 let tipe_ujian = $('#tipe_ujian').val()
                 let semester = $('#semester').val()
+                let nis = $('#nis').val()
+
                 let datas = {
                     'tipe_ujian': tipe_ujian,
-                    'semester': semester
+                    'semester': semester,
+                    'nis': nis
                 }
                 tipe_ujian_title.html(tipe_ujian)
                 return datas
@@ -356,22 +341,23 @@
             function createTable(datas) {
                 let row;
                 for (let i = 0; i < datas.data.length; i++) {
+                    console.log(datas.data[i])
                     row = `
                         <tr class="${(i + 1) % 2 == 0 ? 'bg-blue-50' : 'bg-white'}">
                             <td
-                                class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
-                                ${datas.data[i].mapels.nama_mata_pelajaran}
+                                class="p-4 ">
+                                ${datas.data[i].nama_mata_pelajaran}
                             </td>
                             <td
-                                class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
+                                class="p-4 ">
                                 ${datas.data[i].tipe_ujian}
                             </td>
                             <td
-                                class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
+                                class="p-4 ">
                                 ${datas.data[i].semester}
                             </td>
                             <td
-                                class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
+                                class="p-4 ">
                                 ${datas.data[i].nilai}
                             </td>
                         </tr>

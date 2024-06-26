@@ -2,7 +2,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+ .selected-card {
+        border: 1px solid #12a8ff !important;
+    }
+.hover\:scale-98:hover {
+    transform: scale(0.98);
+    }
 @layer components {
   .btn-edit {
     @apply

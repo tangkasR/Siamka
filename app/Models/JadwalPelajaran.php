@@ -3,14 +3,17 @@
 namespace App\Models;
 
 use App\Models\Guru;
-use App\Models\Sesi;
-use App\Traits\uuid;
+use App\Models\JadwalPelajaran;
+use App\Models\MataPelajaran;
 use App\Models\Rombel;
 use App\Models\Ruangan;
-use App\Models\MataPelajaran;
-use App\Models\JadwalPelajaran;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Sesi;
+use App\Models\TahunAjaran;
+use App\Traits\uuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Crypt;
+use Throwable;
 
 class JadwalPelajaran extends Model
 {
@@ -20,9 +23,14 @@ class JadwalPelajaran extends Model
         'rombel_id',
         'guru_id',
         'sesi_id',
+        'tahun_ajaran_id',
         'hari',
         'nama_mata_pelajaran',
     ];
+    public function tahun_ajaran()
+    {
+        return $this->belongsTo(TahunAjaran::class, 'tahun_ajaran_id', 'id');
+    }
     public function ruangans()
     {
         return $this->belongsTo(Ruangan::class, 'ruangan_id', 'id');
@@ -47,5 +55,21 @@ class JadwalPelajaran extends Model
     public function getRouteKeyName(): String
     {
         return 'uuid';
+    }
+
+    public function getRouteKey()
+    {
+        return Crypt::encrypt($this->uuid);
+    }
+    public function resolveRouteBinding($value, $field = null)
+    {
+        try {
+            $decrypted = Crypt::decrypt($value);
+            $field = $field ?? $this->getRouteKeyName();
+
+            return parent::resolveRouteBinding($decrypted, $field);
+        } catch (Throwable $er) {
+            abort(404);
+        }
     }
 }

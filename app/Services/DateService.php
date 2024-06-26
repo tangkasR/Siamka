@@ -15,4 +15,8 @@ class DateService
     {
         return $this->date->getDate();
     }
+    public function getTime()
+    {
+        return $this->date->getTime();
+    }
 }

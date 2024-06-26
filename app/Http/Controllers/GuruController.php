@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Guru;
+use App\Models\Rombel;
 use App\Services\AuthService;
 use App\Services\DateService;
 use App\Services\GuruService;
 use App\Services\KehadiranGuruService;
 use App\Services\MataPelajaranService;
 use App\Services\RombelService;
+use App\Services\SiswaService;
+use App\Services\TahunAjaranService;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
@@ -23,6 +26,8 @@ class GuruController extends Controller
     private $date;
     private $rombel;
     private $auth;
+    private $siswa;
+    private $tahun_ajaran;
 
     public function __construct(
         GuruService $guru,
@@ -30,7 +35,9 @@ class GuruController extends Controller
         KehadiranGuruService $kehadiran_guru,
         DateService $date,
         RombelService $rombel,
-        AuthService $auth
+        AuthService $auth,
+        SiswaService $siswa,
+        TahunAjaranService $tahun_ajaran
     ) {
         $this->guru = $guru;
         $this->mapel = $mapel;
@@ -38,29 +45,42 @@ class GuruController extends Controller
         $this->date = $date;
         $this->rombel = $rombel;
         $this->auth = $auth;
+        $this->siswa = $siswa;
+        $this->tahun_ajaran = $tahun_ajaran;
     }
-    public function index()
+    public function index($tahun, $semester)
     {
+        $tahun_ajaran_id = $this->tahun_ajaran->getId($tahun, $semester);
+        $tahun_ajaran = $this->tahun_ajaran->getById($tahun_ajaran_id);
         return view('pages.admin.guru.guru', [
-            'guru' => $this->guru->getAll(),
+            'guru' => $this->guru->getAll($tahun_ajaran_id),
             'mapels' => $this->mapel->getAll(),
+            'tahun' => $tahun,
+            'semester' => $semester,
+            'tahun_ajaran' => $tahun_ajaran,
+            'tahun_ajaran_id' => $tahun_ajaran_id,
         ]);
     }
 
-    public function detail_guru($id)
+    public function detail_guru($tahun, $semester, Guru $guru)
     {
-        // dd($this->guru->getById($id));
         return view('pages.admin.guru.show-guru', [
-            'guru' => $this->guru->getById($id),
+            'guru' => $this->guru->getById($guru->id),
+            'tahun' => $tahun,
+            'semester' => $semester,
+
         ]);
     }
     public function store(Request $request)
     {
+        if ($request->file == null) {
+            return back()->with('error', 'Masukan file excel');
+        }
         try {
             $this->guru->store($request->all());
-            return redirect()->back()->with('message', 'Berhasil menambah data');
+            return redirect()->route('admin.guru', ['tahun' => $request->tahun, 'semester' => $request->semester])->with('message', 'Berhasil menambah data');
         } catch (ValidationException $err) {
-            return redirect()->back()->with('error', $err->getMessage());
+            return redirect()->route('admin.guru', ['tahun' => $request->tahun, 'semester' => $request->semester])->with('error', $err->getMessage());
         }
     }
     public function update(Request $request, Guru $guru)
@@ -110,28 +130,33 @@ class GuruController extends Controller
         return redirect()->route('guru.profil')->with('message', 'Berhasil mengubah profil!');
 
     }
-    public function cetak_kehadiran(Request $request, $id)
+    public function cetak_kehadiran($tahun, $semester, Request $request, Guru $guru)
     {
-        $guru = $this->guru->getById($id);
         $tahun = $this->date->getDate()->year;
-        if ($request->ajax()) {
-            $tahun = $request->tahun;
-            return view('pages.admin.guru.data-kehadiran', [
-                'guru' => $guru,
-                'tanggal' => $this->date->getDate()->format('d-m-Y'),
-                'bulan' => $this->date->getDate()->month,
-                'tahun' => $this->date->getDate()->year,
-                'rekaps' => $this->kehadiran_guru->rekapKehadiranGuru($guru->id, $tahun),
-                'years' => $this->kehadiran_guru->getYear(),
-            ]);
-        }
         return view('pages.admin.guru.rekap-kehadiran', [
             'guru' => $guru,
             'tanggal' => $this->date->getDate()->format('d-m-Y'),
             'bulan' => $this->date->getDate()->month,
             'tahun' => $this->date->getDate()->year,
-            'rekaps' => $this->kehadiran_guru->rekapKehadiranGuru($guru->id, $tahun),
+            'rekaps' => $this->kehadiran_guru->rekapKehadiranGuru($guru->nomor_induk_yayasan, $tahun),
             'years' => $this->kehadiran_guru->getYear(),
+            'semester' => $semester,
+            'tahun_ajaran' => $tahun,
+        ]);
+    }
+    public function filter_kehadiran($tahun, $semester, Request $request)
+    {
+        $tahun = $request->tahun;
+        $niy = $request->niy;
+        return view('pages.admin.guru.data-kehadiran', [
+            'guru' => $this->guru->getById($request->guru_id),
+            'tanggal' => $this->date->getDate()->format('d-m-Y'),
+            'bulan' => $this->date->getDate()->month,
+            'tahun' => $this->date->getDate()->year,
+            'rekaps' => $this->kehadiran_guru->rekapKehadiranGuru($niy, $tahun),
+            'years' => $this->kehadiran_guru->getYear(),
+            'semester' => $semester,
+            'tahun_ajaran' => $tahun,
         ]);
     }
 
@@ -142,7 +167,7 @@ class GuruController extends Controller
 
         // Mengecek apakah file terenkripsi ada
         if (!file_exists($encryptedPath)) {
-            return response()->json(['error' => 'Encrypted image not found'], 404);
+            return redirect()->back()->with('error', 'File belum ada!');
         }
 
         // Membaca konten gambar terenkripsi
@@ -152,7 +177,7 @@ class GuruController extends Controller
         try {
             $decryptedImage = Crypt::decrypt($encryptedImage);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Decryption failed'], 500);
+            return redirect()->back();
         }
 
         // Menyimpan gambar terdekripsi sementara
@@ -169,7 +194,7 @@ class GuruController extends Controller
 
         // Mengecek apakah file terenkripsi ada
         if (!file_exists($encryptedPath)) {
-            return response()->json(['error' => 'Encrypted image not found'], 404);
+            return redirect()->back()->with('error', 'File belum ada!');
         }
 
         // Membaca konten gambar terenkripsi
@@ -179,7 +204,7 @@ class GuruController extends Controller
         try {
             $decryptedImage = Crypt::decrypt($encryptedImage);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Decryption failed'], 500);
+            return redirect()->back();
         }
 
         // Menyimpan gambar terdekripsi sementara
@@ -196,7 +221,7 @@ class GuruController extends Controller
 
         // Mengecek apakah file terenkripsi ada
         if (!file_exists($encryptedPath)) {
-            return response()->json(['error' => 'Encrypted image not found'], 404);
+            return redirect()->back()->with('error', 'File belum ada!');
         }
 
         // Membaca konten gambar terenkripsi
@@ -206,7 +231,7 @@ class GuruController extends Controller
         try {
             $decryptedImage = Crypt::decrypt($encryptedImage);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Decryption failed'], 500);
+            return redirect()->back();
         }
 
         // Menyimpan gambar terdekripsi sementara
@@ -217,23 +242,89 @@ class GuruController extends Controller
         return response()->download(storage_path('app/public/' . $tempDecryptedFileName))->deleteFileAfterSend(true);
     }
 
-    public function tambah_rombel()
+    public function show_rombel_admin($tahun, $semester, Guru $guru)
     {
-        $guru_id = $this->auth->getUser('guru')->id;
-        return view('pages.guru.nilai.tambah_rombel', [
-            'rombel' => $this->rombel->rombelWithoutGuru($guru_id),
+        $guru = $this->guru->getById($guru->id);
+        return view('pages.admin.guru.daftar-rombel', [
+            'guru' => $guru,
+            'tahun' => $tahun,
+            'semester' => $semester,
         ]);
     }
-    public function store_rombel(Request $request)
+
+    public function tambah_rombel($tahun, $semester, Guru $guru)
     {
-        $guru_id = $this->auth->getUser('guru')->id;
-        $guru = $this->guru->getById($guru_id);
-        if ($request->rombel_ids) {
+        $guru = $this->guru->getById($guru->id);
+        $tahun_ajaran_id = $this->tahun_ajaran->getId($tahun, $semester);
+        return view('pages.admin.guru.tambah_rombel', [
+            'rombel' => $this->rombel->rombelWithoutGuru($guru->id, $tahun_ajaran_id),
+            'guru' => $guru,
+            'tahun' => $tahun,
+            'semester' => $semester,
+        ]);
+    }
+    public function store_rombel(Request $request, Guru $guru)
+    {
+        $guru = $this->guru->getById($guru->id);
+        if (isset($request->rombel_ids)) {
             foreach ($request->rombel_ids as $rombel_id) {
-                $rombel = $this->rombel->getOne('id', $rombel_id);
+                $rombel = $this->rombel->getOne($rombel_id);
                 $guru->rombels()->attach($rombel);
             }
         }
-        return redirect()->route('guru.nilai');
+        return redirect()->route('admin.guru.show_rombel', ['tahun' => $request->tahun_ajaran, 'semester' => $request->semester, 'guru' => $guru])->with('message', 'Berhasil menambah data!');
+    }
+    public function detach_rombel(Rombel $rombel, Guru $guru)
+    {
+        $guru = $this->guru->getById($guru->id);
+        $rombel = $this->rombel->getOne($rombel->id);
+        $guru->rombels()->detach($rombel);
+        return redirect()->back()->with('message', 'Berhasil mengeluarkan data!');
+    }
+
+    public function wali_kelas($tahun, $semester)
+    {
+        $guru_ = $this->auth->getUser('guru');
+        $guru = $this->guru->getById($guru_->id);
+        $siswa = null;
+        if ($guru->rombel) {
+            $siswa = $this->siswa->getSiswa($guru->rombel->id);
+        }
+        return view('pages.guru.wali_kelas.index', [
+            'siswa' => $siswa,
+            'rombel' => $guru->rombel,
+            'tahun' => $tahun,
+            'semester' => $semester,
+        ]);
+    }
+
+    public function aktivasi($id)
+    {
+        $this->guru->aktivasi($id);
+        return back();
+    }
+    public function deaktivasi($id)
+    {
+        $this->guru->deaktivasi($id);
+        return back();
+    }
+    public function aktivasi_all($id)
+    {
+        $this->guru->aktivasi_all($id);
+        return back();
+    }
+    public function deaktivasi_all($id)
+    {
+        $this->guru->deaktivasi_all($id);
+        return back();
+    }
+    public function tambah_data($tahun, $semester)
+    {
+        $datas = [];
+        return view('pages.admin.guru.import_data', [
+            'tahun' => $tahun,
+            'semester' => $semester,
+            'datas' => $datas,
+        ]);
     }
 }

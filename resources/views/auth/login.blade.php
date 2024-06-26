@@ -63,11 +63,22 @@
         .Section_top {
             width: 100%;
             height: 100%;
-            background-image: url(asset('assets/bg-login/bg-login-1.jpg'));
+            background-image: url({{ asset('assets/bg-login/bg-login-1.jpg') }});
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
-            animation: change 10s infinite ease-in-out;
+            /* animation: change 10s infinite ease-in-out; */
+        }
+
+        .Section_top::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.274);
+            /* Ubah nilai alpha untuk mengatur tingkat kegelapan */
         }
 
         @media only screen and (max-width: 639px) {
@@ -76,7 +87,7 @@
             }
         }
 
-        @keyframes change {
+        /* @keyframes change {
             0% {
                 background-image: url({{ asset('assets/bg-login/bg-login-1.jpg') }});
             }
@@ -93,10 +104,14 @@
                 background-image: url({{ asset('assets/bg-login/bg-login-5.jpg') }});
             }
 
+            0% {
+                background-image: url({{ asset('assets/bg-login/bg-login-1.jpg') }});
+            }
+
             100% {
                 background-image: url({{ asset('assets/bg-login/bg-login-1.jpg') }});
             }
-        }
+        } */
     </style>
 
     @vite('resources/css/app.css')
@@ -119,30 +134,30 @@
     <div class="items-center justify-center min-h-screen w-full hidden md:p-0 p-6 relative Section_top overflow-hidden"
         id="container">
         <div
-            class="bg-gradient-to-r from-blue-500 to-blue-100 md:bg-none sm:hidden absolute -rotate-45 w-[1000px] min-h-[150vh]">
+            class="bg-gradient-to-r from-blue-500 to-blue-100 md:bg-none sm:hidden absolute -rotate-45 w-[800px] min-h-[150vh]">
         </div>
         <div class="relative py-3 sm:max-w-xl sm:mx-auto">
-            <div class="absolute inset-0 bg-gradient-to-r from-blue-300 to-blue-600 shadow-lg transform -skew-y-12 sm:skew-y-0 sm:-rotate-6 rotate-0 sm:rounded-3xl rounded-md"
+            <div class="md:absolute z-0 inset-0 bg-gradient-to-r from-blue-300 to-blue-600 shadow-lg transform -skew-y-12 sm:skew-y-0 sm:-rotate-6 rotate-0 sm:rounded-3xl rounded-md"
                 id="bg-blue">
             </div>
-            <div class="relative md:py-10 md:px-14 p-6 bg-white shadow-lg sm:rounded-3xl rounded-md">
+            <div class="relative md:p-10 p-6 bg-white shadow-lg  border-2 border-slate-200 rounded-3xl">
                 <div class="max-w-md mx-auto">
-
                     <form class="" action="login" method="POST">
                         @csrf
                         <div class="mb-2 w-full flex justify-center items-center flex-col">
                             <img src="{{ asset('assets/img/logo.png') }}" alt="Logo"
-                                class="mb-4 md:max-w-[150px] max-w-[100px]">
-                            <h3 class="md:text-[30px] text-[24px] font-bold text-gray-700 text-center">SMK KARTEK 2
+                                class="mb-4 md:max-w-[150px] max-w-[100px] ">
+                            <h3 class="md:text-[24px] text-[20px] font-bold text-gray-700 text-center">SMK KARTEK 2
                                 JATILAWANG</h3>
                         </div>
                         <div class="mb-4 text-center">
                             <h3 class="text-[18px] font-semibold text-gray-500">Sistem Informasi Akademik Siswa</h3>
                         </div>
                         <div class="mb-2">
+
                             @if (Session::has('status'))
                                 <div class="p-6 border-l-4 border-red-500 -6 rounded-r-xl bg-red-50">
-                                    <div class="flex">
+                                    <div class="flex items-center">
                                         <div class="flex-shrink-0">
                                             <svg class="w-5 h-5 text-red-400" aria-hidden="true"
                                                 xmlns="http://www.w3.org/2000/svg" fill="currentColor"
@@ -152,8 +167,11 @@
                                             </svg>
                                         </div>
                                         <div class="ml-3">
+                                            <div class="text-sm text-red-600 mb-3">
+                                                <p>{{ Session::get('message1') }}</p>
+                                            </div>
                                             <div class="text-sm text-red-600">
-                                                <p>{{ Session::get('message') }}</p>
+                                                <p>{{ Session::get('message2') }}</p>
                                             </div>
                                         </div>
                                     </div>

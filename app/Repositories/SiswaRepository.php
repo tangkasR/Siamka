@@ -20,10 +20,14 @@ class SiswaRepository implements SiswaInterface
         $this->siswa = $siswa;
         $this->date = $date;
     }
-    public function getById($id)
+    public function getById($siswa)
     {
-        return $this->siswa->with('rombels', 'kehadirans', 'ekskuls', 'ekskuls.gurus')->where('id', $id)->first();
+        if (is_object($siswa)) {
+            return $siswa->with('rombels', 'kehadirans', 'ekskuls', 'ekskuls.gurus')->first();
+        }
+        return $this->siswa->with('rombels', 'kehadirans', 'ekskuls', 'ekskuls.gurus')->where('id', $siswa)->first();
     }
+
     public function getPivotTahunPembelajaran($id)
     {
         return DB::table('siswas')
@@ -52,12 +56,12 @@ class SiswaRepository implements SiswaInterface
             ->where('siswas.aktivasi_akun', '=', 'tidak aktif')
             ->where(function ($query) use ($currentMonth, $currentYear) {
                 $query->where(function ($subQuery) use ($currentMonth, $currentYear) {
-                    $subQuery->where('rombel_siswa.tahun_awal', $currentYear)
-                        ->whereBetween(DB::raw($currentMonth), [7, 12]);
+                    $subQuery->where('rombel_siswa.tahun_awal', $currentYear) // membuat kondisi jika pivot tahun awal sama dengan tahun sekarang
+                        ->whereBetween(DB::raw($currentMonth), [7, 12]); // maka dari bulan juli sampai desember
                 })
                     ->orWhere(function ($subQuery) use ($currentMonth, $currentYear) {
-                        $subQuery->where('rombel_siswa.tahun_akhir', $currentYear)
-                            ->whereBetween(DB::raw($currentMonth), [1, 6]);
+                        $subQuery->where('rombel_siswa.tahun_akhir', $currentYear) // membuat kondisi jika pivot tahun akhir sama dengan tahun sekarang
+                            ->whereBetween(DB::raw($currentMonth), [1, 6]); // maka dari bulan januari sampai juni
                     });
             })
             ->select(
@@ -79,12 +83,12 @@ class SiswaRepository implements SiswaInterface
             ->where('siswas.status_siswa', '=', 'belum lulus')
             ->where(function ($query) use ($currentMonth, $currentYear) {
                 $query->where(function ($subQuery) use ($currentMonth, $currentYear) {
-                    $subQuery->where('rombel_siswa.tahun_awal', $currentYear)
-                        ->whereBetween(DB::raw($currentMonth), [7, 12]);
+                    $subQuery->where('rombel_siswa.tahun_awal', $currentYear) // membuat kondisi jika pivot tahun awal sama dengan tahun sekarang
+                        ->whereBetween(DB::raw($currentMonth), [7, 12]); // maka dari bulan juli sampai desember
                 })
                     ->orWhere(function ($subQuery) use ($currentMonth, $currentYear) {
-                        $subQuery->where('rombel_siswa.tahun_akhir', $currentYear)
-                            ->whereBetween(DB::raw($currentMonth), [1, 6]);
+                        $subQuery->where('rombel_siswa.tahun_akhir', $currentYear) // membuat kondisi jika pivot tahun akhir sama dengan tahun sekarang
+                            ->whereBetween(DB::raw($currentMonth), [1, 6]); // maka dari bulan januari sampai juni
                     });
             })
             ->select(
@@ -101,6 +105,7 @@ class SiswaRepository implements SiswaInterface
                 'rombel_siswa.tahun_awal',
                 'rombel_siswa.tahun_akhir',
             )
+            ->orderBy('siswas.nama')
             ->get();
 
         return $siswas;
@@ -110,19 +115,30 @@ class SiswaRepository implements SiswaInterface
         $currentYear = $this->date->getDate()->year;
         $currentMonth = $this->date->getDate()->month;
 
+        // Subquery untuk mendapatkan siswa yang berada di rombel terakhir (tahun_akhir terbaru) berdasarkan rombel_id tertentu
+        $subQuery = DB::table('rombel_siswa as rs1')
+            ->select('rs1.siswa_id') // mengambil siswa id dari rombel_siswa 1
+            ->where('rs1.rombel_id', $id) // membuat kondisi berdasarkan rombel_id tertentu
+            ->where('rs1.tahun_akhir', $currentYear) // membuat kondisi berdasarkan pivot rombel_id tahun akhir sama dengan tahun sekarang
+            ->whereBetween(DB::raw($currentMonth), [7, 12]) // membuat kondisi jika bulan sekarang antara juli sampai desember karena bulan tersebut sudah tahun ajaran baru
+            ->where('rs1.tahun_akhir', function ($query) {
+                $query->select(DB::raw('MAX(rs2.tahun_akhir)')) // mendapatkan rombel_siswa dengan pivot tahun akhir paling akhir
+                    ->from('rombel_siswa as rs2') //membuat alias rombel_siswa 2 menjadi rs2
+                    ->whereColumn('rs2.siswa_id', 'rs1.siswa_id'); //nmembandingkan siswa antara rombel_siswa 1 dan rombel_siswa 2
+            });
+
+        // Query utama untuk mendapatkan siswa berdasarkan subquery rombel terakhir
         $siswas = DB::table('siswas')
-            ->join('rombel_siswa', 'siswas.id', '=', 'rombel_siswa.siswa_id')
-            ->where('rombel_id', '=', $id)
-            ->where('siswas.status_siswa', '=', 'belum lulus')
-            ->where(function ($query) use ($currentMonth, $currentYear) {
-                $query->Where(function ($subQuery) use ($currentMonth, $currentYear) {
-                    $subQuery->where('rombel_siswa.tahun_akhir', $currentYear)
-                        ->whereBetween(DB::raw($currentMonth), [7, 12]);
-                });
+            ->joinSub($subQuery, 'last_rombel', function ($join) { //join query dengan sub query alias last rombel
+                $join->on('siswas.id', '=', 'last_rombel.siswa_id'); //mencari siswa id dengan rombel terakhir
             })
+            ->where('siswas.status_siswa', '=', 'belum lulus')
             ->select(
                 'siswas.id',
+                'siswas.nama',
+                'siswas.profil'
             )
+            ->orderBy('siswas.nama')
             ->get();
 
         return $siswas;
@@ -138,7 +154,7 @@ class SiswaRepository implements SiswaInterface
 
     public function store($data)
     {
-        return Excel::import(new SiswaImport, $data['file']);
+        return Excel::import(new SiswaImport($data['tahun'], $data['semester'], $data['rombel_id']), $data['file']);
     }
     public function update($data, $id)
     {
@@ -150,7 +166,6 @@ class SiswaRepository implements SiswaInterface
             'jenis_kelamin' => $data['jenis_kelamin'],
             'username' => $data['username'],
             'password' => Hash::make($data['password']),
-            'status_siswa' => $data['status_siswa'],
         ]);
     }
     public function destroy($id)
@@ -162,19 +177,23 @@ class SiswaRepository implements SiswaInterface
         return $this->siswa->where('id', $id)->update([
             'status_siswa' => 'lulus',
             'aktivasi_akun' => 'tidak aktif',
+            'username' => '-',
         ]);
     }
 
     public function aktivasi($id)
     {
+        $siswa = $this->siswa->where('id', $id)->first();
         return $this->siswa->where('id', $id)->update([
             'aktivasi_akun' => 'aktif',
+            'username' => $siswa->nisn,
         ]);
     }
     public function deaktivasi($id)
     {
         return $this->siswa->where('id', $id)->update([
             'aktivasi_akun' => 'tidak aktif',
+            'username' => '-',
         ]);
     }
     public function update_profil($datas, $id)
@@ -201,6 +220,46 @@ class SiswaRepository implements SiswaInterface
             ->where('status_siswa', '!=', 'belum lulus')
             ->selectRaw("LEFT(nis, 2) as angkatan")
             ->distinct()
+            ->orderBy('angkatan', 'asc')
             ->get();
+    }
+
+    public function getSiswa($id)
+    {
+        return $this->siswa
+            ->where('status_siswa', 'belum lulus')
+            ->with(['rombels', 'kehadirans', 'ekskuls', 'ekskuls.gurus'])
+            ->whereHas('rombels', function ($query) use ($id) {
+                $query->where('id', $id);
+            })
+            ->get();
+    }
+    public function getSiswaAdmin($id)
+    {
+        return $this->siswa
+            ->with(['rombels', 'kehadirans', 'ekskuls', 'ekskuls.gurus'])
+            ->whereHas('rombels', function ($query) use ($id) {
+                $query->where('id', $id);
+            })->get();
+    }
+
+    public function keluar($id)
+    {
+        return $this->siswa->where('id', $id)->update([
+            'status_siswa' => 'keluar',
+        ]);
+    }
+
+    public function getSiswaPerAngkatan()
+    {
+        $total_siswa = $this->siswa
+            ->selectRaw('LEFT(nis, 2) as angkatan,
+                     COUNT(DISTINCT CASE WHEN jenis_kelamin = "L" THEN nis END) as total_laki_laki,
+                     COUNT(DISTINCT CASE WHEN jenis_kelamin = "P" THEN nis END) as total_perempuan')
+            ->groupBy('angkatan')
+            ->orderBy('angkatan', 'asc')
+            ->get();
+
+        return $total_siswa;
     }
 }

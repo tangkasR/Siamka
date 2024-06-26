@@ -16,8 +16,6 @@ return new class extends Migration
             $table->foreign('siswa_id')->references('id')->on('siswas')->onDelete('restrict');
             $table->unsignedBigInteger('rombel_id');
             $table->foreign('rombel_id')->references('id')->on('rombels')->onDelete('restrict');
-            $table->String('tahun_awal');
-            $table->String('tahun_akhir');
         });
     }
 

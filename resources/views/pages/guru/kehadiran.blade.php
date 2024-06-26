@@ -26,6 +26,9 @@
                             Absensi</p>
                         <p class="mb-4 text-gray-500 text-[16px] font-medium">
                             Tanggal: {{ $tanggal }}</p>
+                        <p class="mb-4 text-gray-500 text-[16px] font-medium">
+                            Jam: <span id="clock"></span>
+                        </p>
                         <p class="mb-1 text-gray-500 text-[16px]">Pastikan bahwa Anda sudah di lingkungan sekolah
                             supaya dapat
                             melakukan
@@ -34,14 +37,25 @@
                         </p>
 
                     </div>
-
-                    <button type="submit"
-                        class="w-full  text-md font-medium bg-violet-400
+                    @if ($checkAbsen == false)
+                        <button type="submit"
+                            class="w-full  text-md font-medium hover:bg-blue-700 bg-blue-500
                         mt-3 px-4 py-2 rounded-lg
-                        text-white text-center">
-                        Absen
-                    </button>
+                        text-white text-center btn">
+                            Absen Masuk
+                        </button>
+                    @endif
                 </form>
+                @if ($checkAbsen == true)
+                    <form action="{{ route('guru.kehadiran_guru.absen_keluar') }}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <button type="submit"
+                            class="w-full  text-md font-medium hover:bg-red-700 bg-red-500 mt-3 px-4 py-2 rounded-lg text-white text-center btn">
+                            Absen Keluar
+                        </button>
+                    </form>
+                @endif
             </div>
         </div>
     </div>
@@ -52,11 +66,11 @@
                     class="block mb-2 font-medium text-gray-700 dark:text-gray-100">Bulan</label>
                 <input
                     class="w-full border-gray-100 rounded placeholder:text-13 text-13 py-1.5 focus:border focus:ring focus:ring-violet-500/20 focus:border-violet-100 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder:text-zinc-100 dark:text-zinc-100"
-                    type="month" id="month">
+                    type="month" id="month" value="{{ $bulan_now }}">
             </div>
         </div>
         <div class="relative overflow-x-auto card-body md:px-[20px] flex flex-col justify-center items-center ">
-            <table id="" class="table uppercase w-full pt-4 text-center text-gray-700 dark:text-zinc-100">
+            <table id="" class="table capitalize w-full pt-4 text-center text-gray-700 dark:text-zinc-100">
                 <thead>
                     <tr class="bg-blue-200">
                         <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
@@ -64,43 +78,41 @@
                         <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
                             Kehadiran</th>
                         <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                            Jam Masuk</th>
+                        <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                            Jam Keluar</th>
+                        <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                            Total Jam per Hari</th>
+                        <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
                             Tanggal</th>
                     </tr>
                 </thead>
                 <tbody id="tabel-container">
                 </tbody>
             </table>
-            <div class="mt-4">
-                <div class="">
-                    <div class="">
-                        <div class=" mt-2 xs:mt-0  flex justify-between " id="container-pagination">
-                            <!-- Buttons -->
-                            <div class="">
-                                <button id="btn-previous"
-                                    class="flex items-center  justify-center px-4 h-10 text-base font-medium border-black border-[0.05px] text-black rounded-md hover:bg-gray-50 dark:bg-violet-800 dark:border-violet-700 dark:text-violet-400 dark:hover:bg-violet-700 dark:hover:text-white">
-                                    <svg class="w-3.5 h-3.5 me-2 rtl:rotate-180" aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="M13 5H1m0 0 4 4M1 5l4-4" />
-                                    </svg>
-                                    Sebelumnya
-                                </button>
-                            </div>
-                            <div class="">
-                                <button id="btn-next"
-                                    class="flex   items-center justify-center px-4 h-10 text-base font-medium text-black  border-black border-[0.05px] border-s  rounded-md hover:bg-gray-50 dark:bg-violet-800 dark:border-violet-700 dark:text-violet-400 dark:hover:bg-violet-700 dark:hover:text-white">
-                                    Selanjutnya
-                                    <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Help text -->
-                </div>
+        </div>
+        <div class="mt-4 flex justify-between px-[20px]">
+            <div class="">
+                <button id="btn-previous"
+                    class="flex items-center  justify-center px-4 h-10 text-base font-medium border-black border-[0.05px] text-black rounded-md hover:bg-gray-50 dark:bg-violet-800 dark:border-violet-700 dark:text-violet-400 dark:hover:bg-violet-700 dark:hover:text-white">
+                    <svg class="w-3.5 h-3.5 me-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        fill="none" viewBox="0 0 14 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 5H1m0 0 4 4M1 5l4-4" />
+                    </svg>
+                    Sebelumnya
+                </button>
+            </div>
+            <div class="">
+                <button id="btn-next"
+                    class="flex   items-center justify-center px-4 h-10 text-base font-medium text-black  border-black border-[0.05px] border-s  rounded-md hover:bg-gray-50 dark:bg-violet-800 dark:border-violet-700 dark:text-violet-400 dark:hover:bg-violet-700 dark:hover:text-white">
+                    Selanjutnya
+                    <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        fill="none" viewBox="0 0 14 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M1 5h12m0 0L9 1m4 4L9 9" />
+                    </svg>
+                </button>
             </div>
         </div>
         <div class="pb-20 mt-20">
@@ -114,9 +126,6 @@
                 <div class="md:col-span-3">
                 </div>
                 <div class="md:col-span-2">
-                    <p for="example-text-input"
-                        class=" block font-medium text-gray-700 dark:text-gray-100 text-[16px] mb-2">
-                        Pilih Tahun</p>
                     <select id="tahun_rekap" name="tahun_rekap"
                         class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100">
                         @foreach ($years as $item)
@@ -144,7 +153,7 @@
                 </div>
             </div>
             <div class="relative overflow-x-auto card-body md:px-[20px] flex justify-center" id="template_pdf">
-                <table class="table uppercase w-full pt-4 text-center text-gray-700 dark:text-zinc-100"
+                <table class="table capitalize w-full pt-4 text-center text-gray-700 dark:text-zinc-100"
                     id="table_rekap_kehadiran">
                     <thead>
                         <tr class="bg-blue-200">
@@ -154,6 +163,8 @@
                                 Bulan</th>
                             <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
                                 Total Kehadiran</th>
+                            <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                Total Jam Per Bulan</th>
                         </tr>
                     </thead>
                     <tbody id="container_rekap">
@@ -163,6 +174,7 @@
             </div>
         </div>
     </div>
+    <input type="text" name="" value="{{ $guru->nomor_induk_yayasan }}" id="niy" hidden>
     <script>
         toast('error', 'Tolong melakukan absensi dihandphone!')
     </script>
@@ -277,11 +289,12 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+
             $.ajax({
                 type: "GET",
                 url: url,
                 data: {
-                    'guru_id': $('#guru_id').val(),
+                    'niy': $('#niy').val(),
                     'bulan': $('#bulan').val(),
                     'tahun': $('#tahun').val(),
                 },
@@ -323,6 +336,8 @@
 
             // ajax request
             function ajaxRequest(url, page) {
+                console.log(url);
+                console.log(page);
                 btnPrev.classList.add('hidden')
                 btnNext.classList.add('hidden')
                 $.ajax({
@@ -330,6 +345,7 @@
                     type: 'get',
                     data: getDatas(),
                 }).done((response) => {
+                    console.log(response)
                     container.innerHTML = ''
                     if (response.data.length != 0) {
                         createTable(response)
@@ -366,6 +382,7 @@
                         url: url,
                         data: getDatas(),
                         success: function(response) {
+                            console.log(response)
                             container.innerHTML = ''
                             if (response.data.length != 0) {
                                 createTable(response)
@@ -387,10 +404,10 @@
                 let bulan = $('#month').val()
                 tahun = bulan.split('-')[0]
                 bulan = bulan.split('-')[1]
-                bulan = bulan.slice(1)
-                let guru_id = $('#guru_id').val()
+                bulan = +bulan - 1 + 1
+                let niy = $('#niy').val()
                 let datas = {
-                    'guru_id': guru_id,
+                    'niy': niy,
                     'bulan': bulan,
                     'tahun': tahun,
                 }
@@ -402,10 +419,15 @@
                 let row = ''
                 let index = datas.from
                 for (let i = 0; i < datas.data.length; i++) {
-                    let date = datas.data[i].tanggal
-                    let tahun = date.split('-')[0]
-                    let bulan = date.split('-')[1]
-                    let tanggal = date.split('-')[2]
+                    let dateStr = datas.data[i].tanggal;
+                    let date = new Date(dateStr);
+                    let options = {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    };
+                    let formattedDate = date.toLocaleDateString('id-ID', options);
 
                     row = `
                         <tr class="${(i + 1) % 2 == 0 ? 'bg-blue-50' : 'bg-white'}">
@@ -414,7 +436,13 @@
                             <td class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
                                 ${datas.data[i].kehadiran}</td>
                             <td class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
-                                ${tanggal}-${bulan}-${tahun}</td>
+                                ${datas.data[i].jam_masuk}</td>
+                            <td class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
+                                ${datas.data[i].jam_keluar}</td>
+                            <td class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
+                                ${datas.data[i].total_jam}</td>
+                            <td class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
+                                ${formattedDate}</td>
                         </tr>
                     `;
                     container.innerHTML += row
@@ -485,5 +513,27 @@
             window.print();
             window.location.reload()
         })
+
+        document.addEventListener('DOMContentLoaded', function() {
+            function startTime() {
+                const today = new Date();
+                let h = today.getHours();
+                let m = today.getMinutes();
+                let s = today.getSeconds();
+                m = checkTime(m);
+                s = checkTime(s);
+                document.getElementById('clock').innerHTML = h + ":" + m + ":" + s;
+                setTimeout(startTime, 1000);
+            }
+
+            function checkTime(i) {
+                if (i < 10) {
+                    i = "0" + i
+                }; // Add zero in front of numbers < 10
+                return i;
+            }
+
+            startTime();
+        });
     </script>
 @endsection
