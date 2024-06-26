@@ -13,10 +13,14 @@
     <div class="grid grid-cols-12 gap-6 bg-white shadow-md">
         <div class="col-span-12">
             <div class="card dark:bg-zinc-800 dark:border-zinc-600">
-                <div class="card-body border-b border-gray-100 dark:border-zinc-600 pt-6">
+                <div class="card-body border-b border-gray-100 dark:border-zinc-600 pt-6 flex justify-between items-center">
+                    <h1 class="text-[18px] font-medium capitalize ">Tahun Ajaran
+                        {{ str_replace('-', '/', $tahun) }},
+                        Semester
+                        {{ $semester }}</h1>
                     <a type="submit"
                         href="{{ route('guru.tambah_nilai', ['tahun_ajaran_id' => Crypt::encrypt($tahun_ajaran_id), 'ekskul' => $ekskul]) }}"
-                        class="ms-auto w-fit md:mt-0 mt-6 cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md flex items-center gap-2">
+                        class=" w-fit md:mt-0 mt-6 cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md flex items-center gap-2">
                         <span>Tambah Data</span> <i class='bx bxs-plus-circle text-[25px]'></i>
                     </a>
                 </div>

@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('table-name', 'Rekap Nilai Siswa')
+@section('table-name', 'Rekap Kehadiran Siswa')
 @section('table-role', 'Admin')
 @section('back')
     <div class="font-medium  border border-slate-500 bg-slate-500 text-white rounded-full  me-3">
