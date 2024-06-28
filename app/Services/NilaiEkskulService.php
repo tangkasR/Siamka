@@ -11,13 +11,13 @@ class NilaiEkskulService
     {
         $this->nilai_ekskul = $nilai_ekskul;
     }
-    public function getAll($ekskul_id)
+    public function getAll($ekskul_id, $rombel)
     {
-        return $this->nilai_ekskul->getAll($ekskul_id);
+        return $this->nilai_ekskul->getAll($ekskul_id, $rombel);
     }
-    public function checkNilaiWithSemester($ekskul_id, $tahun_ajaran_id)
+    public function checkNilaiWithSemester($ekskul_id, $tahun_ajaran_id, $rombel)
     {
-        return $this->nilai_ekskul->checkNilaiWithSemester($ekskul_id, $tahun_ajaran_id);
+        return $this->nilai_ekskul->checkNilaiWithSemester($ekskul_id, $tahun_ajaran_id, $rombel);
     }
     public function store($datas)
     {

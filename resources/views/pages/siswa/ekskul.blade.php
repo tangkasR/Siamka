@@ -6,20 +6,30 @@
         <div class="col-span-12">
             <div class="card dark:bg-zinc-800 dark:border-zinc-600 p-0">
                 <div class="relative overflow-x-auto card-body mb-[50px] ">
-                    <div class="grid md:grid-cols-6 mb-3 gap-4 capitalize">
+                    <div class="grid md:grid-cols-4 mb-3 gap-4 capitalize">
                         @foreach ($ekskuls as $data)
                             <div
-                                class="w-full relative mx-auto  rounded-lg bg-gradient-to-tr from-pink-300 to-blue-300 p-0.5 border-violet-300  hover:shadow-lg hover:shadow-violet-200 transition-all  ">
-                                <div class="bg-white p-3 rounded-md min-h-[300px] w-full">
+                                class="w-full  relative mx-auto  rounded-lg bg-gradient-to-tr from-pink-300 to-blue-300 p-0.5 border-violet-300  hover:shadow-lg hover:shadow-violet-200 transition-all  ">
+                                <div class="bg-white py-3 px-6 rounded-md min-h-[300px] w-full">
                                     <span
-                                        class=" p-3 flex mb-3 justify-center items-center place-items-center rounded-md w-full duration-300 text-white bg-indigo-200">
+                                        class="mt-3 p-3 flex flex-col mb-3 justify-center items-center place-items-center rounded-md w-full duration-300 text-white bg-indigo-100 border border-indigo-300">
                                         <img src="{{ asset('assets/img/img-ekskul.png') }}" alt=""
                                             class="max-w-[100px]">
+                                        <h1 class="font-bold text-[20px] m-0 mt-2 capitalize text-indigo-700">
+                                            {{ $data['nama_ekskul'] }}</h1>
                                     </span>
-                                    <h1 class="font-bold text-[20px] m-0  capitalize">{{ $data->nama_ekskul }}</h1>
-                                    <p class="mb-3 text-[16px] font-medium">Pembina Ekskul: {{ $data->nama_guru }}</p>
-                                    <p class="mb-3 text-[16px] font-medium">Tahun Ajaran: {{ $data->tahun_ajaran }}</p>
-                                    <p class="mb-3 text-[16px] font-medium">Semester: {{ $data->semester }}</p>
+
+                                    <div class="">
+                                        @foreach ($data['data'] as $item)
+                                            <div class="border border-indigo-300 p-3 pb-0 rounded-md mb-3">
+                                                <p class="mb-1 text-[14px] font-medium">Tahun Ajaran:
+                                                    {{ $item['tahun_ajaran'] }} - {{ $item['semester'] }}</p>
+                                                <p class="mb-3 text-[14px] font-medium">Pembina:
+                                                    {{ $item['nama_guru'] }}</p>
+
+                                            </div>
+                                        @endforeach
+                                    </div>
                                 </div>
                             </div>
                         @endforeach

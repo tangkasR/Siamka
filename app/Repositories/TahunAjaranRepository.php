@@ -15,7 +15,7 @@ class TahunAjaranRepository implements TahunAjaranInterface
     }
     public function getId($tahun, $semester)
     {
-        return $this->tahun_ajaran->where('tahun_ajaran', $tahun)->where('semester', $semester)->first()->id;
+        return $this->tahun_ajaran->where('tahun_ajaran', $tahun)->where('semester', $semester)->first()->id ?? null;
     }
     public function getById($id)
     {

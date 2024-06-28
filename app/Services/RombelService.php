@@ -4,16 +4,20 @@ namespace App\Services;
 
 use App\Interfaces\RombelInterface;
 use App\Services\GuruService;
+use App\Services\TahunAjaranService;
+use Illuminate\Validation\ValidationException;
 
 class RombelService
 {
     private $rombel;
     private $guru;
+    private $tahun_ajaran;
 
-    public function __construct(RombelInterface $rombel, GuruService $guru)
+    public function __construct(RombelInterface $rombel, GuruService $guru, TahunAjaranService $tahun_ajaran)
     {
         $this->rombel = $rombel;
         $this->guru = $guru;
+        $this->tahun_ajaran = $tahun_ajaran;
     }
     public function getAll($id)
     {
@@ -36,9 +40,14 @@ class RombelService
     {
         return $this->handleGuruBukanWaliKelas($id);
     }
-    public function store($datas)
+    public function store($datas, $tahun_ajaran_id)
     {
-        return $this->handleStore($datas);
+        $guru_ = $this->guru->getById($datas->guru_id);
+        $guru = $this->guru->getByNiy($guru_->nomor_induk_yayasan, $tahun_ajaran_id);
+        if ($guru == null) {
+            throw ValidationException::withMessages(['error' => 'Guru di semester baru tidak ditemukan!']);
+        }
+        return $this->rombel->store($guru->id, $datas->nama_rombel, $tahun_ajaran_id);
     }
     public function update($data, $rombel)
     {
@@ -79,5 +88,36 @@ class RombelService
     public function getRombelGuru($niy, $tahun_ajaran_id)
     {
         return $this->rombel->getRombelGuru($niy, $tahun_ajaran_id);
+    }
+    public function migrasi($datas)
+    {
+        if ($datas['semester'] == 'genap') {
+            $tahun_ajaran = $datas['tahun'];
+            $semester = 'ganjil';
+            $tahun_ajaran_id = $this->tahun_ajaran->getId($tahun_ajaran, $semester);
+            if ($tahun_ajaran_id == null) {
+                throw ValidationException::withMessages(['error' => 'Data semester sebelumnya tidak ada!']);
+            }
+        } else {
+            $tahun_ajaran = $datas['tahun'];
+            list($tahun_awal, $tahun_akhir) = explode('-', $tahun_ajaran);
+            $tahun_awal = (int) $tahun_awal - 1;
+            $tahun_akhir = (int) $tahun_akhir - 1;
+            $tahun_ajaran_sebelumnya = $tahun_awal . '-' . $tahun_akhir;
+            $semester = 'genap';
+            $tahun_ajaran_id = $this->tahun_ajaran->getId($tahun_ajaran_sebelumnya, $semester);
+            if ($tahun_ajaran_id == null) {
+                throw ValidationException::withMessages(['error' => 'Data semester sebelumnya tidak ada!']);
+            }
+        }
+        $rombels = $this->getAll($tahun_ajaran_id);
+        foreach ($rombels as $rombel) {
+            $this->store($rombel, $datas['tahun_ajaran_id']);
+        }
+        return;
+    }
+    public function getByNama($nama_rombel, $tahun_ajaran_id)
+    {
+        return $this->rombel->getByNama($nama_rombel, $tahun_ajaran_id);
     }
 }

@@ -68,8 +68,9 @@
                                             <span class="text-red-400 font-semibold">{{ $data->kehadiran }}</span>
                                         @endif
                                     </td>
-                                    <td class="p-4 ">
-                                        {{ $date }}</td>
+                                    <td class="p-4">
+                                        {{ $date }}
+                                    </td>
                                     <td class="p-4  min-w-[150px] w-[150px]">
                                         <a class="font-medium hover:text-blue-500 cursor-pointer" data-tw-toggle="modal"
                                             data-tw-target="#modal-id_form_edit_{{ $loop->iteration }}"><i

@@ -100,20 +100,11 @@ class KehadiranController extends Controller
             ->with('message', 'Berhasil menambah kehadiran hari ini');
     }
 
-    public function show_update($id, $siswa_id)
-    {
-        $siswa = $this->siswa->getById($siswa_id);
-        return view('pages.guru.kehadiran.ubah-kehadiran', [
-            'siswa' => $siswa,
-            'rombel_id' => $siswa->rombels->last()->id,
-            'kehadiran' => $this->kehadiran->getById($id),
-        ]);
-    }
     public function update(Request $request, $id)
     {
 
         $this->kehadiran->update($request->all(), $id);
-        return redirect()->route('guru.kehadiran', ['tahun' => $request->tahun, 'semester' => $request->semester, 'id' => $request->rombel_id])
+        return redirect()->back()
             ->with('message', 'Berhasil mengubah data kehadiran');
     }
     public function destroy($rombel_id)
@@ -150,11 +141,51 @@ class KehadiranController extends Controller
             'rombel' => $rombel,
             'tahun_ajaran_id' => $tahun_ajaran_id,
             'tanggal' => $tanggal,
+            'kehadirans' => [],
         ]);
     }
     public function admin_get_kehadiran(Request $request)
     {
         $kehadirans = $this->kehadiran->getByRombelId($request->rombel_id, $request->tanggal)->get();
-        return response($kehadirans);
+        // return response($kehadirans);
+        $rombel = $this->rombel->getOne($request->rombel_id);
+        $view = view('pages.admin.kehadiran.data-kehadiran', [
+            'tahun' => $request->tahun,
+            'semester' => $request->semester,
+            'rombel' => $rombel,
+            'tahun_ajaran_id' => $request->tahun_ajaran_id,
+            'tanggal' => $request->tanggal,
+            'kehadirans' => $kehadirans,
+        ])->render();
+
+        return response()->json(['html' => $view], 200);
+
+    }
+
+    public function admin_show_input($tahun, $semester, $id)
+    {
+        $tahun_ajaran_id = $this->tahun_ajaran->getId($tahun, $semester);
+        return view('pages.admin.kehadiran.tambah_kehadiran', [
+            'rombel' => $this->rombel->getOne($id),
+            'date' => $this->date->getDate()->format('Y-m-d'),
+            'siswas' => $this->siswa->getSiswa($id),
+            'tahun' => $tahun,
+            'semester' => $semester,
+            'tahun_ajaran_id' => $tahun_ajaran_id,
+        ]);
+    }
+
+    public function admin_store(Request $request)
+    {
+        $check_kehadiran = $this->kehadiran->checkKehadiran($request->tanggal, $request->rombel_id);
+        $rombel = $this->rombel->getOne($request->rombel_id);
+        if (count($check_kehadiran) != 0) {
+            return redirect()->route('admin.kehadiran.detail_kehadiran', ['tahun' => $request->tahun_ajaran, 'semester' => $request->semester, 'rombel' => $rombel])
+                ->with('error', 'Data Kehadiran hari ini sudah ada!');
+        }
+
+        $this->kehadiran->store($request->all());
+        return redirect()->route('admin.kehadiran.detail_kehadiran', ['tahun' => $request->tahun_ajaran, 'semester' => $request->semester, 'rombel' => $rombel])
+            ->with('message', 'Berhasil menambah kehadiran hari ini');
     }
 }

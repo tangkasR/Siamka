@@ -39,6 +39,14 @@
                                         href="{{ route('admin.rombel.tambah_data', ['tahun' => $tahun_ajaran->tahun_ajaran, 'semester' => $tahun_ajaran->semester]) }}">
                                         Import Rombel</a>
                                 </li>
+                                @if (count($rombel) == 0)
+                                    <hr class="my-1 border-gray-50 dark:border-zinc-600">
+                                    <li>
+                                        <a data-tw-toggle="modal" data-tw-target="#modal-id_migration"
+                                            class="cursor-pointer block text-green-500 w-full px-4 py-1 text-sm font-medium  bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 ">
+                                            Transfer Data</a>
+                                    </li>
+                                @endif
                             </ul>
                         </div>
                         <div class="" hidden>
@@ -74,168 +82,399 @@
                         </div>
                     </div>
                 </div>
-                <div class="relative overflow-x-auto card-body">
-                    <table id="datatable" class="capitalize table w-full pt-4 text-center text-gray-700 dark:text-zinc-100">
-                        <thead>
-                            <tr class="bg-blue-100">
-                                <th class="p-4">
-                                    No</th>
-                                <th class="p-4">
-                                    Nama Rombongan Belajar</th>
-                                <th class="p-4">
-                                    Wali Kelas</th>
-                                <th class="p-4">
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($rombel as $data)
-                                <tr class="{{ $loop->iteration % 2 == 0 ? 'bg-blue-50' : 'bg-white' }}">
-                                    <td class="p-4">
-                                        {{ $loop->iteration }}</td>
-                                    <td class="p-4">
-                                        {{ $data->nama_rombel }}</td>
-                                    <td class="p-4">
-                                        {{ $data->guru->nama ?? '-' }}</td>
-                                    <td class="p-4">
-                                        <div class="relative dropdown ">
-                                            <button type="button" class="py-2 font-medium leading-tight  dropdown-toggle"
-                                                id="dropdownMenuButton1" data-bs-toggle="dropdown"><i
-                                                    class='bx bx-menu text-[20px]'></i></button>
-
-                                            <ul class="absolute z-50 float-left py-2 mt-1 text-left list-none bg-white border-none rounded-lg shadow-lg dropdown-menu w-44 bg-clip-padding dark:bg-zinc-700 hidden"
-                                                aria-labelledby="dropdownMenuButton1" data-popper-placement="bottom-start"
-                                                style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(49px, 1636.5px, 0px);">
-                                                <li>
-                                                    <a class="block w-full px-4 py-1 text-sm font-medium text-gray-500 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 dark:text-gray-100 dark:hover:bg-zinc-600/50"
-                                                        data-tw-toggle="modal"
-                                                        data-tw-target="#modal-id_form_edit_{{ $loop->iteration }}">
-                                                        <i class='bx bxs-edit'></i>
-                                                        Ubah
-                                                    </a>
-                                                </li>
-                                                <hr class="my-1 border-gray-50 dark:border-zinc-600">
-                                                <li>
-                                                    <a class="block text-red-500 w-full px-4 py-1 text-sm font-medium  bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 dark:text-gray-100 dark:hover:bg-zinc-600/50"
-                                                        data-tw-toggle="modal"
-                                                        data-tw-target="#modal-id_form_destroy_{{ $loop->iteration }}">
-                                                        <i class='bx bx-trash'></i> Hapus</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                {{-- Modal Edit --}}
-                                <div class="relative z-50 hidden modal" id="modal-id_form_edit_{{ $loop->iteration }}"
-                                    aria-labelledby="modal-title" role="dialog" aria-modal="true">
-                                    <div class="fixed inset-0 z-50 overflow-y-auto">
-                                        <div
-                                            class="absolute inset-0 transition-opacity bg-black bg-opacity-50 modal-overlay">
-                                        </div>
-                                        <div class="p-4 mx-auto animate-translate sm:max-w-lg">
-                                            <div
-                                                class="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl dark:bg-zinc-600">
-                                                <div class="bg-white dark:bg-zinc-700">
-                                                    <button type="button"
-                                                        class="absolute top-3 right-2.5 text-gray-400 border-transparent hover:bg-gray-50/50 hover:text-gray-900 dark:text-gray-100 rounded-lg text-sm px-2 py-1 ltr:ml-auto rtl:mr-auto inline-flex items-center dark:hover:bg-zinc-600"
-                                                        data-tw-dismiss="modal">
-                                                        <i
-                                                            class="text-xl text-gray-500 mdi mdi-close dark:text-zinc-100/60"></i>
-                                                    </button>
-                                                    <div class="p-5">
-                                                        <h3
-                                                            class="mb-4 text-xl font-medium text-gray-700 dark:text-gray-100">
-                                                            Ubah
-                                                            Data Rombongan Belajar </h3>
-                                                        <form class="space-y-4"
-                                                            action="{{ route('admin.rombel.update', ['rombel' => $data]) }}"
-                                                            method="POST">
-                                                            @csrf
-                                                            <div class="mb-3">
-                                                                <label for="guru_id"
-                                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
-                                                                    Wali Kelas
-                                                                </label>
-                                                                <select id="guru_id" name="guru_id"
-                                                                    class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100">
-                                                                    @foreach ($gurus as $item)
-                                                                        <option value="{{ $item->id }}"
-                                                                            {{ $data->guru_id == $item->id ? 'selected' : '' }}>
-                                                                            {{ $item->nama }}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
-                                                            <div>
-                                                                <label for="nama_rombel"
-                                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
-                                                                    Nama Rombongan Belajar
-                                                                </label>
-                                                                <input type="text" name="nama_rombel" id="nama_rombel"
-                                                                    class="bg-gray-800/5 border border-gray-100 text-gray-900 dark:text-gray-100 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder-gray-400 dark:placeholder:text-zinc-100/60 focus:ring-0"
-                                                                    placeholder="Masukan Nama Rombongan Belajar"
-                                                                    value="{{ $data->nama_rombel }}" required>
-                                                            </div>
-                                                            <button type="submit"
-                                                                class="w-full text-white mt-3 bg-violet-600 border-transparent btn">
-                                                                Simpan
+                <div class="">
+                    <div class="relative overflow-x-auto card-body mb-[50px] h-[100%]">
+                        {{-- Data Kelas X --}}
+                        <div class="grid grid-cols-1 mb-10">
+                            <div class="swiper mySwiper1">
+                                <div class="swiper-wrapper">
+                                    @foreach ($rombel as $data)
+                                        @if (explode(' ', $data->nama_rombel)[0] == 'X')
+                                            <div class="swiper-slide">
+                                                <div
+                                                    class="hover:scale-98 relative card bg-blue-50 border-blue-300 border-2  transition-all">
+                                                    <div class="absolute top-0 right-5" style="z-index:1000;">
+                                                        <div class="relative dropstart">
+                                                            <button type="button" class="py-2 font-medium leading-tight">
+                                                                <i class="bx bx-menu text-[20px] dropdown-toggle"
+                                                                    id="dropdownMenu1" data-bs-toggle="dropdown"></i>
                                                             </button>
-                                                        </form>
+                                                            <ul class="absolute z-50 float-left py-2 text-left list-none bg-white border-none rounded-lg shadow-lg dropdown-menu min-w-max bg-clip-padding dark:bg-zinc-700 hidden"
+                                                                aria-labelledby="dropdownMenu1"
+                                                                data-popper-placement="left-start"
+                                                                style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate3d(-913.5px, 1304.5px, 0px);">
+                                                                <li>
+                                                                    <a class="block w-full px-4 py-2 text-sm font-normal text-green-500 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 dark:text-gray-100 dark:hover:bg-zinc-600/50"
+                                                                        data-tw-toggle="modal"
+                                                                        data-tw-target="#modal-id_form_edit_{{ $loop->iteration }}">
+                                                                        <i class='bx bxs-edit'></i>
+                                                                        Ubah
+                                                                    </a>
+                                                                </li>
+                                                                <hr class="my-1 border-gray-50 dark:border-zinc-600">
+                                                                <li>
+                                                                    <a class="block w-full px-4 py-2 text-sm font-normal text-red-500 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 dark:text-gray-100 dark:hover:bg-zinc-600/50"
+                                                                        data-tw-toggle="modal"
+                                                                        data-tw-target="#modal-id_form_destroy_{{ $loop->iteration }}"><i
+                                                                            class='bx bx-trash'></i> Hapus
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <h6
+                                                            class="mb-3 text-slate-700 text-[25px] dark:text-gray-100 font-bold">
+                                                            {{ $data->nama_rombel }}
+                                                        </h6>
+                                                        <p class="text-slate-600 card-text dark:text-zinc-100 mb-2">
+                                                            Silahkan pilih rombel dengan menekan tombol dibawah!
+                                                        </p>
+                                                        <div class="">
+                                                            <a href="{{ route('admin.rombel.show', ['tahun' => $tahun_ajaran->tahun_ajaran, 'semester' => $tahun_ajaran->semester, 'rombel' => $data]) }}"
+                                                                class="hover:bg-blue-700
+                                                                block text-center text-white border-transparent shadow btn bg-blue-500  shadow-blue-500 dark:shadow-zinc-600">
+                                                                Pilih
+                                                            </a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
+                                        @endif
+                                    @endforeach
                                 </div>
-                                {{-- End Modal Edit --}}
-
-                                {{-- Modal Destroy --}}
-                                <div class="relative z-50 hidden modal" id="modal-id_form_destroy_{{ $loop->iteration }}"
-                                    aria-labelledby="modal-title" role="dialog" aria-modal="true">
-                                    <div class="fixed inset-0 z-50 overflow-y-auto">
-                                        <div
-                                            class="absolute inset-0 transition-opacity bg-black bg-opacity-50 modal-overlay">
-                                        </div>
-                                        <div class="p-4 mx-auto animate-translate sm:max-w-lg">
-                                            <div
-                                                class="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl dark:bg-zinc-600">
-                                                <div class="bg-white dark:bg-zinc-700">
-                                                    <button type="button"
-                                                        class="absolute top-3 right-2.5 text-gray-400 border-transparent hover:bg-gray-50/50 hover:text-gray-900 dark:text-gray-100 rounded-lg text-sm px-2 py-1 ltr:ml-auto rtl:mr-auto inline-flex items-center dark:hover:bg-zinc-600"
-                                                        data-tw-dismiss="modal">
-                                                        <i
-                                                            class="text-xl text-gray-500 mdi mdi-close dark:text-zinc-100/60"></i>
-                                                    </button>
-                                                    <div class="p-5">
-                                                        <h3
-                                                            class="mb-4 text-xl font-medium text-gray-700 dark:text-gray-100">
-                                                            Apakah anda ingin
-                                                            menghapus data {{ $data->nama_rombel }}</h3>
-                                                        <form class="space-y-4"
-                                                            action="{{ route('admin.rombel.destroy', ['rombel' => $data]) }}"
-                                                            method="POST">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit"
-                                                                class="w-full text-white bg-red-600 border-transparent btn">
-                                                                Hapus
+                            </div>
+                            <div class="mt-3 mx-auto">
+                                <div class="swiper-pagination1 "></div>
+                            </div>
+                        </div>
+                        {{-- End Data Kelas X --}}
+                        {{-- Data Kelas XI --}}
+                        <div class="grid grid-cols-1 mb-10">
+                            <div class="swiper mySwiper2">
+                                <div class="swiper-wrapper">
+                                    @foreach ($rombel as $data)
+                                        @if (explode(' ', $data->nama_rombel)[0] == 'XI')
+                                            <div class="swiper-slide">
+                                                <div
+                                                    class="card relative hover:scale-98 duration-300 bg-blue-50 border-blue-300 border-2  transition-all">
+                                                    <div class="absolute top-0 right-5" style="z-index:1000;">
+                                                        <div class="relative dropstart">
+                                                            <button type="button" class="py-2 font-medium leading-tight">
+                                                                <i class="bx bx-menu text-[20px] dropdown-toggle"
+                                                                    id="dropdownMenu1" data-bs-toggle="dropdown"></i>
                                                             </button>
-                                                        </form>
+                                                            <ul class="absolute z-50 float-left py-2 text-left list-none bg-white border-none rounded-lg shadow-lg dropdown-menu min-w-max bg-clip-padding dark:bg-zinc-700 hidden"
+                                                                aria-labelledby="dropdownMenu1"
+                                                                data-popper-placement="left-start"
+                                                                style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate3d(-913.5px, 1304.5px, 0px);">
+                                                                <li>
+                                                                    <a class="block w-full px-4 py-2 text-sm font-normal text-green-500 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 dark:text-gray-100 dark:hover:bg-zinc-600/50"
+                                                                        data-tw-toggle="modal"
+                                                                        data-tw-target="#modal-id_form_edit_{{ $loop->iteration }}">
+                                                                        <i class='bx bxs-edit'></i>
+                                                                        Ubah
+                                                                    </a>
+                                                                </li>
+                                                                <hr class="my-1 border-gray-50 dark:border-zinc-600">
+                                                                <li>
+                                                                    <a class="block w-full px-4 py-2 text-sm font-normal text-red-500 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 dark:text-gray-100 dark:hover:bg-zinc-600/50"
+                                                                        data-tw-toggle="modal"
+                                                                        data-tw-target="#modal-id_form_destroy_{{ $loop->iteration }}"><i
+                                                                            class='bx bx-trash'></i> Hapus
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <h6
+                                                            class="mb-3 text-slate-700 text-[25px] dark:text-gray-100 font-bold">
+                                                            {{ $data->nama_rombel }}
+                                                        </h6>
+                                                        <p class="text-slate-600 card-text dark:text-zinc-100 mb-2">
+                                                            Silahkan pilih rombel dengan menekan tombol dibawah!
+                                                        </p>
+                                                        <div class="">
+                                                            <a href="{{ route('admin.rombel.show', ['tahun' => $tahun_ajaran->tahun_ajaran, 'semester' => $tahun_ajaran->semester, 'rombel' => $data]) }}"
+                                                                class="hover:bg-blue-700
+                                                                block text-center text-white border-transparent shadow btn bg-blue-500  shadow-blue-500 dark:shadow-zinc-600">
+                                                                Pilih
+                                                            </a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
+                                        @endif
+                                    @endforeach
                                 </div>
-                                {{-- End Modal Destroy --}}
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </div>
+                            <div class="mt-3 mx-auto">
+                                <div class="swiper-pagination2 "></div>
+                            </div>
+                        </div>
+                        {{-- End Data Kelas XI --}}
+                        {{-- Data Kelas XII --}}
+                        <div class="grid grid-cols-1 mb-10">
+                            <div class="swiper mySwiper3">
+                                <div class="swiper-wrapper">
+                                    @foreach ($rombel as $data)
+                                        @if (explode(' ', $data->nama_rombel)[0] == 'XII')
+                                            <div class="swiper-slide">
+                                                <div
+                                                    class="card relative hover:scale-98 duration-300 bg-blue-50 border-blue-300 border-2  transition-all">
+                                                    <div class="absolute top-0 right-5" style="z-index:1000;">
+                                                        <div class="relative dropstart">
+                                                            <button type="button" class="py-2 font-medium leading-tight">
+                                                                <i class="bx bx-menu text-[20px] dropdown-toggle"
+                                                                    id="dropdownMenu1" data-bs-toggle="dropdown"></i>
+                                                            </button>
+                                                            <ul class="absolute z-50 float-left py-2 text-left list-none bg-white border-none rounded-lg shadow-lg dropdown-menu min-w-max bg-clip-padding dark:bg-zinc-700 hidden"
+                                                                aria-labelledby="dropdownMenu1"
+                                                                data-popper-placement="left-start"
+                                                                style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate3d(-913.5px, 1304.5px, 0px);">
+                                                                <li>
+                                                                    <a class="block w-full px-4 py-2 text-sm font-normal text-green-500 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 dark:text-gray-100 dark:hover:bg-zinc-600/50"
+                                                                        data-tw-toggle="modal"
+                                                                        data-tw-target="#modal-id_form_edit_{{ $loop->iteration }}">
+                                                                        <i class='bx bxs-edit'></i>
+                                                                        Ubah
+                                                                    </a>
+                                                                </li>
+                                                                <hr class="my-1 border-gray-50 dark:border-zinc-600">
+                                                                <li>
+                                                                    <a class="block w-full px-4 py-2 text-sm font-normal text-red-500 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 dark:text-gray-100 dark:hover:bg-zinc-600/50"
+                                                                        data-tw-toggle="modal"
+                                                                        data-tw-target="#modal-id_form_destroy_{{ $loop->iteration }}"><i
+                                                                            class='bx bx-trash'></i> Hapus
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <h6
+                                                            class="mb-3 text-slate-700 text-[25px] dark:text-gray-100 font-bold">
+                                                            {{ $data->nama_rombel }}
+                                                        </h6>
+                                                        <p class="text-slate-600 card-text dark:text-zinc-100 mb-2">
+                                                            Silahkan pilih rombel dengan menekan tombol dibawah!
+                                                        </p>
+                                                        <div class="">
+                                                            <a href="{{ route('admin.rombel.show', ['tahun' => $tahun_ajaran->tahun_ajaran, 'semester' => $tahun_ajaran->semester, 'rombel' => $data]) }}"
+                                                                class="hover:bg-blue-700
+                                                                block text-center text-white border-transparent shadow btn bg-blue-500  shadow-blue-500 dark:shadow-zinc-600">
+                                                                Pilih
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    @endforeach
+                                </div>
+                            </div>
+                            <div class="mt-3 mx-auto">
+                                <div class="swiper-pagination3 "></div>
+                            </div>
+                        </div>
+                        {{-- End Data Kelas XII --}}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    @foreach ($rombel as $data)
+        <div class="relative z-50 hidden modal" id="modal-id_form_edit_{{ $loop->iteration }}"
+            aria-labelledby="modal-title" role="dialog" aria-modal="true">
+            <div class="fixed inset-0 z-50 overflow-y-auto">
+                <div class="absolute inset-0 transition-opacity bg-black bg-opacity-50 modal-overlay">
+                </div>
+                <div class="p-4 mx-auto animate-translate sm:max-w-lg">
+                    <div
+                        class="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl dark:bg-zinc-600">
+                        <div class="bg-white dark:bg-zinc-700">
+                            <button type="button"
+                                class="absolute top-3 right-2.5 text-gray-400 border-transparent hover:bg-gray-50/50 hover:text-gray-900 dark:text-gray-100 rounded-lg text-sm px-2 py-1 ltr:ml-auto rtl:mr-auto inline-flex items-center dark:hover:bg-zinc-600"
+                                data-tw-dismiss="modal">
+                                <i class="text-xl text-gray-500 mdi mdi-close dark:text-zinc-100/60"></i>
+                            </button>
+                            <div class="p-5">
+                                <h3 class="mb-4 text-xl font-medium text-gray-700 dark:text-gray-100">
+                                    Ubah
+                                    Data Rombongan Belajar </h3>
+                                <form class="space-y-4" action="{{ route('admin.rombel.update', ['rombel' => $data]) }}"
+                                    method="POST">
+                                    @csrf
+                                    <div class="mb-3">
+                                        <label for="guru_id"
+                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
+                                            Wali Kelas
+                                        </label>
+                                        <select id="guru_id" name="guru_id"
+                                            class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100">
+                                            @foreach ($gurus as $item)
+                                                <option value="{{ $item->id }}"
+                                                    {{ $data->guru_id == $item->id ? 'selected' : '' }}>
+                                                    {{ $item->nama }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="nama_rombel"
+                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
+                                            Nama Rombongan Belajar
+                                        </label>
+                                        <input type="text" name="nama_rombel" id="nama_rombel"
+                                            class="bg-gray-800/5 border border-gray-100 text-gray-900 dark:text-gray-100 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder-gray-400 dark:placeholder:text-zinc-100/60 focus:ring-0"
+                                            placeholder="Masukan Nama Rombongan Belajar" value="{{ $data->nama_rombel }}"
+                                            required>
+                                    </div>
+                                    <button type="submit"
+                                        class="w-full text-white mt-3 bg-blue-600 border-transparent btn">
+                                        Simpan
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <div class="relative z-50 hidden modal" id="modal-id_form_destroy_{{ $loop->iteration }}"
+            aria-labelledby="modal-title" role="dialog" aria-modal="true">
+            <div class="fixed inset-0 z-50 overflow-y-auto">
+                <div class="absolute inset-0 transition-opacity bg-black bg-opacity-50 modal-overlay">
+                </div>
+                <div class="p-4 mx-auto animate-translate sm:max-w-lg">
+                    <div
+                        class="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl dark:bg-zinc-600">
+                        <div class="bg-white dark:bg-zinc-700">
+                            <button type="button"
+                                class="absolute top-3 right-2.5 text-gray-400 border-transparent hover:bg-gray-50/50 hover:text-gray-900 dark:text-gray-100 rounded-lg text-sm px-2 py-1 ltr:ml-auto rtl:mr-auto inline-flex items-center dark:hover:bg-zinc-600"
+                                data-tw-dismiss="modal">
+                                <i class="text-xl text-gray-500 mdi mdi-close dark:text-zinc-100/60"></i>
+                            </button>
+                            <div class="p-5">
+                                <h3 class="mb-4 text-xl font-medium text-gray-700 dark:text-gray-100">
+                                    Apakah anda ingin
+                                    menghapus data {{ $data->nama_rombel }}</h3>
+                                <form class="space-y-4" action="{{ route('admin.rombel.destroy', ['rombel' => $data]) }}"
+                                    method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="w-full text-white bg-red-600 border-transparent btn">
+                                        Hapus
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
+    {{-- Modal Migrasi --}}
+    <div class="relative z-50 hidden modal" id="modal-id_migration" aria-labelledby="modal-title" role="dialog"
+        aria-modal="true">
+        <div class="fixed inset-0 z-50 overflow-y-auto">
+            <div class="absolute inset-0 transition-opacity bg-black bg-opacity-50 modal-overlay">
+            </div>
+            <div class="p-4 mx-auto animate-translate sm:max-w-lg">
+                <div
+                    class="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl dark:bg-zinc-600">
+                    <div class="bg-white dark:bg-zinc-700">
+                        <button type="button"
+                            class="absolute top-3 right-2.5 text-gray-400 border-transparent hover:bg-gray-50/50 hover:text-gray-900 dark:text-gray-100 rounded-lg text-sm px-2 py-1 ltr:ml-auto rtl:mr-auto inline-flex items-center dark:hover:bg-zinc-600"
+                            data-tw-dismiss="modal">
+                            <i class="text-xl text-gray-500 mdi mdi-close dark:text-zinc-100/60"></i>
+                        </button>
+                        <div class="p-5">
+                            <div class="mx-auto p-3 bg-green-50 rounded-full text-green-500 font-medium w-fit mb-3">
+                                <i class='bx bxs-user-account text-[40px]'></i>
+                            </div>
+                            <h3 class="text-xl font-medium text-gray-700 dark:text-gray-100">
+                                Transfer data rombel dari semester sebelumnya!</h3>
+                            <form action="{{ route('admin.rombel.migrasi') }}" method="POST"
+                                enctype="multipart/form-data">
+                                @csrf
+                                <input type="text" name="tahun" value="{{ $tahun_ajaran->tahun_ajaran }}"
+                                    id="" hidden>
+                                <input type="text" name="semester" value="{{ $tahun_ajaran->semester }}"
+                                    id="" hidden>
+                                <input type="text" name="tahun_ajaran_id" value="{{ $tahun_ajaran_id }}"
+                                    id="" hidden>
+                                <button type="submit"
+                                    class="mt-3 w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-md transition-all duration-300">
+                                    Transfer
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- End Modal Migrasi --}}
+
+    <!-- Initialize Swiper -->
+    <script type="module">
+        var swiper = new Swiper(".mySwiper1", {
+            centeredSlides: false,
+            grabCursor: true,
+            pagination: {
+                el: ".swiper-pagination1",
+                clickable: true,
+            },
+            breakpoints: {
+                640: {
+                    slidesPerView: 2,
+                    spaceBetween: 20,
+                },
+                768: {
+                    slidesPerView: 3,
+                    spaceBetween: 40,
+                },
+            },
+        });
+        var swiper = new Swiper(".mySwiper2", {
+            centeredSlides: false,
+            grabCursor: true,
+            pagination: {
+                el: ".swiper-pagination2",
+                clickable: true,
+            },
+            breakpoints: {
+                640: {
+                    slidesPerView: 2,
+                    spaceBetween: 20,
+                },
+                768: {
+                    slidesPerView: 3,
+                    spaceBetween: 40,
+                },
+            },
+        });
+        var swiper = new Swiper(".mySwiper3", {
+            centeredSlides: false,
+            grabCursor: true,
+            pagination: {
+                el: ".swiper-pagination3",
+                clickable: true,
+            },
+            breakpoints: {
+                640: {
+                    slidesPerView: 2,
+                    spaceBetween: 20,
+                },
+                768: {
+                    slidesPerView: 3,
+                    spaceBetween: 40,
+                },
+            },
+        });
+    </script>
 
     <script>
         document.getElementById('btn-download').addEventListener('click', () => {

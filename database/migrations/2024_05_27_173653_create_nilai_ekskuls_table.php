@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('siswa_id');
             $table->foreign('siswa_id')->references('id')->on('siswas')->onDelete('restrict');
             $table->string('nama_ekskul', 100);
-            $table->float('nilai');
+            $table->string('nilai');
             $table->timestamps();
         });
     }

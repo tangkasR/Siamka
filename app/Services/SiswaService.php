@@ -6,6 +6,7 @@ use App\Interfaces\SiswaInterface;
 use App\Services\AuthService;
 use App\Services\DateService;
 use App\Services\RombelService;
+use App\Services\TahunAjaranService;
 use Illuminate\Validation\ValidationException;
 
 class SiswaService
@@ -14,25 +15,24 @@ class SiswaService
     private $rombel;
     private $auth;
     private $date;
+    private $tahun_ajaran;
 
     public function __construct(
         SiswaInterface $siswa,
         RombelService $rombel,
         AuthService $auth,
         DateService $date,
+        TahunAjaranService $tahun_ajaran
     ) {
         $this->siswa = $siswa;
         $this->rombel = $rombel;
         $this->auth = $auth;
         $this->date = $date;
+        $this->tahun_ajaran = $tahun_ajaran;
     }
     public function getById($siswa)
     {
         return $this->siswa->getById($siswa);
-    }
-    public function getPivotTahunPembelajaran($id)
-    {
-        return $this->siswa->getPivotTahunPembelajaran($id);
     }
     public function getNotActive($angkatan)
     {
@@ -46,14 +46,7 @@ class SiswaService
     {
         return $this->siswa->getSiswaAdmin($id);
     }
-    public function getByRombelIdActive($id)
-    {
-        return $this->siswa->getByRombelIdActive($id);
-    }
-    public function getByRombelIdNotActiveAccount($id)
-    {
-        return $this->siswa->getByRombelIdNotActiveAccount($id);
-    }
+
     public function store($data)
     {
         return $this->siswa->store($data);
@@ -117,10 +110,6 @@ class SiswaService
         return $this->siswa->update_profil($datas, $siswa->id);
     }
 
-    public function getByRombelIdNextGrade($id)
-    {
-        return $this->siswa->getByRombelIdNextGrade($id);
-    }
     private function handleAktivasiAll($datas)
     {
         foreach ($datas as $data) {
@@ -164,34 +153,17 @@ class SiswaService
     {
 
         $rombel_next = $this->rombel->getOne($datas['id_next']);
-        $tahun_pembelajaran = $datas['tahun_pembelajaran'];
-        $tahun_awal = explode("/", $tahun_pembelajaran)[0];
-        $tahun_akhir = explode("/", $tahun_pembelajaran)[1];
+        $rombel_now = $this->rombel->getOne($datas['class_id_now']);
 
         if (isset($datas['siswa_id'])) {
             foreach ($datas['siswa_id'] as $index => $id) {
-                $siswa_ = $this->siswa->getById($id);
-                $last_rombel = $siswa_->rombels->last();
-                $last_pivot_tahun_awal = $last_rombel->pivot->tahun_awal;
-                $rombel_now = $this->rombel->getOne($last_rombel->id);
-
-                if ($last_pivot_tahun_awal != $tahun_awal) {
-                    if ($datas['status'][$index] == 'naik') {
-
-                        $siswa_->rombels()->attach($rombel_next, [
-                            'tahun_awal' => $tahun_awal,
-                            'tahun_akhir' => $tahun_akhir,
-                        ]);
-                    } else {
-
-                        $siswa_->rombels()->detach($rombel_now);
-                        $siswa_->rombels()->attach($rombel_now, [
-                            'tahun_awal' => $tahun_awal,
-                            'tahun_akhir' => $tahun_akhir,
-                        ]);
-                    }
+                $this->siswa->deaktivasi($id);
+                $siswa = $this->siswa->getById($id);
+                if ($datas['status'][$index] == 'naik') {
+                    $this->siswa->create($siswa, $datas['tahun_ajaran_id'], $rombel_next);
+                } else {
+                    $this->siswa->create($siswa, $datas['tahun_ajaran_id'], $rombel_now);
                 }
-
             }
         } else {
             throw ValidationException::withMessages(['error' => 'Data siswa sudah naik kelas']);
@@ -210,5 +182,35 @@ class SiswaService
     public function getSiswaPerAngkatan()
     {
         return $this->siswa->getSiswaPerAngkatan();
+    }
+    public function migrasi($datas)
+    {
+        if ($datas['semester'] == 'genap') {
+            $tahun_ajaran = $datas['tahun'];
+            $semester = 'ganjil';
+            $tahun_ajaran_id = $this->tahun_ajaran->getId($tahun_ajaran, $semester);
+            if ($tahun_ajaran_id == null) {
+                throw ValidationException::withMessages(['error' => 'Data semester sebelumnya tidak ada!']);
+            }
+        } else {
+            $tahun_ajaran = $datas['tahun'];
+            list($tahun_awal, $tahun_akhir) = explode('-', $tahun_ajaran);
+            $tahun_awal = (int) $tahun_awal - 1;
+            $tahun_akhir = (int) $tahun_akhir - 1;
+            $tahun_ajaran_sebelumnya = $tahun_awal . '-' . $tahun_akhir;
+            $semester = 'genap';
+            $tahun_ajaran_id = $this->tahun_ajaran->getId($tahun_ajaran_sebelumnya, $semester);
+            if ($tahun_ajaran_id == null) {
+                throw ValidationException::withMessages(['error' => 'Data semester sebelumnya tidak ada!']);
+            }
+        }
+        $rombel = $this->rombel->getByNama($datas['nama_rombel'], $tahun_ajaran_id);
+        $rombel_next = $this->rombel->getOne($datas['rombel_id']);
+        $siswas = $rombel->siswas()->where('status_siswa', 'belum lulus')->get();
+        foreach ($siswas as $siswa) {
+            $this->siswa->deaktivasi($siswa->id);
+            $this->siswa->create($siswa, $datas['tahun_ajaran_id'], $rombel_next);
+        }
+
     }
 }

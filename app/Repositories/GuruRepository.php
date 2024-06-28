@@ -45,6 +45,7 @@ class GuruRepository implements GuruInterface
     }
     public function destroy($guru)
     {
+        $guru->mapels()->detach();
         return $guru->delete();
     }
     public function updateProfil($data, $id)
@@ -93,5 +94,35 @@ class GuruRepository implements GuruInterface
                 ];
             })
             ->sortBy('tahun_ajaran');
+    }
+
+    public function create($guru, $tahun_ajaran_id)
+    {
+        $new_guru = $this->guru->create([
+            'nama' => $guru->nama,
+            'jabatan' => $guru->jabatan,
+            'nomor_induk_yayasan' => $guru->nomor_induk_yayasan,
+            'username' => '-',
+            'password' => $guru->password,
+            'jenis_kelamin' => $guru->jenis_kelamin,
+            'tempat_tanggal_lahir' => $guru->tempat_tanggal_lahir,
+            'alamat' => $guru->alamat,
+            'pendidikan_terakhir' => $guru->pendidikan_terakhir,
+            'no_hp' => $guru->no_hp,
+            'profil' => $guru->profil,
+            'ktp' => $guru->ktp,
+            'ijazah' => $guru->ijazah,
+            'kartu_keluarga' => $guru->kartu_keluarga,
+            'tahun_ajaran_id' => $tahun_ajaran_id,
+            'status_akun' => 'tidak aktif',
+        ]);
+        foreach ($guru->mapels as $mapel) {
+            $new_guru->mapels()->attach($mapel);
+        }
+        return;
+    }
+    public function getByNiy($niy, $tahun_ajaran_id)
+    {
+        return $this->guru->where('nomor_induk_yayasan', $niy)->where('tahun_ajaran_id', $tahun_ajaran_id)->first() ?? null;
     }
 }

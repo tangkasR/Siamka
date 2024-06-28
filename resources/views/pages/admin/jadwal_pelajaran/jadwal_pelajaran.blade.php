@@ -5,7 +5,7 @@
 @section('table-role', 'Admin')
 @section('back')
     <div class="font-medium  border border-slate-500 bg-slate-500 text-white rounded-full  me-3">
-        <a href="{{ route('admin.jadwal_pelajaran', ['tahun' => $tahun, 'semester' => $semester]) }}"
+        <a href="{{ route('admin.rombel.show', ['tahun' => $tahun, 'semester' => $semester, 'rombel' => $rombel]) }}"
             class="flex justify-center items-center"><i class='bx bx-chevron-left text-[30px]'></i></a>
     </div>
 @endsection
@@ -44,6 +44,14 @@
                                             href="{{ route('admin.jadwal.tambah_data', ['tahun' => $tahun, 'semester' => $semester, 'rombel' => $rombel]) }}">
                                             Import Jadwal</a>
                                     </li>
+                                    @if (count($jadwal_pelajaran) == 0)
+                                        <hr class="my-1 border-gray-50 dark:border-zinc-600">
+                                        <li>
+                                            <a data-tw-toggle="modal" data-tw-target="#modal-id_migration"
+                                                class="cursor-pointer block text-green-500 w-full px-4 py-1 text-sm font-medium  bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 ">
+                                                Transfer Data</a>
+                                        </li>
+                                    @endif
                                 </ul>
                             </div>
                             <div class="">
@@ -331,6 +339,52 @@
         </div>
     </div>
     {{-- End Modal Destroy --}}
+
+    {{-- Modal Migrasi --}}
+    <div class="relative z-50 hidden modal" id="modal-id_migration" aria-labelledby="modal-title" role="dialog"
+        aria-modal="true">
+        <div class="fixed inset-0 z-50 overflow-y-auto">
+            <div class="absolute inset-0 transition-opacity bg-black bg-opacity-50 modal-overlay">
+            </div>
+            <div class="p-4 mx-auto animate-translate sm:max-w-lg">
+                <div
+                    class="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl dark:bg-zinc-600">
+                    <div class="bg-white dark:bg-zinc-700">
+                        <button type="button"
+                            class="absolute top-3 right-2.5 text-gray-400 border-transparent hover:bg-gray-50/50 hover:text-gray-900 dark:text-gray-100 rounded-lg text-sm px-2 py-1 ltr:ml-auto rtl:mr-auto inline-flex items-center dark:hover:bg-zinc-600"
+                            data-tw-dismiss="modal">
+                            <i class="text-xl text-gray-500 mdi mdi-close dark:text-zinc-100/60"></i>
+                        </button>
+                        <div class="p-5">
+                            <div class="mx-auto p-3 bg-green-50 rounded-full text-green-500 font-medium w-fit mb-3">
+                                <i class='bx bxs-user-account text-[40px]'></i>
+                            </div>
+                            <h3 class="text-xl font-medium text-gray-700 dark:text-gray-100">
+                                Transfer data jadwal dari semester sebelumnya!</h3>
+                            <form action="{{ route('admin.jadwal.migrasi') }}" method="POST"
+                                enctype="multipart/form-data">
+                                @csrf
+                                <input type="text" name="tahun" value="{{ $tahun }}" id="" hidden>
+                                <input type="text" name="semester" value="{{ $semester }}" id=""
+                                    hidden>
+                                <input type="text" name="tahun_ajaran_id" value="{{ $tahun_ajaran_id }}"
+                                    id="" hidden>
+                                <input type="text" name="rombel_id" value="{{ $rombel->id }}" id=""
+                                    hidden>
+                                <input type="text" name="nama_rombel" value="{{ $rombel->nama_rombel }}"
+                                    id="" hidden>
+                                <button type="submit"
+                                    class="mt-3 w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-md transition-all duration-300">
+                                    Transfer
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- End Modal Migrasi --}}
     <script>
         document.getElementById('btn-download').addEventListener('click', () => {
             let nama_rombel = document.getElementById('nama_rombel_input').value

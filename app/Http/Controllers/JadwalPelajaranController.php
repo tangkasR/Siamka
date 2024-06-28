@@ -41,15 +41,6 @@ class JadwalPelajaranController extends Controller
         $this->guru = $guru;
         $this->tahun_ajaran = $tahun_ajaran;
     }
-    public function index($tahun, $semeter)
-    {
-        $tahun_ajaran_id = $this->tahun_ajaran->getId($tahun, $semeter);
-        return view('pages.admin.jadwal_pelajaran.index', [
-            'rombel' => $this->rombel->getAll($tahun_ajaran_id),
-            'tahun' => $tahun,
-            'semester' => $semeter,
-        ]);
-    }
 
     public function show_jadwal($tahun, $semeter, Rombel $rombel)
     {
@@ -120,5 +111,14 @@ class JadwalPelajaranController extends Controller
             'datas' => $datas,
             'rombel' => $rombel,
         ]);
+    }
+    public function migrasi(Request $request)
+    {
+        try {
+            $this->jadwal->migrasi($request->all());
+            return back()->with('message', 'Berhasil mengirim data!');
+        } catch (ValidationException $err) {
+            return back()->with('error', $err->getMessage());
+        }
     }
 }

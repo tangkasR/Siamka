@@ -64,16 +64,6 @@ class SiswaController extends Controller
         $this->tahun_ajaran = $tahun_ajaran;
         $this->ekskul = $ekskul;
     }
-    public function index($tahun, $semester)
-    {
-        $tahun_ajaran_id = $this->tahun_ajaran->getId($tahun, $semester);
-
-        return view('pages.admin.siswa.index', [
-            'rombel' => $this->rombel->getAll($tahun_ajaran_id),
-            'tahun' => $tahun,
-            'semester' => $semester,
-        ]);
-    }
     public function show_siswa($tahun, $semester, Rombel $rombel)
     {
         $tahun_ajaran_id = $this->tahun_ajaran->getId($tahun, $semester);
@@ -86,6 +76,7 @@ class SiswaController extends Controller
             'admin' => $this->auth->getUser('admin')->username,
             'tanggal' => $this->date->getDate()->format('d-m-Y'),
             'tahun_ajaran' => $tahun_ajaran,
+            'tahun_ajaran_id' => $tahun_ajaran_id,
         ]);
     }
     public function detail_siswa($tahun, $semester, Rombel $rombel, $id)
@@ -290,13 +281,7 @@ class SiswaController extends Controller
         return response($nilai);
 
     }
-    public function tambah_aktivasi(Rombel $rombel)
-    {
-        return view('pages.admin.siswa.aktivasi', [
-            'siswas' => $this->siswa->getByRombelIdNotActiveAccount($rombel->id),
-            'rombel' => $this->rombel->getOne($rombel->id),
-        ]);
-    }
+
     public function aktivasi(Request $request)
     {
         try {
@@ -523,17 +508,29 @@ class SiswaController extends Controller
         ]);
     }
 
-    public function show_next_grade(Rombel $rombel)
+    public function show_next_grade($tahun, $semester, Rombel $rombel)
     {
-        $tahun_awal = $this->date->getDate()->year;
-        $tahun_akhir = $tahun_awal + 1;
-        $tahun_pembelajaran = $tahun_awal . '/' . $tahun_akhir;
+        list($tahun_awal, $tahun_akhir) = explode('-', $tahun);
+        $tahun_awal = (int) $tahun_awal + 1;
+        $tahun_akhir = (int) $tahun_akhir + 1;
+        $tahun_ = $tahun_awal . '-' . $tahun_akhir;
+        $semester_ = 'ganjil';
+        $tahun_ajaran_id = $this->tahun_ajaran->getId($tahun_, $semester_);
+        if ($tahun_ajaran_id == null) {
+            return redirect()->route('admin.siswa.show_siswa', ['tahun' => $tahun, 'semester' => $semester, 'rombel' => $rombel]);
+        }
+        $rombels = $this->rombel->getAll($tahun_ajaran_id);
+        if (count($rombels) == 0) {
+            return redirect()->route('admin.siswa.show_siswa', ['tahun' => $tahun, 'semester' => $semester, 'rombel' => $rombel]);
+        }
         try {
             return view('pages.admin.siswa.naik_kelas', [
-                'siswas' => $this->siswa->getByRombelIdNextGrade($rombel->id),
-                'rombel' => $this->rombel->getOne($rombel->id),
-                'rombels' => $this->rombel->getAll(),
-                'tahun_pembelajaran' => $tahun_pembelajaran,
+                'siswas' => $this->siswa->getSiswa($rombel->id),
+                'tahun' => $tahun_,
+                'semester' => $semester_,
+                'rombel' => $rombel,
+                'tahun_ajaran_id' => $tahun_ajaran_id,
+                'rombels' => $rombels,
             ]);
         } catch (ValidationException $err) {
             return back()->with('error', $err->getMessage());
@@ -544,9 +541,9 @@ class SiswaController extends Controller
         $rombel = $this->rombel->getOne($request->id_next);
         try {
             $this->siswa->nextGrade($request->all());
-            return redirect()->route('admin.siswa.show_siswa', ['rombel' => $rombel])->with('message', 'Berhasil menaikan kelas');
+            return redirect()->route('admin.siswa.show_siswa', ['tahun' => $request->tahun, 'semester' => $request->semester, 'rombel' => $rombel])->with('message', 'Berhasil menaikan kelas');
         } catch (ValidationException $err) {
-            return redirect()->route('admin.siswa.show_siswa', ['rombel' => $rombel])->with('error', $err->getMessage());
+            return redirect()->route('admin.siswa.show_siswa', ['tahun' => $request->tahun, 'semester' => $request->semester, 'rombel' => $rombel])->with('error', $err->getMessage());
         }
     }
     public function show_lulus($tahun, $semester, Rombel $rombel)
@@ -589,5 +586,14 @@ class SiswaController extends Controller
     {
         $this->siswa->keluar($id);
         return back()->with('message', 'Berhasil mengeluarkan siswa');
+    }
+    public function migrasi(Request $request)
+    {
+        try {
+            $this->siswa->migrasi($request->all());
+            return back()->with('message', 'Berhasil mengirim data!');
+        } catch (ValidationException $err) {
+            return back()->with('error', $er->getMessage());
+        }
     }
 }

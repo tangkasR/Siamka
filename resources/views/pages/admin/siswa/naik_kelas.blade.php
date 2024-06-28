@@ -6,7 +6,9 @@
         <div class="col-span-12">
             <form action="{{ route('admin.siswa.next_grade') }}" method="POST">
                 @csrf
-                <input type="text" value="{{ $tahun_pembelajaran }}" name="tahun_pembelajaran" hidden>
+                <input type="text" name="tahun_ajaran_id" id="" value="{{ $tahun_ajaran_id }}" hidden>
+                <input type="text" name="tahun" id="" value="{{ $tahun }}" hidden>
+                <input type="text" name="semester" id="" value="{{ $semester }}" hidden>
                 <div class="card dark:bg-zinc-800 dark:border-zinc-600">
                     <div class="card-body border-b border-gray-100 dark:border-zinc-600" id="template_pdf">
                         <div class="card-body border-b border-gray-100 dark:border-zinc-600">
@@ -18,6 +20,12 @@
                         <div>
                             @foreach ($rombels as $data_rombel)
                                 @if (explode(' ', $rombel->nama_rombel)[0] == 'X')
+                                    @if (explode(' ', $data_rombel->nama_rombel)[0] == 'X' &&
+                                            explode(' ', $data_rombel->nama_rombel)[1] == explode(' ', $rombel->nama_rombel)[1]
+                                    )
+                                        <input type="text" class="class_id_now" name="class_id_now"
+                                            value="{{ $data_rombel->id }}" hidden>
+                                    @endif
                                     @if (explode(' ', $data_rombel->nama_rombel)[0] == 'XI' &&
                                             explode(' ', $data_rombel->nama_rombel)[1] == explode(' ', $rombel->nama_rombel)[1]
                                     )
@@ -26,6 +34,12 @@
                                     @endif
                                 @endif
                                 @if (explode(' ', $rombel->nama_rombel)[0] == 'XI')
+                                    @if (explode(' ', $data_rombel->nama_rombel)[0] == 'XI' &&
+                                            explode(' ', $data_rombel->nama_rombel)[1] == explode(' ', $rombel->nama_rombel)[1]
+                                    )
+                                        <input type="text" class="class_id_now" name="class_id_now"
+                                            value="{{ $data_rombel->id }}" hidden>
+                                    @endif
                                     @if (explode(' ', $data_rombel->nama_rombel)[0] == 'XII' &&
                                             explode(' ', $data_rombel->nama_rombel)[1] == explode(' ', $rombel->nama_rombel)[1]
                                     )
@@ -62,7 +76,7 @@
 
                             </div>
                             <button type="submit"
-                                class="w-fit mt-6 px-10 bg-violet-500 hover:bg-violet-700 text-white font-bold py-2 rounded-md">
+                                class="w-fit mt-6 px-10 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 rounded-md btn">
                                 Naikkan
                             </button>
                         </div>

@@ -62,6 +62,8 @@
                                     <th class="p-4 ">
                                         Nama Siswa</th>
                                     <th class="p-4 ">
+                                        Rombel</th>
+                                    <th class="p-4 ">
                                     </th>
                                 </tr>
                             </thead>
@@ -72,6 +74,8 @@
                                             {{ $loop->iteration }}</td>
                                         <td class="p-4">
                                             {{ $data->nama }}</td>
+                                        <td class="p-4">
+                                            {{ $data->rombels[0]->nama_rombel }}</td>
                                         <td class="p-4">
                                             <div class="relative dropdown ">
                                                 <button type="button"

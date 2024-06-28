@@ -32,16 +32,14 @@ class SiswaImport implements ToCollection, WithHeadingRow
         $tahun_ajaran_id = $tahun_ajaran->id;
         $rombel = Rombel::where('id', $this->rombel_id)->first();
         $rombel_id = $rombel->id;
-        $checkSiswa = Siswa::with(['rombels'])
-            ->where('tahun_ajaran_id', $tahun_ajaran_id)
-            ->whereHas('rombels', function ($query) use ($rombel_id) {
-                $query->where('id', $rombel_id);
-            })->get();
+        $check = 0;
 
-        if (count($checkSiswa) == 0) {
-            foreach ($rows as $row) {
-                if ($rombel != null) {
-                    if ($row['nama'] != null && $row['nis'] && $row['nisn'] && $row['nomor_id'] && $row['jenis_kelamin']) {
+        foreach ($rows as $row) {
+            if ($rombel != null) {
+                if ($row['nama'] != null && $row['nis'] != null && $row['nisn'] != null && $row['nomor_id'] != null && $row['jenis_kelamin'] != null) {
+                    $checkSiswa = Siswa::where('nis', $row['nis'])->where('tahun_ajaran_id', $tahun_ajaran_id)->first();
+                    if ($checkSiswa == null) {
+                        $check++;
                         $siswa = Siswa::create([
                             'nama' => $row['nama'],
                             'nis' => $row['nis'],
@@ -71,7 +69,8 @@ class SiswaImport implements ToCollection, WithHeadingRow
                     }
                 }
             }
-        } else {
+        }
+        if ($check == 0) {
             $message = 'Data siswa rombel = ' . $rombel->nama_rombel . ' | tahun ajaran = ' . $tahun_ajaran->tahun_ajaran . ' | semester = ' . $tahun_ajaran->semester . ' sudah dimasukan!';
             throw ValidationException::withMessages(['error' => $message]);
         }

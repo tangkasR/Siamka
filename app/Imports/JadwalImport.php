@@ -44,8 +44,16 @@ class JadwalImport implements ToCollection, WithHeadingRow
 
                 $ruangan = Ruangan::where('nomor_ruangan', $row['ruangan'])->first();
                 $sesi = Sesi::where('nama_sesi', $row['sesi'])->first();
-                $guru = Guru::where('nomor_induk_yayasan', $row['niy_guru'])->with('mapels')->first();
+                $guru = Guru::with('mapels')->where('nomor_induk_yayasan', $row['niy_guru'])->where('tahun_ajaran_id', $tahun_ajaran_id)->first();
 
+                if ($guru != null) {
+                    if ($guru->rombels) {
+                        $checkGuru = $guru->rombels()->where('rombel_id', $rombel->id)->get();
+                    }
+                    if (count($checkGuru) == 0) {
+                        $guru->rombels()->attach($rombel);
+                    }
+                }
                 if ($ruangan != null && $rombel != null && $sesi != null && $guru != null && $hari != '') {
                     if (count($guru->mapels) > 1) {
                         $nama_mapel = '-';

@@ -12,4 +12,5 @@ interface RombelInterface
     public function update($data, $rombel);
     public function destroy($rombel);
     public function getRombelGuru($niy, $tahun_ajaran_id);
+    public function getByNama($nama_rombel, $tahun_ajaran_id);
 }

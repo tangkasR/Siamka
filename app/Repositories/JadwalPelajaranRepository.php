@@ -62,4 +62,16 @@ class JadwalPelajaranRepository implements JadwalPelajaranInterface
             ->with('rombels')->first();
 
     }
+    public function create($jadwal, $rombel_id, $guru_id, $tahun_ajaran_id)
+    {
+        return $this->jadwal->create([
+            'ruangan_id' => $jadwal->ruangan_id,
+            'rombel_id' => $rombel_id,
+            'guru_id' => $guru_id,
+            'sesi_id' => $jadwal->sesi_id,
+            'hari' => $jadwal->hari,
+            'nama_mata_pelajaran' => $jadwal->nama_mata_pelajaran,
+            'tahun_ajaran_id' => $tahun_ajaran_id,
+        ]);
+    }
 }

@@ -6,8 +6,8 @@ use App\Imports\SiswaImport;
 use App\Interfaces\SiswaInterface;
 use App\Models\Siswa;
 use App\Services\DateService;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Facades\Excel;
 
 class SiswaRepository implements SiswaInterface
@@ -27,122 +27,11 @@ class SiswaRepository implements SiswaInterface
         }
         return $this->siswa->with('rombels', 'kehadirans', 'ekskuls', 'ekskuls.gurus')->where('id', $siswa)->first();
     }
-
-    public function getPivotTahunPembelajaran($id)
-    {
-        return DB::table('siswas')
-            ->join('rombel_siswa', 'siswas.id', '=', 'rombel_siswa.siswa_id')
-            ->where('siswas.id', '=', $id)
-            ->select(
-                'rombel_siswa.tahun_awal',
-                'rombel_siswa.tahun_akhir',
-            )
-            ->get()->last();
-    }
     public function getByNama($nama)
     {
         return $this->siswa->with('rombels')->where('nama', $nama)->first();
     }
-    public function getByRombelIdNotActiveAccount($id)
-    {
-        $currentYear = $this->date->getDate()->year;
-        // Dapatkan bulan sekarang
-        $currentMonth = $this->date->getDate()->month;
-        // Query untuk mendapatkan siswa
-        $siswas = DB::table('siswas')
-            ->join('rombel_siswa', 'siswas.id', '=', 'rombel_siswa.siswa_id')
-            ->where('rombel_id', '=', $id)
-            ->where('siswas.status_siswa', '=', 'belum lulus')
-            ->where('siswas.aktivasi_akun', '=', 'tidak aktif')
-            ->where(function ($query) use ($currentMonth, $currentYear) {
-                $query->where(function ($subQuery) use ($currentMonth, $currentYear) {
-                    $subQuery->where('rombel_siswa.tahun_awal', $currentYear) // membuat kondisi jika pivot tahun awal sama dengan tahun sekarang
-                        ->whereBetween(DB::raw($currentMonth), [7, 12]); // maka dari bulan juli sampai desember
-                })
-                    ->orWhere(function ($subQuery) use ($currentMonth, $currentYear) {
-                        $subQuery->where('rombel_siswa.tahun_akhir', $currentYear) // membuat kondisi jika pivot tahun akhir sama dengan tahun sekarang
-                            ->whereBetween(DB::raw($currentMonth), [1, 6]); // maka dari bulan januari sampai juni
-                    });
-            })
-            ->select(
-                'siswas.id',
-                'siswas.nama',
-            )
-            ->get();
 
-        return $siswas;
-    }
-    public function getByRombelIdActive($id)
-    {
-        $currentYear = $this->date->getDate()->year;
-        $currentMonth = $this->date->getDate()->month;
-
-        $siswas = DB::table('siswas')
-            ->join('rombel_siswa', 'siswas.id', '=', 'rombel_siswa.siswa_id')
-            ->where('rombel_id', '=', $id)
-            ->where('siswas.status_siswa', '=', 'belum lulus')
-            ->where(function ($query) use ($currentMonth, $currentYear) {
-                $query->where(function ($subQuery) use ($currentMonth, $currentYear) {
-                    $subQuery->where('rombel_siswa.tahun_awal', $currentYear) // membuat kondisi jika pivot tahun awal sama dengan tahun sekarang
-                        ->whereBetween(DB::raw($currentMonth), [7, 12]); // maka dari bulan juli sampai desember
-                })
-                    ->orWhere(function ($subQuery) use ($currentMonth, $currentYear) {
-                        $subQuery->where('rombel_siswa.tahun_akhir', $currentYear) // membuat kondisi jika pivot tahun akhir sama dengan tahun sekarang
-                            ->whereBetween(DB::raw($currentMonth), [1, 6]); // maka dari bulan januari sampai juni
-                    });
-            })
-            ->select(
-                'siswas.id',
-                'siswas.nama',
-                'siswas.nis',
-                'siswas.nisn',
-                'siswas.nomor_id',
-                'siswas.jenis_kelamin',
-                'siswas.status_siswa',
-                'siswas.aktivasi_akun',
-                'siswas.username',
-                'siswas.password',
-                'rombel_siswa.tahun_awal',
-                'rombel_siswa.tahun_akhir',
-            )
-            ->orderBy('siswas.nama')
-            ->get();
-
-        return $siswas;
-    }
-    public function getByRombelIdNextGrade($id)
-    {
-        $currentYear = $this->date->getDate()->year;
-        $currentMonth = $this->date->getDate()->month;
-
-        // Subquery untuk mendapatkan siswa yang berada di rombel terakhir (tahun_akhir terbaru) berdasarkan rombel_id tertentu
-        $subQuery = DB::table('rombel_siswa as rs1')
-            ->select('rs1.siswa_id') // mengambil siswa id dari rombel_siswa 1
-            ->where('rs1.rombel_id', $id) // membuat kondisi berdasarkan rombel_id tertentu
-            ->where('rs1.tahun_akhir', $currentYear) // membuat kondisi berdasarkan pivot rombel_id tahun akhir sama dengan tahun sekarang
-            ->whereBetween(DB::raw($currentMonth), [7, 12]) // membuat kondisi jika bulan sekarang antara juli sampai desember karena bulan tersebut sudah tahun ajaran baru
-            ->where('rs1.tahun_akhir', function ($query) {
-                $query->select(DB::raw('MAX(rs2.tahun_akhir)')) // mendapatkan rombel_siswa dengan pivot tahun akhir paling akhir
-                    ->from('rombel_siswa as rs2') //membuat alias rombel_siswa 2 menjadi rs2
-                    ->whereColumn('rs2.siswa_id', 'rs1.siswa_id'); //nmembandingkan siswa antara rombel_siswa 1 dan rombel_siswa 2
-            });
-
-        // Query utama untuk mendapatkan siswa berdasarkan subquery rombel terakhir
-        $siswas = DB::table('siswas')
-            ->joinSub($subQuery, 'last_rombel', function ($join) { //join query dengan sub query alias last rombel
-                $join->on('siswas.id', '=', 'last_rombel.siswa_id'); //mencari siswa id dengan rombel terakhir
-            })
-            ->where('siswas.status_siswa', '=', 'belum lulus')
-            ->select(
-                'siswas.id',
-                'siswas.nama',
-                'siswas.profil'
-            )
-            ->orderBy('siswas.nama')
-            ->get();
-
-        return $siswas;
-    }
     public function getNotActive($angkatan)
     {
         // mencari rombel terbaru setiap siswa
@@ -261,5 +150,45 @@ class SiswaRepository implements SiswaInterface
             ->get();
 
         return $total_siswa;
+    }
+    public function create($siswa, $tahun_ajaran_id, $rombel)
+    {
+        $check = 0;
+        $checkSiswa = $this->siswa->where('nis', $siswa->nis)->where('tahun_ajaran_id', $tahun_ajaran_id)->first();
+
+        if ($checkSiswa == null) {
+            $siswa = $this->siswa->create([
+                'nama' => $siswa->nama,
+                'nis' => $siswa->nis,
+                'nisn' => $siswa->nisn,
+                'nomor_id' => $siswa->nomor_id,
+                'jenis_kelamin' => $siswa->jenis_kelamin,
+                'username' => '-',
+                'password' => $siswa->password,
+                'nik' => $siswa->nik,
+                'tempat_tanggal_lahir' => $siswa->tempat_tanggal_lahir,
+                'alamat' => $siswa->alamat,
+                'no_hp' => $siswa->no_hp,
+                'kompetensi_keahlian' => $siswa->kompetensi_keahlian,
+                'agama' => $siswa->agama,
+                'nama_ayah' => $siswa->nama_ayah,
+                'nama_ibu' => $siswa->nama_ibu,
+                'pekerjaan_orang_tua' => $siswa->pekerjaan_orang_tua,
+                'no_hp_orang_tua' => $siswa->no_hp_orang_tua,
+                'asal_smp' => $siswa->asal_smp,
+                'tahun_lulus_smp' => $siswa->tahun_lulus_smp,
+                'status_siswa' => 'belum lulus',
+                'aktivasi_akun' => 'tidak aktif',
+                'profil' => $siswa->profil,
+                'tahun_ajaran_id' => $tahun_ajaran_id,
+            ]);
+
+            $siswa->rombels()->attach($rombel);
+            $check++;
+        }
+        if ($check == 0) {
+            throw ValidationException::withMessages(['error' => 'Data siswa sudah naik kelas']);
+        }
+        return;
     }
 }

@@ -55,16 +55,8 @@ class EkskulRepository implements EkskulInterface
     }
     public function getMemberList($id)
     {
-        return DB::table('ekskuls')
-            ->join('ekskul_siswa', 'ekskul_siswa.ekskul_id', '=', 'ekskuls.id')
-            ->join('siswas', 'ekskul_siswa.siswa_id', '=', 'siswas.id')
-            ->where('ekskuls.id', $id)
-            ->select(
-                'siswas.id',
-                'siswas.nama',
-            )
-            ->orderBy('siswas.nama', 'asc')
-            ->get();
+        $ekskul = $this->ekskul->where('id', $id)->with('siswas', 'siswas.rombels')->first();
+        return $ekskul->siswas;
     }
     public function store($data, $guru_id, $tahun_ajaran_id)
     {
@@ -84,7 +76,7 @@ class EkskulRepository implements EkskulInterface
 
     public function getEkskulSiswa($nis)
     {
-        return $this->ekskul
+        $ekskuls = $this->ekskul
             ->join('ekskul_siswa', 'ekskuls.id', '=', 'ekskul_siswa.ekskul_id')
             ->join('siswas', 'ekskul_siswa.siswa_id', '=', 'siswas.id')
             ->join('gurus', 'ekskuls.guru_id', '=', 'gurus.id')
@@ -96,57 +88,69 @@ class EkskulRepository implements EkskulInterface
                 'tahun_ajarans.tahun_ajaran',
                 'tahun_ajarans.semester'
             )
+            ->orderBy('ekskuls.nama_ekskul')
             ->orderBy('tahun_ajarans.tahun_ajaran')
             ->orderBy('tahun_ajarans.semester')
             ->get();
-    }
-    // ---------------------------------------------------------------------------
-    public function getMemberListNotActive($id)
-    {
-        $datas = DB::table('ekskuls')
-            ->join('ekskul_siswa', 'ekskuls.id', '=', 'ekskul_siswa.ekskul_id')
-            ->join('siswas', 'ekskul_siswa.siswa_id', '=', 'siswas.id')
-            ->leftJoin('nilai_ekskuls', function ($join) {
-                $join->on('ekskul_siswa.siswa_id', '=', 'nilai_ekskuls.siswa_id')
-                    ->on('ekskul_siswa.ekskul_id', '=', 'nilai_ekskuls.ekskul_id');
-            })
-            ->where('ekskuls.id', '=', $id)
-            ->select(
-                'siswas.nama as nama_siswa',
-                'ekskul_siswa.status',
-                'nilai_ekskuls.nilai',
-                'nilai_ekskuls.semester'
-            )
-            ->orderBy('siswas.nama', 'asc')
-            ->get();
 
-        // Mengelompokkan data berdasarkan nama siswa dan semester
-        $siswas = $datas->groupBy('nama_siswa')->map(function ($item) {
-            return $item->keyBy('semester');
+        $formattedEkskuls = $ekskuls->groupBy('nama_ekskul')->map(function ($grouped) {
+            $data = $grouped->map(function ($item) {
+                return [
+                    'nama_guru' => $item->nama_guru,
+                    'tahun_ajaran' => $item->tahun_ajaran,
+                    'semester' => $item->semester,
+                ];
+            });
+            return [
+                'nama_ekskul' => $grouped->first()->nama_ekskul,
+                'data' => $data,
+            ];
         });
 
-        // Mengambil semua semester yang ada di tabel nilai_ekskul
-        $semesters = DB::table('nilai_ekskuls')
-            ->select('semester')
-            ->distinct()
-            ->orderBy('semester', 'asc')
-            ->pluck('semester');
-        return [
-            'siswas' => $siswas,
-            'semesters' => $semesters,
-        ];
+        return $formattedEkskuls->values();
+    }
+    public function getRombel($id)
+    {
+        $ekskul = $this->ekskul->where('id', $id)
+            ->with(['siswas' => function ($query) {
+                $query->with(['rombels' => function ($subQuery) {
+                    $subQuery->select('rombels.id', 'rombels.nama_rombel');
+                }]);
+            }])
+            ->first();
+
+        // Extract unique class levels from 'nama_rombel' values
+        $uniqueClassLevels = collect();
+
+        if ($ekskul && $ekskul->siswas) {
+            foreach ($ekskul->siswas as $siswa) {
+                if ($siswa->rombels) {
+                    foreach ($siswa->rombels as $rombel) {
+                        // Extract the class level (e.g., 'X', 'XI', 'XII') from 'nama_rombel'
+                        $classLevel = preg_replace('/\s.*$/', '', $rombel->nama_rombel);
+                        $uniqueClassLevels->push($classLevel);
+                    }
+                }
+            }
+        }
+
+        $uniqueClassLevels = $uniqueClassLevels->unique()->values();
+        return $uniqueClassLevels;
     }
 
-    public function destroy($id)
+    public function getMemberListNilai($id, $rombel)
     {
-        return $this->ekskul->where('id', $id)->update([
-            'status' => 'tidak aktif',
-        ]);
-    }
-    public function activate($id)
-    {
-        return $this->ekskul->where('id', $id)->update([
-            'status' => 'aktif',
-        ]);
+        $ekskul = $this->ekskul->where('id', $id)->with('siswas.rombels')->first();
+
+        // Filter siswas based on the given rombel
+        $filteredSiswas = $ekskul->siswas->filter(function ($siswa) use ($rombel) {
+            return $siswa->rombels->contains(function ($rombelInstance) use ($rombel) {
+                // Extract the class level (e.g., 'X', 'XI', 'XII') from 'nama_rombel'
+                $classLevel = preg_replace('/\s.*$/', '', $rombelInstance->nama_rombel);
+                return $classLevel == $rombel;
+            });
+        });
+
+        return $filteredSiswas->values();
     }
 }

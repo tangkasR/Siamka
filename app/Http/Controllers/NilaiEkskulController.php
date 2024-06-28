@@ -39,32 +39,35 @@ class NilaiEkskulController extends Controller
             'semester' => $semester,
         ]);
     }
-    public function nilai($tahun, $semester, $id)
+    public function nilai($tahun, $semester, $rombel, $id)
     {
         $ekskul = $this->ekskul->getById(Crypt::decrypt($id));
         return view('pages.guru.ekskul.nilai.nilai', [
-            'nilais' => $this->nilai_ekskul->getAll($ekskul->id),
+            'nilais' => $this->nilai_ekskul->getAll($ekskul->id, $rombel),
             'ekskul' => $ekskul,
             'tahun' => $tahun,
             'semester' => $semester,
             'tahun_ajaran_id' => $this->tahun_ajaran->getId($tahun, $semester),
+            'rombel' => $rombel,
         ]);
     }
 
-    public function tambah_nilai($tahun_ajaran_id, Ekskul $ekskul)
+    public function tambah_nilai($rombel, $tahun_ajaran_id, Ekskul $ekskul)
     {
         $tahun_ajaran = $this->tahun_ajaran->getById(Crypt::decrypt($tahun_ajaran_id));
         return view('pages.guru.ekskul.nilai.tambah_nilai', [
-            'siswas' => $this->ekskul->getMemberList($ekskul->id),
+            'siswas' => $this->ekskul->getMemberListNilai($ekskul->id, $rombel),
             'ekskul' => $ekskul,
             'tahun_ajaran_id' => Crypt::decrypt($tahun_ajaran_id),
             'semester' => $tahun_ajaran->semester,
+            'tahun' => $tahun_ajaran->tahun_ajaran,
+            'rombel' => $rombel,
         ]);
     }
 
     public function store(Request $request, Ekskul $ekskul)
     {
-        $checkNilai = $this->nilai_ekskul->checkNilaiWithSemester($request->ekskul_id, $request->tahun_ajaran_id);
+        $checkNilai = $this->nilai_ekskul->checkNilaiWithSemester($request->ekskul_id, $request->tahun_ajaran_id, $request->rombel);
         $tahun_ajaran = $this->tahun_ajaran->getById($request->tahun_ajaran_id);
 
         if (count($checkNilai) > 0) {
@@ -75,11 +78,11 @@ class NilaiEkskulController extends Controller
 
         try {
             $this->nilai_ekskul->store($request->all());
-            return redirect()->route('guru.nilai_ekskul', ['tahun' => $tahun_ajaran->tahun_ajaran, 'semester' => $tahun_ajaran->semester, 'id' => Crypt::encrypt($ekskul->id)])
+            return redirect()->route('guru.nilai_ekskul', ['tahun' => $tahun_ajaran->tahun_ajaran, 'semester' => $tahun_ajaran->semester, 'rombel' => $request->rombel, 'id' => Crypt::encrypt($ekskul->id)])
                 ->with('message', 'Berhasil menambah data nilai');
 
         } catch (QueryException $er) {
-            return redirect()->route('guru.nilai_ekskul', ['tahun' => $tahun_ajaran->tahun_ajaran, 'semester' => $tahun_ajaran->semester, 'id' => Crypt::encrypt($ekskul->id)])
+            return redirect()->route('guru.nilai_ekskul', ['tahun' => $tahun_ajaran->tahun_ajaran, 'semester' => $tahun_ajaran->semester, 'rombel' => $request->rombel, 'id' => Crypt::encrypt($ekskul->id)])
                 ->with('error', 'Gagal menambah data nilai');
         }
     }
@@ -116,6 +119,18 @@ class NilaiEkskulController extends Controller
             'semester' => $semester,
             'ekskul' => $ekskul,
             'nilais' => $this->nilai_ekskul->getAll($ekskul->id),
+        ]);
+    }
+
+    public function show_rombel($tahun, $semester, $ekskul_id)
+    {
+        $rombels = $this->ekskul->getRombel(Crypt::decrypt($ekskul_id));
+        $ekskul = $this->ekskul->getById(Crypt::decrypt($ekskul_id));
+        return view('pages.guru.ekskul.nilai.daftar_rombel', [
+            'ekskul' => $ekskul,
+            'tahun' => $tahun,
+            'semester' => $semester,
+            'rombels' => $rombels,
         ]);
     }
 }

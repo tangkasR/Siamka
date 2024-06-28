@@ -82,4 +82,8 @@ class RombelRepository implements RombelInterface
     {
         return $rombel->delete();
     }
+    public function getByNama($nama_rombel, $tahun_ajaran_id)
+    {
+        return $this->rombel->where('nama_rombel', $nama_rombel)->where('tahun_ajaran_id', $tahun_ajaran_id)->first();
+    }
 }

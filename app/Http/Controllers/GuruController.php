@@ -132,13 +132,13 @@ class GuruController extends Controller
     }
     public function cetak_kehadiran($tahun, $semester, Request $request, Guru $guru)
     {
-        $tahun = $this->date->getDate()->year;
+        $tahun_ = $this->date->getDate()->year;
         return view('pages.admin.guru.rekap-kehadiran', [
             'guru' => $guru,
             'tanggal' => $this->date->getDate()->format('d-m-Y'),
             'bulan' => $this->date->getDate()->month,
             'tahun' => $this->date->getDate()->year,
-            'rekaps' => $this->kehadiran_guru->rekapKehadiranGuru($guru->nomor_induk_yayasan, $tahun),
+            'rekaps' => $this->kehadiran_guru->rekapKehadiranGuru($guru->nomor_induk_yayasan, $tahun_),
             'years' => $this->kehadiran_guru->getYear(),
             'semester' => $semester,
             'tahun_ajaran' => $tahun,
@@ -326,5 +326,14 @@ class GuruController extends Controller
             'semester' => $semester,
             'datas' => $datas,
         ]);
+    }
+    public function migrasi(Request $request)
+    {
+        try {
+            $this->guru->migrasi($request->all());
+            return back()->with('message', 'Berhasil mengirim data!');
+        } catch (ValidationException $er) {
+            return back()->with('error', $er->getMessage());
+        }
     }
 }

@@ -15,133 +15,105 @@
         <div class="">
             <div class="card dark:bg-zinc-800 dark:border-zinc-600">
                 <div class="relative overflow-x-auto card-body">
-                    <div class="mb-3">
-                        <input
-                            class="w-[200px] border-gray-100 rounded placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
-                            type="date" value="{{ $tanggal }}" id="tanggal">
+                    <div class="mb-3 flex justify-between items-center">
+                        <div class="">
+                            <h6 class="mb-3 text-gray-700 text-[16px] dark:text-gray-100 font-medium">Menampilkan daftar
+                                kehadiran siswa tanggal {{ $tanggal }}
+                            </h6>
+                        </div>
+                        <div class=" flex gap-4 items-center">
+                            <a type="submit"
+                                href="{{ route('admin.kehadiran.show_input', ['tahun' => $tahun, 'semester' => $semester, 'id' => $rombel->id]) }}"
+                                class=" w-fit md:mt-0 mt-6 cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md flex items-center justify-center gap-2">
+                                <span>Tambah Data</span> <i class='bx bxs-plus-circle text-[25px]'></i>
+                            </a>
+                            <input
+                                class="w-[200px] border-gray-100 rounded placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
+                                type="date" value="{{ $tanggal }}" id="tanggal">
+                        </div>
                     </div>
-                    <table id="" class="text-center table w-full pt-4 text-gray-700 dark:text-zinc-100">
-                        <thead>
-                            <tr class="bg-blue-200">
-                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
-                                    Nama Siswa</th>
-                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
-                                    Kehadiran</th>
-                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
-                                    Tanggal</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tabel-container">
-                        </tbody>
-                    </table>
+                    <div id="tabel-container">
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <input type="text" value="{{ $rombel->id }}" id="rombel_id" hidden>
+        <input type="text" value="{{ $rombel->id }}" id="rombel_id" hidden>
+        <input type="text" value="{{ $tahun }}" id="tahun" hidden>
+        <input type="text" value="{{ $semester }}" id="semester" hidden>
+        <input type="text" value="{{ $tahun_ajaran_id }}" id="tahun_ajaran_id" hidden>
 
-    <script>
-        $(document).ready(function() {
-            let url = null;
-            let container = document.getElementById('tabel-container')
+        <script>
+            $(document).ready(function() {
+                let url = null;
 
-            url = '{{ route('admin.kehadiran.get_kehadiran') }}';
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                type: "GET",
-                url: url,
-                data: getDatas(),
-                success: function(response) {
-                    if (response.length != 0) {
-                        container.innerHTML = ''
-                        createTable(response)
+                url = '{{ route('admin.kehadiran.get_kehadiran') }}';
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
-                }
-            });
+                });
+                $.ajax({
+                    type: "GET",
+                    url: url,
+                    data: getDatas(),
+                    success: function(response) {
+                        $('#tabel-container').html(response.html)
+                    }
+                });
 
 
-            // filter
-            filter('#tanggal')
+                // filter
+                filter('#tanggal')
 
-            function filter(id_select) {
-                $(id_select).on('change', function() {
-                    url = '{{ route('admin.kehadiran.get_kehadiran') }}';
-                    page = 1;
+                function filter(id_select) {
+                    $(id_select).on('change', function() {
+                        url = '{{ route('admin.kehadiran.get_kehadiran') }}';
+                        page = 1;
 
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
-                    $.ajax({
-                        type: "GET",
-                        url: url,
-                        data: getDatas(),
-                        success: function(response) {
-                            container.innerHTML = ''
-                            if (response.length != 0) {
-                                createTable(response)
+                        $.ajaxSetup({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             }
-                        }
-                    });
-                })
-            }
-
-            function getDatas() {
-                let rombel_id = $('#rombel_id').val()
-                let tanggal = $('#tanggal').val()
-                let datas = {
-                    'tanggal': tanggal,
-                    'rombel_id': rombel_id,
+                        });
+                        $.ajax({
+                            type: "GET",
+                            url: url,
+                            data: getDatas(),
+                            datatype: 'html',
+                            success: function(response) {
+                                $('#tabel-container').html(response.html)
+                            }
+                        });
+                    })
                 }
-                return datas
-            }
 
-            function createTable(datas) {
-                let row = ''
-                for (let i = 0; i < datas.length; i++) {
-                    let keterangan = '-'
-
-                    let date = datas[i].tanggal
-                    let tahun = date.split('-')[0]
-                    let bulan = date.split('-')[1]
-                    let tanggal = date.split('-')[2]
-                    let text_color = '';
-                    if (datas[i].kehadiran == 'hadir') {
-                        text_color = 'text-green-500 font-medium'
+                function getDatas() {
+                    let rombel_id = $('#rombel_id').val()
+                    let tahun = $('#tahun').val()
+                    let semester = $('#semester').val()
+                    let tahun_ajaran_id = $('#tahun_ajaran_id').val()
+                    let tanggal = $('#tanggal').val()
+                    let datas = {
+                        'tanggal': tanggal,
+                        'rombel_id': rombel_id,
+                        'tahun': tahun,
+                        'semester': semester,
+                        'tahun_ajaran_id': tahun_ajaran_id,
                     }
-                    if (datas[i].kehadiran == 'sakit') {
-                        text_color = 'text-blue-500 font-medium'
-                    }
-                    if (datas[i].kehadiran == 'izin') {
-                        text_color = 'text-slate-500 font-medium'
-                    }
-                    if (datas[i].kehadiran == 'alpa') {
-                        text_color = 'text-red-500 font-medium'
-                    }
-
-                    if (datas[i].keterangan != null) {
-                        keterangan = datas[i].keterangan
-                    }
-                    row = `
-                <tr class="${(i + 1) % 2 == 0 ? 'bg-blue-50' : 'bg-white'}">
-                    <td class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
-                        ${datas[i].nama}</td>
-                    <td class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600 ${text_color}">
-                        ${datas[i].kehadiran}</td>
-                    <td class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
-                        ${tanggal}-${bulan}-${tahun}</td>
-                </tr>
-                `;
-                    container.innerHTML += row
+                    return datas
                 }
-            }
+            });
+        </script>
 
 
-        });
-    </script>
-@endsection
+        @if (session('message'))
+            <script>
+                toast('message', '{{ Session::get('message') }}')
+            </script>
+        @endif
+        @if (session('error'))
+            <script>
+                toast('error', '{{ Session::get('error') }}')
+            </script>
+        @endif
+    @endsection

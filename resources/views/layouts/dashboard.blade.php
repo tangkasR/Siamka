@@ -141,6 +141,60 @@
             max-width: none;
             max-height: none
         }
+
+        html:has(dialog[open]) {
+            overflow: hidden;
+        }
+
+        @keyframes scaleDown {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20%);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        dialog[open]::backdrop {
+            backdrop-filter: blur(5px);
+        }
+
+        @media (prefers-reduced-motion: no-preference) {
+            dialog {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            dialog.showing {
+                animation: slideInUp 0.3s ease-out forwards;
+            }
+
+            dialog.closing {
+                animation: scaleDown 0.3s ease-in forwards;
+            }
+        }
+
+        .close-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            cursor: pointer;
+        }
     </style>
     <script src="{{ asset('assets/jquery/jquery.js') }}"></script>
     <script src="{{ asset('assets/toast/toast.js') }}"></script>
@@ -156,7 +210,6 @@
     {{-- year picker --}}
     <link rel="stylesheet" href="{{ asset('assets/year_picker/yearpicker.css') }}">
     <script src="{{ asset('assets/year_picker/yearpicker.js') }}"></script>
-
 </head>
 
 <body data-mode="light" data-sidebar-size="lg" class="group">

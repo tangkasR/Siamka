@@ -29,11 +29,13 @@ class GuruImport implements ToCollection, WithHeadingRow
             ->where('semester', $this->semester)
             ->first();
         $tahun_ajaran_id = $tahun_ajaran->id;
-        $checkInput = Guru::where('tahun_ajaran_id', $tahun_ajaran_id)->get();
+        $check = 0;
 
-        if (count($checkInput) == 0) {
-            foreach ($rows as $index => $row) {
-                if ($row['nama'] != '') {
+        foreach ($rows as $index => $row) {
+            if ($row['nama'] != null && $row['jabatan'] != null && $row['niy'] != null && $row['password'] != null && $tahun_ajaran_id != null) {
+                $checkInput = Guru::where('tahun_ajaran_id', $tahun_ajaran_id)->where('nomor_induk_yayasan', $row['niy'])->first();
+                if ($checkInput == null) {
+                    $check++;
                     $guru = Guru::create([
                         'nama' => $row['nama'],
                         'jabatan' => $row['jabatan'],
@@ -61,9 +63,9 @@ class GuruImport implements ToCollection, WithHeadingRow
                         $guru->mapels()->attach($mapel2);
                     }
                 }
-
             }
-        } else {
+        }
+        if ($check == 0) {
             $message = 'Data guru dengan tahun ajaran = ' . $tahun_ajaran->tahun_ajaran . ' | semester = ' . $tahun_ajaran->semester . ' sudah dimasukan!';
             throw ValidationException::withMessages(['error' => $message]);
         }

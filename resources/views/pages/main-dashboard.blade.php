@@ -147,62 +147,6 @@
                         </div>
                     </div>
                 </a>
-                <a href="{{ route('tahun_ajaran.index', 'siswa') }}">
-                    <div
-                        class="w-full p-3 bg-white rounded-3xl shadow-md grid grid-cols-12 gap-4 items-center dashboard group border-2 hover:border-sky-400 transition-all  cursor-pointer">
-                        <div class="col-span-3 flex justify-center items-center">
-                            <span
-                                class="flex justify-center items-center md:w-20 md:h-20 w-16 h-16 place-items-center rounded-full  bg-sky-50 bg-opacity-30">
-                                <i class='bx bxs-user text-sky-500  text-[30px]'></i>
-                            </span>
-                        </div>
-                        <div class="col-span-9 flex justify-between gap-1">
-                            <div>
-                                <div class="space-y-6 text-base leading-7 mb-1">
-                                    <h5 class="text-[18px] font-semibold">Siswa</h5>
-                                </div>
-                                <div class="space-y-6 text-base line-clamp-5 leading-7">
-                                    <p>Fitur ini untuk mengelola siswa.</p>
-                                </div>
-                            </div>
-                            <div class="flex justify-center items-center text-white">
-                                <span
-                                    class="w-fit flex justify-center items-center place-items-center rounded-full     group-dashboard:group-hover:bg-sky-200 ">
-                                    <i
-                                        class='bx bx-chevron-right   text-[30px] group-dashboard:group-hover:text-sky-500'></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-                <a href="{{ route('tahun_ajaran.index', 'jadwal') }}">
-                    <div
-                        class="w-full p-3 bg-white rounded-3xl shadow-md grid grid-cols-12 gap-4 items-center dashboard group border-2 hover:border-sky-400 transition-all  cursor-pointer">
-                        <div class="col-span-3 flex justify-center items-center">
-                            <span
-                                class="flex justify-center items-center md:w-20 md:h-20 w-16 h-16 place-items-center rounded-full  bg-sky-50 bg-opacity-30">
-                                <i class='bx bxs-spreadsheet text-sky-500  text-[30px]'></i>
-                            </span>
-                        </div>
-                        <div class="col-span-9 flex justify-between gap-1">
-                            <div>
-                                <div class="space-y-6 text-base leading-7 mb-1">
-                                    <h5 class="text-[18px] font-semibold">Jadwal Pelajaran</h5>
-                                </div>
-                                <div class="space-y-6 text-base line-clamp-5 leading-7">
-                                    <p>Fitur ini untuk mengelola jadwal pelajaran.</p>
-                                </div>
-                            </div>
-                            <div class="flex justify-center items-center text-white">
-                                <span
-                                    class="w-fit flex justify-center items-center place-items-center rounded-full     group-dashboard:group-hover:bg-sky-200 ">
-                                    <i
-                                        class='bx bx-chevron-right   text-[30px] group-dashboard:group-hover:text-sky-500'></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </a>
                 <a href="{{ route('admin.pengumuman') }}">
                     <div
                         class="w-full p-3 bg-white rounded-3xl shadow-md grid grid-cols-12 gap-4 items-center dashboard group border-2 hover:border-sky-400 transition-all  cursor-pointer">

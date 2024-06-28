@@ -75,7 +75,7 @@
                 <button type="submit" class=" w-[150px] text-white hover:bg-blue-700 bg-blue-500 border-transparent btn">
                     Simpan
                 </button>
-                <a href="{{ route('guru.nilai.show_siswa', ['tahun' => $tahun, 'semester' => $semester, 'rombel' => $rombel]) }}"
+                <a href="{{ route('guru.nilai.show_siswa', ['tahun' => $tahun, 'semester' => $semester, 'rombel' => Crypt::encrypt($rombel->id)]) }}"
                     class="w-[150px] text-white bg-gray-600   border-transparent btn">
                     Batal
                 </a>

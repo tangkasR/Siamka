@@ -45,8 +45,8 @@ class RataRataJamChart
         return $this->chart->areaChart()
             ->setTitle('Rata-Rata Jam Kerja Guru')
             ->setSubtitle('Rata-rata jam kerja guru berdasarkan Tahun Ajaran dan Semester.')
-            ->addData('Semester Ganjil', $rataRataGanjil)
-            ->addData('Semester Genap', $rataRataGenap)
+            ->addData('Semester Ganjil - Rata-Rata Jam Kerja', $rataRataGanjil)
+            ->addData('Semester Genap - Rata-Rata Jam Kerja', $rataRataGenap)
             ->setXAxis($tahun_ajaran)
             ->setColors(['#00c6ff', '#0072ff']) // Gradient colors
             ->setMarkers(['#FF5722', '#E040FB'], 7, 10)

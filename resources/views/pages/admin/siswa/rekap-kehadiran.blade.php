@@ -36,13 +36,13 @@
                     <table id="" class="table uppercase w-full pt-4 text-center text-gray-700 dark:text-zinc-100">
                         <thead>
                             <tr class="bg-blue-200">
-                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4 ">
                                     No</th>
-                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4 ">
                                     Nama Siswa</th>
-                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4 ">
                                     Kehadiran</th>
-                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4 ">
                                     Tanggal</th>
                             </tr>
                         </thead>
@@ -144,17 +144,17 @@
                         class="text-center uppercase table w-full pt-4 text-gray-700 dark:text-zinc-100">
                         <thead>
                             <tr class="bg-blue-200">
-                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4 ">
                                     Tahun</th>
-                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4 ">
                                     Bulan</th>
-                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4 ">
                                     Hadir</th>
-                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4 ">
                                     Sakit</th>
-                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4 ">
                                     Izin</th>
-                                <th class="p-4 pr-8 border rtl:border-l-0  border-gray-200 dark:border-zinc-600">
+                                <th class="p-4 ">
                                     Alpa</th>
                             </tr>
                         </thead>
@@ -368,13 +368,13 @@
                     }
                     row = `
             <tr class="${(i + 1) % 2 == 0 ? 'bg-blue-50' : 'bg-white'}">
-                <td class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
+                <td class="p-4 ">
                     ${index}</td>
-                <td class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
+                <td class="p-4 ">
                     ${datas.data[i].nama}</td>
-                <td class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
+                <td class="p-4 ">
                     ${datas.data[i].kehadiran}</td>
-                <td class="p-4 pr-8 border border-t-0 rtl:border-l-0 border-gray-200 dark:border-zinc-600">
+                <td class="p-4 ">
                     ${tanggal}-${bulan}-${tahun}</td>
             </tr>
             `;

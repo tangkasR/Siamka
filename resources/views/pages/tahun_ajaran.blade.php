@@ -54,100 +54,83 @@
                                                     </h3>
                                                     @if ($type == 'guru')
                                                         <div class="grid grid-cols-2 gap-4">
-                                                            <x-link link="admin.guru" :tahun="$data->tahun_ajaran"
-                                                                semester="ganjil"></x-link>
-                                                            <x-link link="admin.guru" :tahun="$data->tahun_ajaran"
-                                                                semester="genap"></x-link>
+                                                            @foreach ($data->semesters as $semester)
+                                                                <x-link link="admin.guru" :tahun="$data->tahun_ajaran"
+                                                                    :semester="$semester"></x-link>
+                                                            @endforeach
                                                         </div>
                                                     @endif
 
                                                     @if ($type == 'rombel')
                                                         <div class="grid grid-cols-2 gap-4">
-                                                            <x-link link="admin.rombel" :tahun="$data->tahun_ajaran"
-                                                                semester="ganjil"></x-link>
-                                                            <x-link link="admin.rombel" :tahun="$data->tahun_ajaran"
-                                                                semester="genap"></x-link>
-                                                        </div>
-                                                    @endif
-
-                                                    @if ($type == 'siswa')
-                                                        <div class="grid grid-cols-2 gap-4">
-                                                            <x-link link="admin.siswa" :tahun="$data->tahun_ajaran"
-                                                                semester="ganjil"></x-link>
-                                                            <x-link link="admin.siswa" :tahun="$data->tahun_ajaran"
-                                                                semester="genap"></x-link>
-                                                        </div>
-                                                    @endif
-                                                    @if ($type == 'jadwal')
-                                                        <div class="grid grid-cols-2 gap-4">
-                                                            <x-link link="admin.jadwal_pelajaran" :tahun="$data->tahun_ajaran"
-                                                                semester="ganjil"></x-link>
-                                                            <x-link link="admin.jadwal_pelajaran" :tahun="$data->tahun_ajaran"
-                                                                semester="genap"></x-link>
+                                                            @foreach ($data->semesters as $semester)
+                                                                <x-link link="admin.rombel" :tahun="$data->tahun_ajaran"
+                                                                    :semester="$semester"></x-link>
+                                                            @endforeach
                                                         </div>
                                                     @endif
                                                     @if ($type == 'kehadiran')
                                                         <div class="grid grid-cols-2 gap-4">
-                                                            <x-link link="guru.kehadiran" :tahun="$data->tahun_ajaran"
-                                                                semester="ganjil"></x-link>
-                                                            <x-link link="guru.kehadiran" :tahun="$data->tahun_ajaran"
-                                                                semester="genap"></x-link>
+                                                            @foreach ($data->semesters as $semester)
+                                                                <x-link link="guru.kehadiran" :tahun="$data->tahun_ajaran"
+                                                                    :semester="$semester"></x-link>
+                                                            @endforeach
                                                         </div>
                                                     @endif
                                                     @if ($type == 'nilai')
                                                         <div class="grid grid-cols-2 gap-4">
-                                                            <x-link link="guru.nilai" :tahun="$data->tahun_ajaran"
-                                                                semester="ganjil"></x-link>
-                                                            <x-link link="guru.nilai" :tahun="$data->tahun_ajaran"
-                                                                semester="genap"></x-link>
+                                                            @foreach ($data->semesters as $semester)
+                                                                <x-link link="guru.nilai" :tahun="$data->tahun_ajaran"
+                                                                    :semester="$semester"></x-link>
+                                                            @endforeach
                                                         </div>
                                                     @endif
                                                     @if ($type == 'ekskul')
                                                         <div class="grid grid-cols-2 gap-4">
-                                                            <x-link link="guru.ekskul" :tahun="$data->tahun_ajaran"
-                                                                semester="ganjil"></x-link>
-                                                            <x-link link="guru.ekskul" :tahun="$data->tahun_ajaran"
-                                                                semester="genap"></x-link>
+                                                            @foreach ($data->semesters as $semester)
+                                                                <x-link link="guru.ekskul" :tahun="$data->tahun_ajaran"
+                                                                    :semester="$semester"></x-link>
+                                                            @endforeach
                                                         </div>
                                                     @endif
                                                     @if ($type == 'nilai_ekskul')
                                                         <div class="grid grid-cols-2 gap-4">
-                                                            <x-link link="guru.show_ekskul" :tahun="$data->tahun_ajaran"
-                                                                semester="ganjil"></x-link>
-                                                            <x-link link="guru.show_ekskul" :tahun="$data->tahun_ajaran"
-                                                                semester="genap"></x-link>
+                                                            @foreach ($data->semesters as $semester)
+                                                                <x-link link="guru.show_ekskul" :tahun="$data->tahun_ajaran"
+                                                                    :semester="$semester"></x-link>
+                                                            @endforeach
                                                         </div>
                                                     @endif
                                                     @if ($type == 'wali_kelas')
                                                         <div class="grid grid-cols-2 gap-4">
-                                                            <x-link link="guru.wali_kelas" :tahun="$data->tahun_ajaran"
-                                                                semester="ganjil"></x-link>
-                                                            <x-link link="guru.wali_kelas" :tahun="$data->tahun_ajaran"
-                                                                semester="genap"></x-link>
+                                                            @foreach ($data->semesters as $semester)
+                                                                <x-link link="guru.wali_kelas" :tahun="$data->tahun_ajaran"
+                                                                    :semester="$semester"></x-link>
+                                                            @endforeach
                                                         </div>
                                                     @endif
                                                     @if ($type == 'admin_nilai')
                                                         <div class="grid grid-cols-2 gap-4">
-                                                            <x-link link="admin.nilai.show_nilai" :tahun="$data->tahun_ajaran"
-                                                                semester="ganjil"></x-link>
-                                                            <x-link link="admin.nilai.show_nilai" :tahun="$data->tahun_ajaran"
-                                                                semester="genap"></x-link>
+                                                            @foreach ($data->semesters as $semester)
+                                                                <x-link link="admin.nilai.show_nilai" :tahun="$data->tahun_ajaran"
+                                                                    :semester="$semester"></x-link>
+                                                            @endforeach
                                                         </div>
                                                     @endif
                                                     @if ($type == 'admin_kehadiran')
                                                         <div class="grid grid-cols-2 gap-4">
-                                                            <x-link link="admin.kehadiran.show_kehadiran" :tahun="$data->tahun_ajaran"
-                                                                semester="ganjil"></x-link>
-                                                            <x-link link="admin.kehadiran.show_kehadiran" :tahun="$data->tahun_ajaran"
-                                                                semester="genap"></x-link>
+                                                            @foreach ($data->semesters as $semester)
+                                                                <x-link link="admin.kehadiran.show_kehadiran"
+                                                                    :tahun="$data->tahun_ajaran" :semester="$semester"></x-link>
+                                                            @endforeach
                                                         </div>
                                                     @endif
                                                     @if ($type == 'admin_ekskul')
                                                         <div class="grid grid-cols-2 gap-4">
-                                                            <x-link link="admin.ekskul.show_ekskul" :tahun="$data->tahun_ajaran"
-                                                                semester="ganjil"></x-link>
-                                                            <x-link link="admin.ekskul.show_ekskul" :tahun="$data->tahun_ajaran"
-                                                                semester="genap"></x-link>
+                                                            @foreach ($data->semesters as $semester)
+                                                                <x-link link="admin.ekskul.show_ekskul" :tahun="$data->tahun_ajaran"
+                                                                    :semester="$semester"></x-link>
+                                                            @endforeach
                                                         </div>
                                                     @endif
                                                 </div>

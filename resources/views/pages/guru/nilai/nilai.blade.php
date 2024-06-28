@@ -5,7 +5,7 @@
 @section('table-role', 'Guru')
 @section('back')
     <div class="font-medium  border border-slate-500 bg-slate-500 text-white rounded-full  me-3">
-        <a href="{{ route('guru.nilai', ['tahun' => $tahun, 'semester' => $semester, 'rombel' => $rombel]) }}"
+        <a href="{{ route('guru.nilai', ['tahun' => $tahun, 'semester' => $semester, 'rombel' => Crypt::encrypt($rombel->id)]) }}"
             class="flex justify-center items-center"><i class='bx bx-chevron-left text-[30px]'></i></a>
     </div>
 @endsection

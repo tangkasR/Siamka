@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\TahunAjaran;
 use App\Services\DateService;
-use Illuminate\Http\Request;
 
 class TahunAjaranController extends Controller
 {
@@ -17,44 +16,22 @@ class TahunAjaranController extends Controller
 
     public function index($type)
     {
-        $tahun_ajarans = TahunAjaran::select('tahun_ajaran')->distinct()->orderBy('tahun_ajaran', 'desc')->get();
+        $tahun_ajarans = TahunAjaran::orderBy('tahun_ajaran', 'desc')
+            ->get()
+            ->groupBy('tahun_ajaran')
+            ->map(function ($items, $key) {
+                return [
+                    'tahun_ajaran' => $key,
+                    'semesters' => $items->pluck('semester')->toArray(),
+                ];
+            })
+            ->values()
+            ->toArray();
+        $tahun_ajarans = json_decode(json_encode($tahun_ajarans));
         return view('pages.tahun_ajaran', [
             'tahun_ajarans' => $tahun_ajarans,
             'type' => $type,
         ]);
-    }
-    public function semester($type, $tahun)
-    {
-        // $tahun = Crypt::decrypt($tahun);
-        return view('pages.semester', [
-            'tahun_ajaran' => $tahun,
-            'type' => $type,
-        ]);
-    }
-
-    public function create()
-    {
-        // $tahun_ajaran = $this->date->getDate()->year;
-        // $tahun_ajaran = $tahun_ajaran . '/' . $tahun_ajaran + 1;
-        // $semester = [
-        //     'gasal', 'genap',
-        // ];
-        // foreach ($semester as $i) {
-        //     TahunAjaran::create([
-        //         'tahun_ajaran' => $tahun_ajaran,
-        //         'semester' => $i,
-        //     ]);
-        // }
-    }
-
-    public function store(Request $request)
-    {
-        //
-    }
-
-    public function show(string $id)
-    {
-        //
     }
 
 }

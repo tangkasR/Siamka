@@ -67,10 +67,10 @@ class RombelController extends Controller
     {
         try {
             $this->rombel->destroy($rombel);
-            return back()->with('message', 'Berhasil menghapus data');
+            return back()->with('message', 'Berhasil menghapus data!');
 
         } catch (QueryException $er) {
-            return back()->with('error', 'Gagal menghapus data');
+            return back()->with('error', 'Gagal menghapus data!');
         }
     }
     public function tambah_data($tahun, $semester)
@@ -80,6 +80,23 @@ class RombelController extends Controller
             'tahun' => $tahun,
             'semester' => $semester,
             'datas' => $datas,
+        ]);
+    }
+    public function migrasi(Request $request)
+    {
+        try {
+            $this->rombel->migrasi($request->all());
+            return back()->with('message', 'Berhasil mengirim data!');
+        } catch (ValidationException $err) {
+            return back()->with('error', $err->getMessage());
+        }
+    }
+    public function show($tahun, $semester, Rombel $rombel)
+    {
+        return view('pages.admin.rombel.index', [
+            'tahun' => $tahun,
+            'semester' => $semester,
+            'rombel' => $rombel,
         ]);
     }
 }

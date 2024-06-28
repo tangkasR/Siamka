@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 @section('table-name')
-    <span class="capitalize">Daftar Nilai Ekskul {{ $ekskul->nama_ekskul }}</span>
+    <span class="capitalize">Daftar Nilai Ekskul {{ $ekskul->nama_ekskul }} rombel {{ $rombel }}</span>
 @endsection
 @section('table-role', 'Guru')
 @section('back')
@@ -19,7 +19,7 @@
                         Semester
                         {{ $semester }}</h1>
                     <a type="submit"
-                        href="{{ route('guru.tambah_nilai', ['tahun_ajaran_id' => Crypt::encrypt($tahun_ajaran_id), 'ekskul' => $ekskul]) }}"
+                        href="{{ route('guru.tambah_nilai', ['rombel' => $rombel, 'tahun_ajaran_id' => Crypt::encrypt($tahun_ajaran_id), 'ekskul' => $ekskul]) }}"
                         class=" w-fit md:mt-0 mt-6 cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md flex items-center gap-2">
                         <span>Tambah Data</span> <i class='bx bxs-plus-circle text-[25px]'></i>
                     </a>
@@ -32,6 +32,8 @@
                                     No</th>
                                 <th class="p-4">
                                     Nama Siswa</th>
+                                <th class="p-4">
+                                    Rombel</th>
                                 <th class="p-4">
                                     Nama Ekskul</th>
                                 <th class="p-4">
@@ -50,11 +52,22 @@
                                     <td class="p-4 ">
                                         {{ $data->nama }}</td>
                                     <td class="p-4 ">
+                                        {{ $data->nama_rombel }}</td>
+                                    <td class="p-4 ">
                                         {{ $data->nama_ekskul }}</td>
                                     <td class="p-4 ">
-                                        {{ $data->semester }}</td>
-                                    <td class="p-4 ">
-                                        {{ $data->nilai }}</td>
+                                        {{ $semester }}</td>
+                                    <td class="p-4 font-bold">
+                                        @if ($data->nilai == 'Amat Baik')
+                                            <span class="text-[#007BFF]">{{ $data->nilai }}</span>
+                                        @endif
+                                        @if ($data->nilai == 'Baik')
+                                            <span class="text-[#0047AB]">{{ $data->nilai }}</span>
+                                        @endif
+                                        @if ($data->nilai == 'Cukup')
+                                            <span class="text-[#808080]">{{ $data->nilai }}</span>
+                                        @endif
+                                    </td>
                                     <td class="p-4  ">
                                         <div class="relative dropdown ">
                                             <button type="button" class="py-2 font-medium leading-tight  dropdown-toggle"
@@ -132,44 +145,23 @@
                                                                     placeholder="Masukan Nama Ekskul"
                                                                     value="{{ $data->nama_ekskul }}" readonly>
                                                             </div>
-                                                            <div class="mb-3">
+                                                            <div class="mb-6">
                                                                 <label for=""
                                                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
                                                                     Nilai
                                                                 </label>
-                                                                <input type="text" id="" name="nilai"
+                                                                <select name="nilai"
                                                                     class="bg-gray-800/5 border border-gray-100 text-gray-900 dark:text-gray-100 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder-gray-400 dark:placeholder:text-zinc-100/60 focus:ring-0"
-                                                                    placeholder="Masukan Nama Ekskul"
-                                                                    value="{{ $data->nilai }}">
-                                                            </div>
-                                                            <div class="mb-3">
-                                                                <label for="semester"
-                                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
-                                                                    Semester
-                                                                </label>
-                                                                <select id="semester" name="semester"
-                                                                    class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
                                                                     required>
-                                                                    <option value="">Pilih Semester</option>
-                                                                    <option value="1"
-                                                                        {{ $data->semester == '1' ? 'selected' : '' }}>
-                                                                        Semester 1</option>
-                                                                    <option value="2"
-                                                                        {{ $data->semester == '2' ? 'selected' : '' }}>
-                                                                        Semester 2</option>
-                                                                    <option value="3"
-                                                                        {{ $data->semester == '3' ? 'selected' : '' }}>
-                                                                        Semester 3</option>
-                                                                    <option value="4"
-                                                                        {{ $data->semester == '4' ? 'selected' : '' }}>
-                                                                        Semester 4</option>
-                                                                    <option value="5"
-                                                                        {{ $data->semester == '5' ? 'selected' : '' }}>
-                                                                        Semester 5</option>
-                                                                    <option value="6"
-                                                                        {{ $data->semester == '6' ? 'selected' : '' }}>
-                                                                        Semester 6</option>
-
+                                                                    <option value="Amat Baik"
+                                                                        {{ $data->nilai == 'Amat Baik' ? 'selected' : '' }}>
+                                                                        Amat Baik</option>
+                                                                    <option value="Baik"
+                                                                        {{ $data->nilai == 'Baik' ? 'selected' : '' }}>Baik
+                                                                    </option>
+                                                                    <option value="Cukup"
+                                                                        {{ $data->nilai == 'Cukup' ? 'selected' : '' }}>
+                                                                        Cukup</option>
                                                                 </select>
                                                             </div>
                                                             <button type="submit"

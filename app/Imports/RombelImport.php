@@ -28,22 +28,25 @@ class RombelImport implements ToCollection, WithHeadingRow
             ->first();
         $tahun_ajaran_id = $tahun_ajaran->id;
 
-        $checkrombel = Rombel::where('tahun_ajaran_id', $tahun_ajaran_id)->get();
-        if (count($checkrombel) == 0) {
-            foreach ($rows as $row) {
-                if ($row['niy'] != null) {
-                    $guru = Guru::where('nomor_induk_yayasan', $row['niy'])->where('tahun_ajaran_id', $tahun_ajaran_id)->first();
-                    if ($guru) {
+        $check = 0;
+        foreach ($rows as $row) {
+            if ($row['niy'] != null && $row['nama_rombel'] != null) {
+                $guru = Guru::where('nomor_induk_yayasan', $row['niy'])->where('tahun_ajaran_id', $tahun_ajaran_id)->first();
+                if ($guru) {
+                    $checkrombel = Rombel::where('tahun_ajaran_id', $tahun_ajaran_id)->where('guru_id', $guru->id)->first();
+                    if ($checkrombel == null) {
+                        $check++;
                         Rombel::create([
                             'guru_id' => $guru->id,
                             'tahun_ajaran_id' => $tahun_ajaran_id,
                             'nama_rombel' => $row['nama_rombel'],
                         ]);
-
                     }
+
                 }
             }
-        } else {
+        }
+        if ($check == 0) {
             $message = 'Data rombel dengan tahun ajaran = ' . $tahun_ajaran->tahun_ajaran . ' | semester = ' . $tahun_ajaran->semester . ' sudah dimasukan!';
             throw ValidationException::withMessages(['error' => $message]);
         }

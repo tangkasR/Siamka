@@ -20,10 +20,6 @@ class MataPelajaranRepository implements MataPelajaranInterface
     {
         return $this->mapel->get();
     }
-    public function getByAttribute($attribute, $data)
-    {
-        return $this->mapel->where($attribute, $data)->select('id', 'nama_mata_pelajaran')->get();
-    }
     public function store($data)
     {
         return $this->mapel->create([

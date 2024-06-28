@@ -13,4 +13,6 @@ interface GuruInterface
     public function aktivasi($id);
     public function deaktivasi($id);
     public function totalGuru();
+    public function create($guru, $tahun_ajaran_id);
+    public function getByNiy($niy, $tahun_ajaran_id);
 }

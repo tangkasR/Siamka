@@ -5,20 +5,24 @@ namespace App\Services;
 use App\Interfaces\GuruInterface;
 use App\Services\AuthService;
 use App\Services\MataPelajaranService;
+use App\Services\TahunAjaranService;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 
 class GuruService
 {
     private $guru;
     private $auth;
     private $mapel;
+    private $tahun_ajaran;
 
-    public function __construct(GuruInterface $guru, AuthService $auth, MataPelajaranService $mapel)
+    public function __construct(GuruInterface $guru, AuthService $auth, MataPelajaranService $mapel, TahunAjaranService $tahun_ajaran)
     {
         $this->guru = $guru;
         $this->auth = $auth;
         $this->mapel = $mapel;
+        $this->tahun_ajaran = $tahun_ajaran;
     }
 
     public function getAll($id)
@@ -140,5 +144,38 @@ class GuruService
     public function totalGuru()
     {
         return $this->guru->totalGuru();
+    }
+    public function migrasi($datas)
+    {
+        if ($datas['semester'] == 'genap') {
+            $tahun_ajaran = $datas['tahun'];
+            $semester = 'ganjil';
+            $tahun_ajaran_id = $this->tahun_ajaran->getId($tahun_ajaran, $semester);
+            if ($tahun_ajaran_id == null) {
+                throw ValidationException::withMessages(['error' => 'Data semester sebelumnya tidak ada!']);
+            }
+        } else {
+            $tahun_ajaran = $datas['tahun'];
+            list($tahun_awal, $tahun_akhir) = explode('-', $tahun_ajaran);
+            $tahun_awal = (int) $tahun_awal - 1;
+            $tahun_akhir = (int) $tahun_akhir - 1;
+            $tahun_ajaran_sebelumnya = $tahun_awal . '-' . $tahun_akhir;
+            $semester = 'genap';
+            $tahun_ajaran_id = $this->tahun_ajaran->getId($tahun_ajaran_sebelumnya, $semester);
+            if ($tahun_ajaran_id == null) {
+                throw ValidationException::withMessages(['error' => 'Data semester sebelumnya tidak ada!']);
+            }
+        }
+        $gurus = $this->getAll($tahun_ajaran_id);
+        foreach ($gurus as $guru) {
+            $this->guru->deaktivasi($guru->id);
+            $this->guru->create($guru, $datas['tahun_ajaran_id']);
+        }
+        return;
+    }
+
+    public function getByNiy($niy, $tahun_ajaran_id)
+    {
+        return $this->guru->getByNiy($niy, $tahun_ajaran_id);
     }
 }

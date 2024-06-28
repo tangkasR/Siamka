@@ -39,10 +39,13 @@ Route::group(['middleware' => ["must-login"]], function () {
     });
     // auth
     Route::get('/logout', [AuthController::class, 'logout']);
+    Route::controller(KehadiranController::class)->prefix('guru')->name('guru.')->group(function () {
+        Route::post('/kehadiran/update/{id}', 'update')->name('kehadiran.update');
+        Route::get('/kehadiran/destroy/{rombel_id}', 'destroy')->name('kehadiran.destroy');
+    });
 
     Route::controller(TahunAjaranController::class)->prefix('tahun_ajaran')->name('tahun_ajaran.')->group(function () {
         Route::get('/tahun_ajaran/{type}', 'index')->name('index');
-        Route::get('/semester/{type}/{tahun}', 'semester')->name('semester');
     });
     Route::controller(PengumumanController::class)->prefix('pengumuman')->name('pengumuman.')->group(function () {
         Route::get('/show_pengumuman', 'show_pengumuman')->name('show_pengumuman');
@@ -60,6 +63,7 @@ Route::group(['middleware' => ["must-login"]], function () {
             Route::get('rekap_kehadiran/{tahun}/{semester}/{rombel}/{id}', 'rekap_kehadiran')->name('siswa.rekap_kehadiran');
             Route::get('get_rekap_kehadiran/', 'getDataRekapKehadiran')->name('siswa.get_rekap_kehadiran');
         });
+
     });
     Route::group(['middleware' => ["admin"]], function () {
         // profil
@@ -75,6 +79,8 @@ Route::group(['middleware' => ["must-login"]], function () {
             Route::get('/show_kehadiran/{tahun}/{semester}', 'admin_show_kehadiran')->name('kehadiran.show_kehadiran');
             Route::get('/detail_kehadiran/{tahun}/{semester}/{rombel}', 'admin_detail_kehadiran')->name('kehadiran.detail_kehadiran');
             Route::get('/get_kehadiran', 'admin_get_kehadiran')->name('kehadiran.get_kehadiran');
+            Route::get('/kehadiran/show_input/{tahun}/{semester}/{id}', 'admin_show_input')->name('kehadiran.show_input');
+            Route::post('/kehadiran/save', 'admin_store')->name('kehadiran.store');
         });
         Route::controller(EkskulController::class)->prefix('admin')->name('admin.')->group(function () {
             Route::get('/show_ekskul/{tahun}/{semester}', 'admin_show_ekskul')->name('ekskul.show_ekskul');
@@ -85,7 +91,6 @@ Route::group(['middleware' => ["must-login"]], function () {
 
         // siswa
         Route::controller(SiswaController::class)->prefix('admin')->name('admin.')->group(function () {
-            Route::get('/siswa/{tahun}/{semester}', 'index')->name('siswa');
             Route::get('/siswa/show-siswa/{tahun}/{semester}/{rombel}', 'show_siswa')->name('siswa.show_siswa');
             Route::post('/siswa', 'store')->name('siswa.store');
             Route::post('/siswa/update/{id}', 'update')->name('siswa.update');
@@ -95,7 +100,6 @@ Route::group(['middleware' => ["must-login"]], function () {
 
             Route::post('/siswa/next_grade', 'next_grade')->name('siswa.next_grade');
             Route::post('/siswa/aktivasi', 'aktivasi')->name('siswa.aktivasi');
-            Route::get('/siswa/tambah_aktivasi/{rombel}', 'tambah_aktivasi')->name('siswa.tambah_aktivasi');
             Route::post('/siswa/aktivasiAll/{rombel}', 'aktivasiAll')->name('siswa.aktivasiAll');
             Route::post('/siswa/deaktivasiAll/{rombel}', 'deaktivasiAll')->name('siswa.deaktivasiAll');
             Route::post('/siswa/deaktivasi/{id}', 'deaktivasi')->name('siswa.deaktivasi');
@@ -103,11 +107,12 @@ Route::group(['middleware' => ["must-login"]], function () {
             Route::get('/siswa_not_active', 'siswa_not_active_index')->name('siswa.siswa_not_active');
             Route::get('/not_active/{angkatan}', 'siswa_not_active')->name('siswa.not_active');
             Route::get('/siswa/clear_data/{angkatan}', 'clear_data')->name('siswa.clear_data');
-            Route::get('/siswa/show_next_grade/{rombel}', 'show_next_grade')->name('siswa.show_next_grade');
+            Route::get('/siswa/show_next_grade/{tahun}/{semester}/{rombel}', 'show_next_grade')->name('siswa.show_next_grade');
             Route::get('/siswa/show_lulus/{tahun}/{semester}/{rombel}', 'show_lulus')->name('siswa.show_lulus');
             Route::post('/siswa/lulus', 'lulus')->name('siswa.lulus');
 
             Route::get('/siswa/tambah_data/{tahun}/{semester}/{rombel}', 'tambah_data')->name('siswa.tambah_data');
+            Route::post('/siswa/migrasi', 'migrasi')->name('siswa.migrasi');
         });
 
         // guru
@@ -128,6 +133,7 @@ Route::group(['middleware' => ["must-login"]], function () {
             Route::post('/guru', 'store')->name('guru.store');
             Route::get('/guru/tambah_data/{tahun}/{semester}', 'tambah_data')->name('guru.tambah_data');
             Route::get('/guru/filter_kehadiran/{tahun}/{semester}', 'filter_kehadiran')->name('guru.filter_kehadiran');
+            Route::post('/guru/migrasi', 'migrasi')->name('guru.migrasi');
         });
 
         // rombel
@@ -137,6 +143,9 @@ Route::group(['middleware' => ["must-login"]], function () {
             Route::post('/rombel/update/{rombel}', 'update')->name('rombel.update');
             Route::delete('/rombel/destroy/{rombel}', 'destroy')->name('rombel.destroy');
             Route::get('/rombel/tambah_data/{tahun}/{semester}', 'tambah_data')->name('rombel.tambah_data');
+            Route::post('/rombel/migrasi', 'migrasi')->name('rombel.migrasi');
+            Route::get('/rombel/show/{tahun}/{semester}/{rombel}', 'show')->name('rombel.show');
+
         });
 
         // sesi
@@ -173,13 +182,13 @@ Route::group(['middleware' => ["must-login"]], function () {
 
         // jadwal pelajaran
         Route::controller(JadwalPelajaranController::class)->prefix('admin')->name('admin.')->group(function () {
-            Route::get('/jadwal_pelajaran/{tahun}/{semester}', 'index')->name('jadwal_pelajaran');
             Route::get('/jadwal_pelajaran/show-jadwal/{tahun}/{semester}/{rombel}', 'show_jadwal')->name('jadwal_pelajaran.show_jadwal');
             Route::post('/jadwal_pelajaran', 'store')->name('jadwal_pelajaran.store');
             Route::post('/jadwal_pelajaran/update/{id}', 'update')->name('jadwal_pelajaran.update');
             Route::delete('/jadwal_pelajaran/destroy/{id}', 'destroy')->name('jadwal_pelajaran.destroy');
             Route::get('/jadwal_pelajaran/get-mapels', 'getMapelsByGuru')->name('jadwal_pelajaran.get-mapels');
             Route::get('/jadwal/tambah_data/{tahun}/{semester}/{rombel}', 'tambah_data')->name('jadwal.tambah_data');
+            Route::post('/jadwal/migrasi', 'migrasi')->name('jadwal.migrasi');
         });
 
     });
@@ -204,10 +213,7 @@ Route::group(['middleware' => ["must-login"]], function () {
             Route::get('/kehadiran/filter', 'filter')->name('kehadiran.filter');
             Route::get('/kehadiran/show_input/{tahun}/{semester}/{id}', 'show_input')->name('kehadiran.show_input');
             Route::post('/kehadiran/save', 'store')->name('kehadiran.store');
-            Route::post('/kehadiran/update/{id}', 'update')->name('kehadiran.update');
-            Route::get('/kehadiran/destroy/{rombel_id}', 'destroy')->name('kehadiran.destroy');
             Route::get('/kehadiran/get-kehadiran', 'getKehadiran_guru')->name('kehadiran.get-kehadiran');
-            Route::get('/kehadiran/show_update/{id}/{siswa_id}', 'show_update')->name('kehadiran.show_update');
         });
 
         // ekskul
@@ -219,18 +225,17 @@ Route::group(['middleware' => ["must-login"]], function () {
             Route::post('/ekskul/store', 'store')->name('ekskul.store');
             Route::post('/ekskul/addmember', 'addmember')->name('ekskul.addmember');
             Route::post('/ekskul/update/{id}', 'update')->name('ekskul.update');
-            Route::get('/ekskul/destroy/{id}', 'destroy')->name('ekskul.destroy');
             Route::delete('/ekskul/delete_member/{id}', 'delete_member')->name('ekskul.delete_member');
-            Route::post('/ekskul/change_status', 'change_status')->name('ekskul.change_status');
-            Route::get('/ekskul/activate/{id}', 'activate')->name('ekskul.activate');
         });
         Route::controller(NilaiEkskulController::class)->prefix('guru')->name('guru.')->group(function () {
             Route::get('/show_ekskul/{tahun}/{semester}', 'index')->name('show_ekskul');
-            Route::get('/nilai_ekskul/{tahun}/{semester}/{id}', 'nilai')->name('nilai_ekskul');
-            Route::get('/tambah_nilai/{tahun_ajaran_id}/{ekskul}', 'tambah_nilai')->name('tambah_nilai');
+            Route::get('/show_rombel/{tahun}/{semester}/{ekskul_id}', 'show_rombel')->name('nilai_ekskul.show_rombel');
+            Route::get('/nilai_ekskul/{tahun}/{semester}/{rombel}/{id}', 'nilai')->name('nilai_ekskul');
+            Route::get('/tambah_nilai/{rombel}/{tahun_ajaran_id}/{ekskul}', 'tambah_nilai')->name('tambah_nilai');
             Route::post('/nilai_ekskul/store/{ekskul}', 'store')->name('nilai_ekskul.store');
             Route::post('/nilai_ekskul/update/{id}', 'update')->name('nilai_ekskul.update');
             Route::get('/nilai_ekskul/destroy/{id}', 'destroy')->name('nilai_ekskul.destroy');
+
         });
 
         // profil

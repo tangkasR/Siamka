@@ -30,10 +30,7 @@ class EkskulService
     {
         return $this->ekskul->getMemberList($id);
     }
-    public function getMemberListNotActive($id)
-    {
-        return $this->ekskul->getMemberListNotActive($id);
-    }
+
     public function getSiswaNonMember($rombel, $ekskul)
     {
         return $this->ekskul->getSiswaNonMember($rombel, $ekskul);
@@ -50,35 +47,7 @@ class EkskulService
     {
         return $this->ekskul->update($data['nama_ekskul'], $id);
     }
-    public function destroy($id)
-    {
-        $siswas = $this->ekskul->getMemberList($id)->get();
-        return $this->handleDestroy($siswas, $id);
-    }
-    private function handleDestroy($siswas, $id)
-    {
-        $ekskul = $this->ekskul->getById($id);
-        foreach ($siswas as $siswa) {
-            $siswa = $this->siswa->getById($siswa->id);
-            $ekskul->siswas()->detach($siswa);
-            $ekskul->siswas()->attach($siswa, [
-                'status' => 'tidak aktif',
-            ]);
-        }
-    }
-    public function activate($id)
-    {
-        return $this->ekskul->activate($id);
-    }
-    public function change_status($datas)
-    {
-        $siswa = $this->siswa->getById($datas['siswa_id']);
-        $ekskul = $this->ekskul->getById($datas['ekskul_id']);
-        $ekskul->siswas()->detach($siswa);
-        $ekskul->siswas()->attach($siswa, [
-            'status' => $datas['status'],
-        ]);
-    }
+
     public function delete_member($id_siswa, $datas)
     {
         return $this->handleDeleteMember($id_siswa, $datas);
@@ -102,5 +71,13 @@ class EkskulService
     public function getEkskulSiswa($nis)
     {
         return $this->ekskul->getEkskulSiswa($nis);
+    }
+    public function getRombel($id)
+    {
+        return $this->ekskul->getRombel($id);
+    }
+    public function getMemberListNilai($id, $rombel)
+    {
+        return $this->ekskul->getMemberListNilai($id, $rombel);
     }
 }

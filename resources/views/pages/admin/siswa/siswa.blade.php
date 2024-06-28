@@ -5,7 +5,7 @@
 @section('table-role', 'Admin')
 @section('back')
     <div class="font-medium  border border-slate-500 bg-slate-500 text-white rounded-full  me-3">
-        <a href="{{ route('admin.siswa', ['tahun' => $tahun_ajaran->tahun_ajaran, 'semester' => $tahun_ajaran->semester, 'rombel' => $rombel]) }}"
+        <a href="{{ route('admin.rombel.show', ['tahun' => $tahun_ajaran->tahun_ajaran, 'semester' => $tahun_ajaran->semester, 'rombel' => $rombel]) }}"
             class="flex justify-center items-center"><i class='bx bx-chevron-left text-[30px]'></i></a>
     </div>
 @endsection
@@ -43,6 +43,23 @@
                                             href="{{ route('admin.siswa.tambah_data', ['tahun' => $tahun_ajaran->tahun_ajaran, 'semester' => $tahun_ajaran->semester, 'rombel' => $rombel]) }}">
                                             Import Siswa</a>
                                     </li>
+                                    @if ($tahun_ajaran->semester == 'genap')
+                                        @if (count($siswa) == 0)
+                                            <hr class="my-1 border-gray-50 dark:border-zinc-600">
+                                            <li>
+                                                <a data-tw-toggle="modal" data-tw-target="#modal-id_migration"
+                                                    class="cursor-pointer block text-green-500 w-full px-4 py-1 text-sm font-medium  bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 ">
+                                                    Transfer Data</a>
+                                            </li>
+                                        @else
+                                            <hr class="my-1 border-gray-50 dark:border-zinc-600">
+                                            <li>
+                                                <a href="{{ route('admin.siswa.show_next_grade', ['tahun' => $tahun_ajaran->tahun_ajaran, 'semester' => $tahun_ajaran->semester, 'rombel' => $rombel]) }}"
+                                                    class="cursor-pointer block text-red-500 w-full px-4 py-1 text-sm font-medium  bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 ">
+                                                    Naik Kelas</a>
+                                            </li>
+                                        @endif
+                                    @endif
                                 </ul>
                             </div>
                             <div class="relative dropdown ">
@@ -76,6 +93,31 @@
                                     </a>
                                 </div>
                             @endif
+
+                            <div class="">
+                                <div class="relative dropdown ">
+                                    <button type="button"
+                                        class="hover:bg-gray-700 hover:text-white btn flex gap-2 items-center justify-center py-2 px-5 border border-gray-700 text-gray-700 rounded-md font-medium leading-tight  dropdown-toggle"
+                                        id="dropdownMenuButton1" data-bs-toggle="dropdown"><span>Cetak</span><i
+                                            class='bx bx-printer text-[20px]'></i></button>
+                                    <ul class="absolute z-50 float-left py-2 mt-1 text-left list-none bg-white border-none rounded-lg shadow-lg dropdown-menu w-44 bg-clip-padding dark:bg-zinc-700 hidden"
+                                        aria-labelledby="dropdownMenuButton1" data-popper-placement="bottom-start"
+                                        style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(49px, 1636.5px, 0px);">
+                                        <li>
+                                            <a class="block w-full px-4 py-1 text-sm font-medium text-green-500 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 dark:text-gray-100 dark:hover:bg-zinc-600/50"
+                                                id="btn_excel">
+                                                Excel
+                                            </a>
+                                        </li>
+                                        <hr class="my-1 border-gray-50 dark:border-zinc-600">
+                                        <li>
+                                            <a class="block text-red-500 w-full px-4 py-1 text-sm font-medium  bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 dark:text-gray-100 dark:hover:bg-zinc-600/50"
+                                                id="btn_pdf">
+                                                PDF</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                         <div class="" hidden>
                             {{-- template excel --}}
@@ -130,7 +172,10 @@
 
                     </div>
                 </div>
-                <div class="relative overflow-x-auto card-body">
+                <div class="relative overflow-x-auto card-body" id="template_pdf">
+                    <div class="ms-12 hidden" id="print_nama_rombel">
+                        <h1 class="text-[20px] font-medium">Daftar Siswa Rombel: {{ $rombel->nama_rombel }}</h1>
+                    </div>
                     <table id="datatable" class="text-center table w-full pt-4 text-gray-700 dark:text-zinc-100 capitalize">
                         <thead>
                             <tr class="bg-blue-100">
@@ -145,12 +190,14 @@
                                 <th class="p-4">
                                     Nomor Id</th>
                                 <th class="p-4">
+                                    Jenis Kelamin</th>
+                                <th class="p-4 hidden_item">
                                     Username</th>
-                                <th class="p-4">
+                                <th class="p-4 hidden_item">
                                     Status Siswa</th>
-                                <th class="p-4">
+                                <th class="p-4 hidden_item">
                                     Status Akun</th>
-                                <th class="p-4">
+                                <th class="p-4 hidden_item">
                                 </th>
                             </tr>
                         </thead>
@@ -169,20 +216,22 @@
                                     <td class="p-4">
                                         {{ $data->nomor_id }}</td>
                                     <td class="p-4">
+                                        {{ $data->jenis_kelamin }}</td>
+                                    <td class="p-4 hidden_item">
                                         {{ $data->username }}</td>
                                     @if ($data->status_siswa == 'belum lulus')
-                                        <td class="p-4 min-w-[150px] w-[150px] text-green-400 font-medium">
+                                        <td class="hidden_item p-4 min-w-[150px] w-[150px] text-green-400 font-medium">
                                             {{ $data->status_siswa }}</td>
                                     @endif
                                     @if ($data->status_siswa == 'keluar')
-                                        <td class="p-4 min-w-[150px] w-[150px] text-red-400 font-medium">
+                                        <td class="hidden_item p-4 min-w-[150px] w-[150px] text-red-400 font-medium">
                                             {{ $data->status_siswa }}</td>
                                     @endif
                                     @if ($data->status_siswa == 'lulus')
-                                        <td class="p-4 min-w-[150px] w-[150px] text-red-400 font-medium">
+                                        <td class="hidden_item p-4 min-w-[150px] w-[150px] text-red-400 font-medium">
                                             {{ $data->status_siswa }}</td>
                                     @endif
-                                    <td class="p-4 min-w-[150px] w-[150px]">
+                                    <td class="hidden_item p-4 min-w-[150px] w-[150px]">
                                         @if ($data->aktivasi_akun == 'aktif')
                                             <a data-tw-toggle="modal"
                                                 data-tw-target="#modal-id_single_deaktivation_{{ $loop->iteration }}"
@@ -193,8 +242,10 @@
                                             <form action="{{ route('admin.siswa.aktivasi') }}" method="POST"
                                                 class=" mx-auto">
                                                 @csrf
-                                                <input type="text" value="{{ $data->id }}" name="siswa_id" hidden>
-                                                <input type="text" value="{{ $rombel->id }}" name="rombel_id" hidden>
+                                                <input type="text" value="{{ $data->id }}" name="siswa_id"
+                                                    hidden>
+                                                <input type="text" value="{{ $rombel->id }}" name="rombel_id"
+                                                    hidden>
                                                 <button type="submit"
                                                     class="w-[130px] cursor-pointer hover:border-green-500 hover:bg-green-600 text-white py-2 px-6 border  bg-red-500 rounded-full  capitalize font-medium btn">
                                                     {{ $data->aktivasi_akun }}
@@ -202,7 +253,7 @@
                                             </form>
                                         @endif
                                     </td>
-                                    <td class="p-4  ">
+                                    <td class="hidden_item p-4">
                                         <div class="relative dropdown">
                                             <button type="button" class="py-2 font-medium leading-tight  dropdown-toggle"
                                                 id="dropdownMenuButton1" data-bs-toggle="dropdown"><i
@@ -237,8 +288,9 @@
                                                 <li>
                                                     <a class="block w-full px-4 py-1 text-sm font-medium text-gray-500 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 dark:text-gray-100 dark:hover:bg-zinc-600/50"
                                                         data-tw-toggle="modal"
-                                                        data-tw-target="#modal-id_form_keluar_{{ $loop->iteration }}"><i
-                                                            class="text-lg align-middle bx bx-trash ltr:mr-2 rtl:ml-2"></i>Keluar</a>
+                                                        data-tw-target="#modal-id_form_keluar_{{ $loop->iteration }}">
+                                                        <i
+                                                            class="text-lg align-middle bx bx-log-out ltr:mr-2 rtl:ml-2"></i>Keluar</a>
                                                 </li>
                                                 <hr class="my-1 border-gray-50 dark:border-zinc-600">
                                                 <li>
@@ -620,6 +672,52 @@
     </div>
     {{-- End Modal Deaktivasi --}}
 
+    {{-- Modal Migrasi --}}
+    <div class="relative z-50 hidden modal" id="modal-id_migration" aria-labelledby="modal-title" role="dialog"
+        aria-modal="true">
+        <div class="fixed inset-0 z-50 overflow-y-auto">
+            <div class="absolute inset-0 transition-opacity bg-black bg-opacity-50 modal-overlay">
+            </div>
+            <div class="p-4 mx-auto animate-translate sm:max-w-lg">
+                <div
+                    class="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl dark:bg-zinc-600">
+                    <div class="bg-white dark:bg-zinc-700">
+                        <button type="button"
+                            class="absolute top-3 right-2.5 text-gray-400 border-transparent hover:bg-gray-50/50 hover:text-gray-900 dark:text-gray-100 rounded-lg text-sm px-2 py-1 ltr:ml-auto rtl:mr-auto inline-flex items-center dark:hover:bg-zinc-600"
+                            data-tw-dismiss="modal">
+                            <i class="text-xl text-gray-500 mdi mdi-close dark:text-zinc-100/60"></i>
+                        </button>
+                        <div class="p-5">
+                            <div class="mx-auto p-3 bg-green-50 rounded-full text-green-500 font-medium w-fit mb-3">
+                                <i class='bx bxs-user-account text-[40px]'></i>
+                            </div>
+                            <h3 class="text-xl font-medium text-gray-700 dark:text-gray-100">
+                                Transfer data siswa dari semester sebelumnya!</h3>
+                            <form action="{{ route('admin.siswa.migrasi') }}" method="POST"
+                                enctype="multipart/form-data">
+                                @csrf
+                                <input type="text" name="tahun" value="{{ $tahun_ajaran->tahun_ajaran }}"
+                                    id="" hidden>
+                                <input type="text" name="semester" value="{{ $tahun_ajaran->semester }}"
+                                    id="" hidden>
+                                <input type="text" name="tahun_ajaran_id" value="{{ $tahun_ajaran_id }}"
+                                    id="" hidden>
+                                <input type="text" name="nama_rombel" value="{{ $rombel->nama_rombel }}"
+                                    id="" hidden>
+                                <input type="text" name="rombel_id" value="{{ $rombel->id }}" id=""
+                                    hidden>
+                                <button type="submit"
+                                    class="mt-3 w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-md transition-all duration-300">
+                                    Migrasi
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- End Modal Migrasi --}}
 
 
     {{-- Modal Aktivation All --}}
@@ -684,4 +782,70 @@
             toast('error', '{{ Session::get('error') }}')
         </script>
     @endif
+
+    <input type="text" name="nama_rombel" value="{{ $rombel->nama_rombel }}" id="nama_rombel_" hidden>
+    <script>
+        document.getElementById('btn_excel').addEventListener('click', () => {
+            const workbook = XLSX.utils.book_new();
+            const tableSiswa = document.getElementById('datatable');
+
+            // Ambil indeks kolom yang ingin kamu sertakan dalam array
+            const selectedColumns = [0, 1, 2, 3, 4, 5]; // Ganti dengan indeks kolom yang kamu inginkan
+
+            // Buat array untuk menampung data yang sudah diseleksi
+            const selectedData = [];
+            const headers = [];
+
+            // Ambil header kolom
+            const headerRow = tableSiswa.rows[0];
+            for (let i = 0; i < selectedColumns.length; i++) {
+                headers.push(headerRow.cells[selectedColumns[i]].innerText);
+            }
+
+            // Ambil data untuk setiap baris
+            for (let i = 1; i < tableSiswa.rows.length; i++) {
+                const rowData = [];
+                for (let j = 0; j < selectedColumns.length; j++) {
+                    rowData.push(tableSiswa.rows[i].cells[selectedColumns[j]].innerText);
+                }
+                selectedData.push(rowData);
+            }
+
+            // Buat worksheet dari data yang sudah diseleksi
+            const worksheetSiswa = XLSX.utils.aoa_to_sheet([headers, ...selectedData]);
+            const rombel = document.getElementById('nama_rombel_').value;
+
+            // Tambahkan worksheet ke workbook
+            XLSX.utils.book_append_sheet(workbook, worksheetSiswa, 'Daftar Siswa');
+
+            // Simpan file Excel dengan nama yang sesuai
+            XLSX.writeFile(workbook, `daftar-siswa-rombel-${rombel}.xlsx`);
+        });
+
+        document.getElementById('btn_pdf').addEventListener('click', () => {
+            var btnExcel = document.getElementById('btn_excel')
+            var btnPdf = document.getElementById('btn_pdf')
+            const show = document.getElementById('datatable_length');
+            const search = document.getElementById('datatable_filter');
+            const paginate = document.getElementById('datatable_paginate');
+            const nama_rombel = document.getElementById('print_nama_rombel');
+            show.classList.add('hidden')
+            search.classList.add('hidden')
+            paginate.classList.add('hidden')
+            nama_rombel.classList.remove('hidden')
+
+            let hiddenItem = document.querySelectorAll('.hidden_item');
+            hiddenItem.forEach(element => {
+                console.log(element);
+                element.classList.add('hidden')
+            });
+
+            var printContents = document.getElementById('template_pdf').innerHTML;
+            var originalContents = document.body.innerHTML;
+            document.body.innerHTML = `<div style="margin-bottom:30px"></div>`
+            document.body.innerHTML += printContents;
+            window.print();
+            window.location.reload()
+        })
+    </script>
 @endsection

@@ -64,18 +64,6 @@ class EkskulController extends Controller
             return redirect()->back()->with('error', 'Gagal mengubah data');
         }
     }
-
-    public function destroy($id)
-    {
-        try {
-            $this->ekskul->destroy($id);
-            return redirect()->back()->with('message', 'Berhasil menonaktifkan data ekskul');
-
-        } catch (QueryException $er) {
-            return redirect()->back()->with('error', 'Gagal menonaktifkan data ekskul');
-        }
-    }
-
     public function daftar_anggota($tahun, $semester, $id)
     {
         $tahun_ajaran_id = $this->tahun_ajaran->getId($tahun, $semester);
@@ -133,26 +121,6 @@ class EkskulController extends Controller
 
         } catch (QueryException $er) {
             return redirect()->back()->with('error', 'Gagal mengeluarkan siswa dari ekskul');
-        }
-    }
-    public function change_status(Request $request)
-    {
-        try {
-            $this->ekskul->change_status($request->all());
-            return redirect()->back()->with('message', 'Berhasil mengubah status siswa');
-
-        } catch (QueryException $er) {
-            return redirect()->back()->with('error', 'Gagal mengubah status siswa');
-        }
-    }
-    public function activate($id)
-    {
-        try {
-            $this->ekskul->activate($id);
-            return redirect()->back()->with('message', 'Berhasil mengaktifkan data ekskul');
-
-        } catch (QueryException $er) {
-            return redirect()->back()->with('error', 'Gagal mengaktifkan data ekskul');
         }
     }
 

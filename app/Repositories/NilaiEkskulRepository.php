@@ -14,7 +14,7 @@ class NilaiEkskulRepository implements NilaiEkskulInterface
         $this->nilai_ekskul = $nilai_ekskul;
     }
 
-    public function getAll($ekskul_id)
+    public function getAll($ekskul_id, $rombel)
     {
         $siswas = DB::table('nilai_ekskuls')
             ->join('siswas', 'nilai_ekskuls.siswa_id', '=', 'siswas.id')
@@ -24,6 +24,9 @@ class NilaiEkskulRepository implements NilaiEkskulInterface
                     ->on('nilai_ekskuls.ekskul_id', '=', 'ekskul_siswa.ekskul_id')
                     ->where('ekskul_siswa.ekskul_id', '=', $ekskul_id);
             })
+            ->join('rombel_siswa', 'siswas.id', '=', 'rombel_siswa.siswa_id')
+            ->join('rombels', 'rombel_siswa.rombel_id', '=', 'rombels.id')
+            ->whereRaw("SUBSTRING_INDEX(rombels.nama_rombel, ' ', 1) = ?", [$rombel])
             ->where('nilai_ekskuls.ekskul_id', $ekskul_id)
             ->select(
                 'siswas.nama',
@@ -31,9 +34,11 @@ class NilaiEkskulRepository implements NilaiEkskulInterface
                 'nilai_ekskuls.semester',
                 'nilai_ekskuls.nilai',
                 'nilai_ekskuls.id',
-                'ekskuls.nama_ekskul'
+                'ekskuls.nama_ekskul',
+                'rombels.nama_rombel'
             )
             ->distinct()
+            ->orderBy('rombels.nama_rombel')
             ->orderBy('siswas.nama')
             ->get();
 
@@ -45,7 +50,7 @@ class NilaiEkskulRepository implements NilaiEkskulInterface
             $query->where('nis', $nis);
         }])->get();
     }
-    public function checkNilaiWithSemester($ekskul_id, $tahun_ajaran_id)
+    public function checkNilaiWithSemester($ekskul_id, $tahun_ajaran_id, $rombel)
     {
         return $siswas = DB::table('nilai_ekskuls')
             ->join('siswas', 'nilai_ekskuls.siswa_id', '=', 'siswas.id')
@@ -55,14 +60,12 @@ class NilaiEkskulRepository implements NilaiEkskulInterface
                     ->on('nilai_ekskuls.ekskul_id', '=', 'ekskul_siswa.ekskul_id')
                     ->where('ekskul_siswa.ekskul_id', '=', $ekskul_id);
             })
-            ->where('nilai_ekskuls.tahun_ajaran_id', $tahun_ajaran_id)
+            ->join('rombel_siswa', 'siswas.id', '=', 'rombel_siswa.siswa_id')
+            ->join('rombels', 'rombel_siswa.rombel_id', '=', 'rombels.id')
+            ->whereRaw("SUBSTRING_INDEX(rombels.nama_rombel, ' ', 1) = ?", [$rombel])
+            ->where('nilai_ekskuls.ekskul_id', $ekskul_id)
             ->select(
                 'siswas.nama',
-                'nilai_ekskuls.siswa_id',
-                'nilai_ekskuls.semester',
-                'nilai_ekskuls.nilai',
-                'nilai_ekskuls.id',
-                'ekskuls.nama_ekskul'
             )
             ->distinct()
             ->orderBy('siswas.nama')
@@ -83,7 +86,6 @@ class NilaiEkskulRepository implements NilaiEkskulInterface
         return $this->nilai_ekskul->where('id', $id)
             ->update([
                 'nilai' => $datas['nilai'],
-                'semester' => $datas['semester'],
             ]);
     }
     public function destroy($condition, $params)

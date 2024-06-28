@@ -21,7 +21,6 @@ class Guru extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable, uuid;
 
     protected $fillable = [
-        'mata_pelajaran_id',
         'nama',
         'jabatan',
         'nomor_induk_yayasan',

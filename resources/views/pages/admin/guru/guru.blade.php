@@ -37,13 +37,18 @@
                                     </li>
                                     <hr class="my-1 border-gray-50 dark:border-zinc-600">
                                     <li>
-                                        {{-- <a class="cursor-pointer block text-blue-700 w-full px-4 py-1 text-sm font-medium  bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 "
-                                            data-tw-toggle="modal" data-tw-target="#modal-id_form_add">
-                                            Import Guru</a> --}}
                                         <a class="cursor-pointer block text-blue-700 w-full px-4 py-1 text-sm font-medium  bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 "
                                             href="{{ route('admin.guru.tambah_data', ['tahun' => $tahun, 'semester' => $semester]) }}">
                                             Import Guru</a>
                                     </li>
+                                    @if (count($guru) == 0)
+                                        <hr class="my-1 border-gray-50 dark:border-zinc-600">
+                                        <li>
+                                            <a data-tw-toggle="modal" data-tw-target="#modal-id_migration"
+                                                class="cursor-pointer block text-green-500 w-full px-4 py-1 text-sm font-medium  bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 ">
+                                                Transfer Data</a>
+                                        </li>
+                                    @endif
                                 </ul>
                             </div>
                             <div class="relative dropdown ">
@@ -463,6 +468,47 @@
             </div>
         </div>
     </div>
+
+    {{-- Modal Migrasi --}}
+    <div class="relative z-50 hidden modal" id="modal-id_migration" aria-labelledby="modal-title" role="dialog"
+        aria-modal="true">
+        <div class="fixed inset-0 z-50 overflow-y-auto">
+            <div class="absolute inset-0 transition-opacity bg-black bg-opacity-50 modal-overlay">
+            </div>
+            <div class="p-4 mx-auto animate-translate sm:max-w-lg">
+                <div
+                    class="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl dark:bg-zinc-600">
+                    <div class="bg-white dark:bg-zinc-700">
+                        <button type="button"
+                            class="absolute top-3 right-2.5 text-gray-400 border-transparent hover:bg-gray-50/50 hover:text-gray-900 dark:text-gray-100 rounded-lg text-sm px-2 py-1 ltr:ml-auto rtl:mr-auto inline-flex items-center dark:hover:bg-zinc-600"
+                            data-tw-dismiss="modal">
+                            <i class="text-xl text-gray-500 mdi mdi-close dark:text-zinc-100/60"></i>
+                        </button>
+                        <div class="p-5">
+                            <div class="mx-auto p-3 bg-green-50 rounded-full text-green-500 font-medium w-fit mb-3">
+                                <i class='bx bxs-user-account text-[40px]'></i>
+                            </div>
+                            <h3 class="text-xl font-medium text-gray-700 dark:text-gray-100">
+                                Transfer data guru dari semester sebelumnya!</h3>
+                            <form action="{{ route('admin.guru.migrasi') }}" method="POST"
+                                enctype="multipart/form-data">
+                                @csrf
+                                <input type="text" name="tahun" value="{{ $tahun }}" id="" hidden>
+                                <input type="text" name="semester" value="{{ $semester }}" id="" hidden>
+                                <input type="text" name="tahun_ajaran_id" value="{{ $tahun_ajaran_id }}"
+                                    id="" hidden>
+                                <button type="submit"
+                                    class="mt-3 w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-md transition-all duration-300">
+                                    Transfer
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- End Modal Migrasi --}}
 
     {{-- Modal Aktivation All --}}
     <div class="relative z-50 hidden modal" id="modal-id_aktivation_all" aria-labelledby="modal-title" role="dialog"
