@@ -49,6 +49,7 @@ class EkskulRepository implements EkskulInterface
                     ->where('ekskul_siswa.ekskul_id', '=', $ekskul_id);
             })
             ->whereNull('ekskul_siswa.siswa_id')
+            ->where('siswas.status_siswa', 'belum lulus')
             ->select('siswas.id', 'siswas.nama')
             ->orderBy('siswas.nama', 'asc')
             ->get();
