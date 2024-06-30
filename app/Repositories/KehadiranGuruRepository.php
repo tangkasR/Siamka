@@ -79,8 +79,8 @@ class KehadiranGuruRepository implements KehadiranGuruInterface
 
         // benar
         return $lokasi = [
-            'latitude' => -7.7682121,
-            'longitude' => 110.4083341,
+            'latitude' => -7.537368581394443,
+            'longitude' => 109.1264773486788,
         ];
 
     }
@@ -98,10 +98,10 @@ class KehadiranGuruRepository implements KehadiranGuruInterface
             'total_jam' => 0,
         ]);
     }
-    public function AbsenKeluar($tanggal)
+    public function AbsenKeluar($tanggal, $datas)
     {
-        $jam_keluar = Carbon::now()->addHour(6);
-        $kehadiran_guru_ = $this->kehadiran_guru->where('tanggal', $tanggal)->first();
+        $jam_keluar = Carbon::now();
+        $kehadiran_guru_ = $this->kehadiran_guru->where('tanggal', $tanggal)->where('guru_id', $datas['guru_id'])->first();
         $jam_masuk = Carbon::parse($kehadiran_guru_->jam_masuk);
 
         // Hitung total jam dalam menit

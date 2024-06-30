@@ -14,8 +14,9 @@ class DateRepository implements DateInterface
     }
     public function getDate()
     {
+        return $this->date::today();
         // return $this->date::today()->subYear(3)->addMonth(1);
-        return $this->date::today()->subYear(2)->subMonth(2);
+        // return $this->date::today()->subYear(2)->subMonth(2);
 
         // return $this->date::today()->subYear(2)->addMonth(1);
         // return $this->date::today()->subYear(1)->subMonth(2);

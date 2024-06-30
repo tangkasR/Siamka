@@ -11,6 +11,6 @@ interface KehadiranGuruInterface
     public function checkAbsensi($guru_id, $tanggal);
     public function setLatLongSekolah();
     public function store($datas, $tanggal, $tahun_ajaran_id);
-    public function AbsenKeluar($tanggal);
+    public function AbsenKeluar($tanggal, $datas);
     public function rataRataJamKerja();
 }

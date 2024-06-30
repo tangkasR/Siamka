@@ -87,9 +87,9 @@ class KehadiranGuruController extends Controller
         }
 
     }
-    public function absen_keluar()
+    public function absen_keluar(Request $request)
     {
-        $this->kehadiran_guru->AbsenKeluar();
+        $this->kehadiran_guru->AbsenKeluar($request->all());
         return back();
     }
 }

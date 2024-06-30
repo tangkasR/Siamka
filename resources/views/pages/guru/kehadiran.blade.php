@@ -50,6 +50,7 @@
                     <form action="{{ route('guru.kehadiran_guru.absen_keluar') }}" method="POST">
                         @csrf
                         @method('PUT')
+                        <input type="text" name="guru_id" value="{{ $guru->id }}" id="" hidden>
                         <button type="submit"
                             class="w-full  text-md font-medium hover:bg-red-700 bg-red-500 mt-3 px-4 py-2 rounded-lg text-white text-center btn">
                             Absen Keluar
@@ -262,7 +263,7 @@
             schoolCircle = L.circle([latitude_sekolah, longitude_sekolah], {
                 color: '#fc4e4e',
                 fillOpacity: 0.1,
-                radius: 100
+                radius: 35
             }).addTo(map);
         }
 

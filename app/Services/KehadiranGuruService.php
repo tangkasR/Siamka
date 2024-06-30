@@ -41,7 +41,7 @@ class KehadiranGuruService
     public function store($datas)
     {
         $distance = round($this->distance($datas));
-        if ($distance > 100) {
+        if ($distance > 40) {
             throw ValidationException::withMessages(['error' => 'Anda diluar lingkungan sekolah, dan berada dijarak ' . $distance . ' m']);
         }
 
@@ -88,10 +88,10 @@ class KehadiranGuruService
 
         return $distance * 1000;
     }
-    public function AbsenKeluar()
+    public function AbsenKeluar($datas)
     {
         $tanggal = $this->date->getDate();
-        return $this->kehadiran_guru->AbsenKeluar($tanggal);
+        return $this->kehadiran_guru->AbsenKeluar($tanggal, $datas);
     }
     public function rataRataJamKerja()
     {
