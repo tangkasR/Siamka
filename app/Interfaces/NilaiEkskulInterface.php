@@ -8,6 +8,6 @@ interface NilaiEkskulInterface
     public function checkNilaiWithSemester($ekskul_id, $tahun_ajaran_id, $rombel);
     public function store($siswa_id, $ekskul_id, $nilai, $tahun_ajaran_id, $semester);
     public function update($datas, $id);
-    public function destroy($condition, $params);
+    public function destroy($nis);
     public function getBySiswaNis($nis);
 }

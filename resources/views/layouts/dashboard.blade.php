@@ -252,7 +252,7 @@
                         </div>
 
                         <div class="min-h-[60vh] flex justify-center items-center" id="loader">
-                            <img src="{{ asset('loader.gif') }}" class="md:w-[300px] w-[150px]" alt="">
+                            <img src="{{ asset('loader.gif') }}" class=" w-[150px]" alt="">
                         </div>
                         <div class=" hidden" id="container">
                             @yield('content')

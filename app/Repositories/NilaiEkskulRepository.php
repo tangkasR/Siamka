@@ -88,8 +88,9 @@ class NilaiEkskulRepository implements NilaiEkskulInterface
                 'nilai' => $datas['nilai'],
             ]);
     }
-    public function destroy($condition, $params)
+    public function destroy($nis)
     {
-        return $this->nilai_ekskul->where($condition, $params)->delete();
+        return $this->nilai_ekskul->join('siswas', 'siswa_id', 'siswas.id')
+            ->where('siswas.nis', $nis)->delete();
     }
 }

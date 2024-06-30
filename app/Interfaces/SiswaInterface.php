@@ -8,7 +8,7 @@ interface SiswaInterface
     public function getSiswa($id);
     public function getSiswaAdmin($id);
     public function getByNama($nama);
-    public function getNotActive($angkatan);
+    public function getNotActive($angkatan, $nama_rombel);
     public function store($data);
     public function update($data, $id);
     public function destroy($id);
@@ -20,4 +20,5 @@ interface SiswaInterface
     public function keluar($id);
     public function getSiswaPerAngkatan();
     public function create($siswa, $tahun_ajaran_id, $rombel);
+    public function getNotActiveRombel($angkatan);
 }

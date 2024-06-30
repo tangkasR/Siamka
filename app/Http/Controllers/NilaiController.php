@@ -55,15 +55,28 @@ class NilaiController extends Controller
             'semester' => $semester,
         ]);
     }
-    public function show_siswa($tahun, $semester, $rombel)
+    public function show_siswa($tahun, $semester, $rombel, Request $request)
     {
         $guru_ = $this->auth->getUser('guru');
         $guru = $this->guru->getById($guru_->id);
+        if ($request->has("mapel_id") && $request->has('tipe_ujian')) {
+            return view('pages.guru.nilai.nilai', [
+                'rombel' => $this->rombel->getOne(Crypt::decrypt($rombel)),
+                'mapel' => $guru->mapels,
+                'guru' => $guru,
+                'nilais' => $this->nilai->getNilaiByParams(
+                    Crypt::decrypt($rombel), $request->mapel_id, $request->tipe_ujian, $request->semester, $this->tahun_ajaran->getId($tahun, $semester)
+                )->get(),
+                'tahun' => $tahun,
+                'semester' => $semester,
+                'tahun_ajaran_id' => $this->tahun_ajaran->getId($tahun, $semester),
+            ]);
+        }
         return view('pages.guru.nilai.nilai', [
             'rombel' => $this->rombel->getOne(Crypt::decrypt($rombel)),
             'mapel' => $guru->mapels,
             'guru' => $guru,
-            'nilais' => [],
+            'nilais' => $this->nilai->getNilai(Crypt::decrypt($rombel), $guru->mapels[0]->id, $this->tahun_ajaran->getId($tahun, $semester))->get(),
             'tahun' => $tahun,
             'semester' => $semester,
             'tahun_ajaran_id' => $this->tahun_ajaran->getId($tahun, $semester),
@@ -88,7 +101,7 @@ class NilaiController extends Controller
         return response($nilai);
     }
 
-    public function show_input($tahun, $semester, Rombel $rombel)
+    public function show_input($tahun, $semester, $tipe_ujian, Rombel $rombel)
     {
         // dd($this->siswa->getSiswa($rombel->id));
         $guru_ = $this->auth->getUser('guru');
@@ -101,50 +114,26 @@ class NilaiController extends Controller
             'tahun' => $tahun,
             'semester' => $semester,
             'tahun_ajaran_id' => $this->tahun_ajaran->getId($tahun, $semester),
+            'tipe_ujian' => $tipe_ujian,
         ]);
     }
 
     public function store(Request $request)
     {
-        $checkSiswa = $this->nilai->getNilaiByParams(
-            $request->rombel_id,
-            $request->mata_pelajaran_id,
-            $request->tipe_ujian,
-            $request->semester,
-            $request->tahun_ajaran_id
-        )->get();
+        try {
+            $this->nilai->store($request->all());
+            return redirect()->route('guru.nilai.show_siswa', ['tahun' => $request->tahun, 'semester' => $request->semester, 'rombel' => Crypt::encrypt($request->rombel_id)])
+                ->with('message', 'Berhasil menambah data nilai');
+        } catch (ValidationException $er) {
+            return redirect()->route('guru.nilai.show_siswa', ['tahun' => $request->tahun, 'semester' => $request->semester, 'rombel' => Crypt::encrypt($request->rombel_id)])
+                ->with('error', $er->getMessage());
+        }
 
-        if (count($checkSiswa) > 0) {
-            return redirect()->back()
-                ->with('error', 'Nilai dengan semester dan tipe ujian tersebut sudah dimasukan!');
-        }
-        if ($request->siswa_id == null) {
-            return redirect()->back()
-                ->with('error', 'Masukan semua nilai Siswa!');
-        }
-        if (count($request->siswa_id) != count($request->nilai)) {
-            return redirect()->back()
-                ->with('error', 'Masukan semua nilai Siswa!');
-        }
-        $this->nilai->store($request->all());
-        return redirect()->route('guru.nilai.show_siswa', ['tahun' => $request->tahun_ajaran_, 'semester' => $request->semester_, 'rombel' => Crypt::encrypt($request->rombel_id)])
-            ->with('message', 'Berhasil menambah data nilai');
     }
-    public function show_update($tahun, $semester, $id, $rombel_id)
+  
+    public function update(Request $request, $nilai)
     {
-        $id = base64_decode($id);
-        $rombel_id = base64_decode($rombel_id);
-        $nilai = $this->nilai->getNilaiById($id);
-        return view('pages.guru.nilai.ubah-nilai', [
-            'data' => $nilai,
-            'rombel' => $this->rombel->getOne($rombel_id),
-            'rombel_id' => $rombel_id,
-            'tahun' => $tahun,
-            'semester' => $semester,
-        ]);
-    }
-    public function update(Request $request, Nilai $nilai)
-    {
+
         try {
             $this->nilai->update($request->all(), $nilai);
             return redirect()->route('guru.nilai.show_siswa', ['tahun' => $request->tahun_ajaran_, 'semester' => $request->semester_, 'rombel' => Crypt::encrypt($request->rombel_id)])

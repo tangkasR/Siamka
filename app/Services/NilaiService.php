@@ -33,28 +33,7 @@ class NilaiService
 
     public function store($datas)
     {
-        return $this->handleStore($datas);
-    }
-    private function handleStore($datas)
-    {
-
-        $data_siswas = [];
-        foreach ($datas['siswa_id'] as $index => $siswa_id) {
-            array_push($data_siswas, [
-                'siswa_id' => $siswa_id,
-                'nilai' => $datas['nilai'][$index],
-            ]);
-        }
-        foreach ($data_siswas as $siswa) {
-            $this->nilai->store(
-                $siswa['siswa_id'],
-                $datas['mata_pelajaran_id'],
-                $datas['tipe_ujian'],
-                $siswa['nilai'],
-                $datas['semester'],
-                $datas['tahun_ajaran_id'],
-            );
-        }
+        return $this->nilai->store($datas);
     }
 
     public function update($data, $nilai)
@@ -68,7 +47,8 @@ class NilaiService
     }
     private function handleDestroy($datas)
     {
-        $nilais = $this->nilai->getNilaiByParams($datas['rombel_id'], $datas['mapel_id'], $datas['tipe_ujian'], $datas['semester'])->get();
+        $nilais = $this->nilai->getNilaiByParams($datas['rombel_id'], $datas['mapel_id'], $datas['tipe_ujian'], $datas['semester'], $datas['tahun_ajaran_id'])->get();
+
         if (count($nilais) == 0) {
             throw ValidationException::withMessages(['error' => 'Data nilai dengan ketentuan tersebut tidak ada!']);
         }
@@ -137,5 +117,8 @@ class NilaiService
     {
         return $this->nilai->getByNisSiswa($nis);
     }
-
+    public function clearDataNilai($nis)
+    {
+        return $this->nilai->clearDataNilai($nis);
+    }
 }

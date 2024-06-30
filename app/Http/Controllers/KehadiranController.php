@@ -129,24 +129,45 @@ class KehadiranController extends Controller
             'semester' => $semester,
         ]);
     }
-    public function admin_detail_kehadiran($tahun, $semester, Rombel $rombel)
+    public function admin_detail_kehadiran($tahun, $semester, Rombel $rombel, Request $request)
     {
-        $tanggal = $this->date->getDate()->format('Y-m-d');
+        // $query = Order::query();
+
+        // $employee = Employee::where(
+        //     "id",
+        //     Auth::guard("employee")->user()->id
+        // )->first();
+
+        // $orders = $query->latest()->paginate(5);
+
+        $tanggal = $this->date->getDate();
 
         $tahun_ajaran_id = $this->tahun_ajaran->getId($tahun, $semester);
         $rombel = $this->rombel->getOne($rombel->id);
+
+        if ($request->has("tanggal")) {
+
+            return view('pages.admin.kehadiran.detail_kehadiran', [
+                'tahun' => $tahun,
+                'semester' => $semester,
+                'rombel' => $rombel,
+                'tahun_ajaran_id' => $tahun_ajaran_id,
+                'tanggal' => $tanggal->format('Y-m-d'),
+                'kehadirans' => $this->kehadiran->getByRombelId($rombel->id, $request->tanggal)->get(),
+            ]);
+        }
         return view('pages.admin.kehadiran.detail_kehadiran', [
             'tahun' => $tahun,
             'semester' => $semester,
             'rombel' => $rombel,
             'tahun_ajaran_id' => $tahun_ajaran_id,
-            'tanggal' => $tanggal,
-            'kehadirans' => [],
+            'tanggal' => $tanggal->format('Y-m-d'),
+            'kehadirans' => $this->kehadiran->getByRombelId($rombel->id, $tanggal)->get(),
         ]);
     }
     public function admin_get_kehadiran(Request $request)
     {
-        $kehadirans = $this->kehadiran->getByRombelId($request->rombel_id, $request->tanggal)->get();
+        $kehadirans =
         // return response($kehadirans);
         $rombel = $this->rombel->getOne($request->rombel_id);
         $view = view('pages.admin.kehadiran.data-kehadiran', [

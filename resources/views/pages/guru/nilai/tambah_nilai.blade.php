@@ -1,5 +1,7 @@
 @extends('layouts.dashboard')
-@section('table-name', 'Menambah Data Nilai')
+@section('table-name')
+    Tambah Nilai <span class="capitalize">{{ $tipe_ujian }}</span> di Rombel {{ $rombel->nama_rombel }}
+@endsection
 @section('table-role', 'Guru')
 @section('back')
     <div class="font-medium  border border-slate-500 bg-slate-500 text-white rounded-full  me-3">
@@ -8,132 +10,216 @@
     </div>
 @endsection
 @section('content')
-    <div class="grid grid-cols-12 gap-6 bg-white shadow-md">
-        <div class="col-span-12">
-            <div class="card dark:bg-zinc-800 dark:border-zinc-600">
-                <form class="" action="{{ route('guru.nilai.store') }}" method="POST">
-                    @csrf
-                    <input type="text" name="tahun_ajaran_" value="{{ $tahun }}" hidden>
-                    <input type="text" name="semester_" value="{{ $semester }}" hidden>
-                    <input type="text" name="tahun_ajaran_id" value="{{ $tahun_ajaran_id }}" hidden>
-                    <div class="px-[30px] pt-[20px]">
-                        <h2 class=" text-gray-800 text-[20px] font-semibold">Daftar Siswa Di Rombel <span
-                                class="text-violet-700 font-bold  ms-1">{{ $rombel->nama_rombel }}</span></h2>
-                    </div>
-                    <div class="px-[30px] pt-[20px] grid md:grid-cols-3 gap-4">
+    <div class="grid grid-cols-1 gap-6 bg-white shadow-md">
+        <div class="">
+            <div class="card dark:bg-zinc-800 dark:border-zinc-600 ">
+                <div class="card-body border-b border-gray-100 dark:border-zinc-600 ">
+                    <div class="flex justify-between items-center">
                         <div class="">
-                            <label for="semester"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
+                            <h1 class="text-[18px] font-medium capitalize">Tahun Ajaran
+                                {{ str_replace('-', '/', $tahun) }},
                                 Semester
-                            </label>
-                            <select id="semester" name="semester"
-                                class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
-                                required>
-                                @if (explode(' ', $rombel->nama_rombel)[0] == 'X')
-                                    @if ($semester == 'ganjil')
-                                        <option value="1">Semester Ganjil</option>
-                                    @endif
-                                    @if ($semester == 'genap')
-                                        <option value="2">Semester Genap</option>
-                                    @endif
-                                @endif
-                                @if (explode(' ', $rombel->nama_rombel)[0] == 'XI')
-                                    @if ($semester == 'ganjil')
-                                        <option value="3">Semester Ganjil</option>
-                                    @endif
-                                    @if ($semester == 'genap')
-                                        <option value="4">Semester Genap</option>
-                                    @endif
-                                @endif
-                                @if (explode(' ', $rombel->nama_rombel)[0] == 'XII')
-                                    @if ($semester == 'ganjil')
-                                        <option value="5">Semester Ganjil</option>
-                                    @endif
-                                    @if ($semester == 'genap')
-                                        <option value="6">Semester Genap</option>
-                                    @endif
-                                @endif
-                            </select>
+                                {{ $semester }}</h1>
                         </div>
-                        <div class="">
-                            <label for="tipe_ujian"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
-                                Tipe Ujian
-                            </label>
-                            <select id="tipe_ujian" name="tipe_ujian"
-                                class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
-                                required>
-                                <option value="">Pilih Ujian</option>
-                                <option value="uts">UTS</option>
-                                <option value="uas">UAS</option>
-                            </select>
-                        </div>
-                        <div class="">
-                            <label for="mata_pelajaran_id"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
-                                Mata Pelajaran
-                            </label>
-                            <select id="mata_pelajaran_id" name="mata_pelajaran_id"
-                                class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
-                                required>
-                                @foreach ($mapel as $data_mapel)
-                                    <option value="{{ $data_mapel->id }}"
-                                        {{ $guru->mata_pelajaran_id == $data_mapel->id ? 'selected' : '' }}>
-                                        {{ $data_mapel->nama_mata_pelajaran }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="card-body border-b border-gray-100 dark:border-zinc-600">
-                    </div>
-                    <div class="flex justify-center flex-col items-center card-body">
-                        <!-- start grid -->
-                        <div class="px-[10px] pb-[20px] w-full ">
-                            <input type="text" value="{{ $rombel->id }}" name="rombel_id" hidden>
-                            <div class="grid md:grid-cols-3 md:gap-4 gap-3 ">
-                                @foreach ($siswas as $data)
-                                    <input type="text" name="siswa_id[]" value="{{ $data->id }}" hidden />
-                                    <div class="card dark:bg-zinc-800 dark:border-zinc-600 ">
-                                        <div class="card-body grid md:grid-cols-12 md:gap-3 items-center">
-                                            <div class="md:col-span-8 mb-4 md:mb-0 ">
-                                                <h6 class="text-gray-600 text-[16px] font-semibold capitalize ">
-                                                    {{ $data->nama }}
-                                                </h6>
-                                            </div>
-                                            <div class="form-check gap-5 md:col-span-4">
-                                                <div>
-                                                    <input type="text" name="nilai[]"
-                                                        class="bg-gray-800/5 border border-gray-100 text-gray-900 dark:text-gray-100 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder-gray-400 dark:placeholder:text-zinc-100/60 focus:ring-0"
-                                                        placeholder="Nilai" required>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                            <div class="mt-10 flex gap-3 items-center">
-                                <input type="checkbox" value=""
-                                    class="cursor-pointer align-middle rounded focus:ring-0 focus:ring-offset-0 dark:bg-zinc-700 dark:border-zinc-400 checked:bg-violet-500 dark:checked:bg-violet-500"
-                                    id="ketentuan" required>
-                                <label for="ketentuan"
-                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
-                                    Pastikan semua data yang diisi sudah benar!
-                                </label>
-                            </div>
-                            <div class="flex gap-3">
-                                <button type="submit"
-                                    class="px-10 py-2 rounded-md mt-5 hover:bg-blue-700 bg-blue-500 text-[16px] font-medium text-white btn"
-                                    {{ count($rombel->siswas) == 0 ? 'hidden' : '' }}>Simpan</button>
-                            </div>
+                        <a id="btn_excel"
+                            class="flex gap-2 justify-center items-center cursor-pointer text-center w-[200px] border border-slate-700 hover:bg-slate-800 hover:text-white text-black font-medium py-2 px-4 rounded-md transition-all duration-300">
+                            <span>Download Template</span><i class='bx bxs-cloud-upload text-[20px]'></i></a>
 
-                        </div>
-                        <!-- end grid -->
                     </div>
-                </form>
+                    <div class=" grid grid-cols-12 gap-4">
+                        <div class="col-span-5">
+                            <form action="{{ route('guru.nilai.store') }}" method="POST" enctype="multipart/form-data"
+                                class="md:mb-0 mb-6 md:col-span-4">
+                                @csrf
+                                <input type="text" value="{{ $tahun }}" name="tahun" hidden id="tahun">
+                                <input type="text" value="{{ $semester }}" name="semester" hidden id="semester">
+                                <input type="text" value="{{ $rombel->id }}" name="rombel_id" hidden>
+                                <div class="hidden">
+                                    <label for="semester"
+                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
+                                        Semester
+                                    </label>
+                                    <select id="semester" name="semester_nilai"
+                                        class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
+                                        required>
+                                        @if (explode(' ', $rombel->nama_rombel)[0] == 'X')
+                                            @if ($semester == 'ganjil')
+                                                <option value="1">Semester Ganjil</option>
+                                            @endif
+                                            @if ($semester == 'genap')
+                                                <option value="2">Semester Genap</option>
+                                            @endif
+                                        @endif
+                                        @if (explode(' ', $rombel->nama_rombel)[0] == 'XI')
+                                            @if ($semester == 'ganjil')
+                                                <option value="3">Semester Ganjil</option>
+                                            @endif
+                                            @if ($semester == 'genap')
+                                                <option value="4">Semester Genap</option>
+                                            @endif
+                                        @endif
+                                        @if (explode(' ', $rombel->nama_rombel)[0] == 'XII')
+                                            @if ($semester == 'ganjil')
+                                                <option value="5">Semester Ganjil</option>
+                                            @endif
+                                            @if ($semester == 'genap')
+                                                <option value="6">Semester Genap</option>
+                                            @endif
+                                        @endif
+                                    </select>
+                                </div>
+                                <div class="">
+                                    <div class="mb-3">
+                                        <label for="mapel_id"
+                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
+                                            Semester
+                                        </label>
+                                        <input type="text" name="" id=""
+                                            class="bg-gray-800/5 border border-gray-100 text-gray-900 dark:text-gray-100 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder-gray-400 dark:placeholder:text-zinc-100/60 focus:ring-0"
+                                            placeholder="Masukan Nama Sesi" value="{{ $semester }}" readonly>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="mapel_id"
+                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
+                                            Tipe Ujian
+                                        </label>
+                                        <input type="text" id="tipe_ujian"
+                                            class="bg-gray-800/5 border border-gray-100 text-gray-900 dark:text-gray-100 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder-gray-400 dark:placeholder:text-zinc-100/60 focus:ring-0"
+                                            placeholder="Masukan Nama Sesi" value="{{ $tipe_ujian }}" name="tipe_ujian"
+                                            readonly>
+                                    </div>
+                                </div>
+                                <div class="">
+                                    <div class="mb-3">
+                                        <label for="mapel_id"
+                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
+                                            Mata Pelajaran
+                                        </label>
+                                        <select id="mapel_id" name="mapel_id"
+                                            class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
+                                            required>
+                                            @foreach ($mapel as $data_mapel)
+                                                <option value="{{ $data_mapel->id }}"
+                                                    {{ $guru->mata_pelajaran_id == $data_mapel->id ? 'selected' : '' }}>
+                                                    {{ $data_mapel->nama_mata_pelajaran }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="mapel_id"
+                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
+                                            File Excel
+                                        </label>
+                                        <input name="file"
+                                            class="block w-full  text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-white focus:outline-none "
+                                            id="file" type="file" required>
+                                    </div>
+                                </div>
+                                <button type="submit"
+                                    class="mt-3 w-full text-white hover:bg-blue-700 bg-blue-600 border-transparent btn">
+                                    Import
+                                </button>
+                            </form>
+                        </div>
+                        <div class="relative overflow-x-auto mt-6 col-span-7">
+                            <table class="table  w-full pt-4 text-center text-gray-700 dark:text-zinc-100"
+                                id="daftar_siswa">
+                                <thead>
+                                    <tr class="bg-blue-100 ">
+                                        <th class="p-4 border-blue-100 border">
+                                            nama</th>
+                                        <th class="p-4 border-blue-100 border">
+                                            nomor_id</th>
+                                        <th class="p-4 border-blue-100 border">
+                                            nilai</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabel-container">
+                                    @foreach ($siswas as $siswa)
+                                        <tr>
+                                            <td class="p-4 border-blue-100 border">
+                                                {{ $siswa->nama }}
+                                            </td>
+                                            <td class="p-4 border-blue-100 border">
+                                                {{ $siswa->nomor_id }}
+                                            </td>
+                                            <td class="p-4 border-blue-100 border">
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
+
+
+    <script>
+        document.getElementById('file').addEventListener('change', function(e) {
+            var file = e.target.files[0];
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                var data = new Uint8Array(e.target.result);
+                var workbook = XLSX.read(data, {
+                    type: 'array'
+                });
+
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, {
+                    header: 1
+                });
+                populateTable(jsonData);
+            };
+
+            reader.readAsArrayBuffer(file);
+        });
+
+        function populateTable(data) {
+            var tableContainer = document.getElementById('tabel-container');
+            tableContainer.innerHTML = '';
+
+            for (var i = 1; i < data.length; i++) {
+                var row = document.createElement('tr');
+                // Ambil kolom yang diinginkan berdasarkan indeksnya
+                var nama = data[i][0];
+                var nomor_id = data[i][1];
+                var nilai = data[i][2];
+
+
+                var cells = [nama, nomor_id, nilai];
+
+                cells.forEach(function(cellData) {
+                    var cell = document.createElement('td');
+                    cell.className = 'p-4 border-blue-100 border';
+                    cell.textContent = cellData;
+                    row.appendChild(cell);
+                });
+
+                tableContainer.appendChild(row);
+            }
+        }
+
+        const tahun = document.getElementById('tahun').value
+        const semester = document.getElementById('semester').value
+        const tipe_ujian = document.getElementById('tipe_ujian').value
+
+        document.getElementById('btn_excel').addEventListener('click', () => {
+            const workbook = XLSX.utils.book_new();
+            const tableTemplate = document.getElementById('daftar_siswa');
+            const worksheetTemplate = XLSX.utils.table_to_sheet(tableTemplate);
+
+            XLSX.utils.book_append_sheet(workbook, worksheetTemplate, 'Template input nilai');
+
+            XLSX.writeFile(workbook, `template-input-nilai-${tahun}-${semester}-${tipe_ujian}.xlsx`);
+        })
+    </script>
 
     @if (session('error'))
         <script>

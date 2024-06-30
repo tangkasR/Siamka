@@ -104,15 +104,17 @@ Route::group(['middleware' => ["must-login"]], function () {
             Route::post('/siswa/deaktivasiAll/{rombel}', 'deaktivasiAll')->name('siswa.deaktivasiAll');
             Route::post('/siswa/deaktivasi/{id}', 'deaktivasi')->name('siswa.deaktivasi');
 
-            Route::get('/siswa_not_active', 'siswa_not_active_index')->name('siswa.siswa_not_active');
-            Route::get('/not_active/{angkatan}', 'siswa_not_active')->name('siswa.not_active');
-            Route::get('/siswa/clear_data/{angkatan}', 'clear_data')->name('siswa.clear_data');
+            Route::delete('/siswa/clear_data/{angkatan}/{nama_rombel}', 'clear_data')->name('siswa.clear_data');
             Route::get('/siswa/show_next_grade/{tahun}/{semester}/{rombel}', 'show_next_grade')->name('siswa.show_next_grade');
             Route::get('/siswa/show_lulus/{tahun}/{semester}/{rombel}', 'show_lulus')->name('siswa.show_lulus');
             Route::post('/siswa/lulus', 'lulus')->name('siswa.lulus');
 
             Route::get('/siswa/tambah_data/{tahun}/{semester}/{rombel}', 'tambah_data')->name('siswa.tambah_data');
             Route::post('/siswa/migrasi', 'migrasi')->name('siswa.migrasi');
+
+            Route::get('/siswa_not_active', 'siswa_not_active_index')->name('siswa.siswa_not_active');
+            Route::get('/siswa_not_active_rombel/{angkatan}', 'siswa_not_active_rombel')->name('siswa.siswa_not_active_rombel');
+            Route::get('/not_active/{angkatan}/{nama_rombel}', 'siswa_not_active')->name('siswa.not_active');
         });
 
         // guru
@@ -199,12 +201,11 @@ Route::group(['middleware' => ["must-login"]], function () {
             Route::get('/nilai/{tahun}/{semester}', 'index')->name('nilai');
             Route::get('/nilai/filter', 'filter')->name('nilai.filter');
             Route::get('/nilai/daftar_siswa/{tahun}/{semester}/{rombel}', 'show_siswa')->name('nilai.show_siswa');
-            Route::get('/nilai/input/{tahun}/{semester}/{rombel}', 'show_input')->name('nilai.show_input');
+            Route::get('/nilai/input/{tahun}/{semester}/{tipe_ujian}/{rombel}', 'show_input')->name('nilai.show_input');
             Route::post('/nilai/save', 'store')->name('nilai.store');
             Route::post('/nilai/update/{nilai}', 'update')->name('nilai.update');
             Route::get('/nilai/destroy', 'destroy')->name('nilai.destroy');
             Route::get('/nilai/get-nilai', 'getNilai_guru')->name('nilai.get-nilai');
-            Route::get('/nilai/show_update/{tahun}/{semester}/{id}/{rombel_id}', 'show_update')->name('nilai.show_update');
         });
 
         // Kehadiran

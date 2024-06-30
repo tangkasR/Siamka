@@ -14,108 +14,114 @@
         <div class="col-span-12">
             <div class="card dark:bg-zinc-800 dark:border-zinc-600">
                 <div class="card-body border-b border-gray-100 dark:border-zinc-600">
-                    <div class="flex justify-between items-start ">
+                    <div class="flex justify-between items-center ">
                         <div>
                             <h1 class="text-[18px] font-medium capitalize">Tahun Ajaran
                                 {{ str_replace('-', '/', $tahun_ajaran->tahun_ajaran) }},
                                 Semester
                                 {{ $tahun_ajaran->semester }}</h1>
                         </div>
-                        <div class="flex gap-4">
-                            <div class="relative dropdown ">
-                                <button type="button"
-                                    class="dropdown-toggle flex gap-2 justify-center items-center cursor-pointer text-center w-[180px] border border-blue-500 bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-all duration-300"
-                                    id="dropdownMenuButton1" data-bs-toggle="dropdown"><span>Tambah Data</span> <i
-                                        class='bx bxs-plus-circle text-[20px]'></i></button>
-
-                                <ul class="absolute z-50 float-left py-2 mt-1 text-left list-none bg-white border-none rounded-lg shadow-lg dropdown-menu w-44 bg-clip-padding dark:bg-zinc-700 hidden"
-                                    aria-labelledby="dropdownMenuButton1" data-popper-placement="bottom-start"
-                                    style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(49px, 1636.5px, 0px);">
-                                    <li>
-                                        <a class="cursor-pointer block w-full px-4 py-1 text-sm font-medium text-black bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 "
-                                            id="btn-download">
-                                            Download Template
-                                        </a>
-                                    </li>
-                                    <hr class="my-1 border-gray-50 dark:border-zinc-600">
-                                    <li>
-                                        <a class="cursor-pointer block text-blue-700 w-full px-4 py-1 text-sm font-medium  bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 "
-                                            href="{{ route('admin.siswa.tambah_data', ['tahun' => $tahun_ajaran->tahun_ajaran, 'semester' => $tahun_ajaran->semester, 'rombel' => $rombel]) }}">
-                                            Import Siswa</a>
-                                    </li>
-                                    @if ($tahun_ajaran->semester == 'genap')
-                                        @if (count($siswa) == 0)
-                                            <hr class="my-1 border-gray-50 dark:border-zinc-600">
-                                            <li>
-                                                <a data-tw-toggle="modal" data-tw-target="#modal-id_migration"
-                                                    class="cursor-pointer block text-green-500 w-full px-4 py-1 text-sm font-medium  bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 ">
-                                                    Transfer Data</a>
-                                            </li>
-                                        @else
-                                            <hr class="my-1 border-gray-50 dark:border-zinc-600">
-                                            <li>
-                                                <a href="{{ route('admin.siswa.show_next_grade', ['tahun' => $tahun_ajaran->tahun_ajaran, 'semester' => $tahun_ajaran->semester, 'rombel' => $rombel]) }}"
-                                                    class="cursor-pointer block text-red-500 w-full px-4 py-1 text-sm font-medium  bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 ">
-                                                    Naik Kelas</a>
-                                            </li>
-                                        @endif
-                                    @endif
-                                </ul>
-                            </div>
-                            <div class="relative dropdown ">
-                                <button type="button"
-                                    class="dropdown-toggle flex gap-2 justify-center items-center cursor-pointer text-center w-[180px] border border-blue-500 hover:bg-blue-500 hover:text-white text-blue-500 font-medium py-2 px-4 rounded-md transition-all duration-300"
-                                    id="dropdownMenuButton1" data-bs-toggle="dropdown"><span>Kelola Akun</span><i
-                                        class='bx bxs-user-account text-[20px]'></i></button>
-
-                                <ul class="absolute z-50 float-left py-2 mt-1 text-left list-none bg-white border-none rounded-lg shadow-lg dropdown-menu w-44 bg-clip-padding dark:bg-zinc-700 hidden"
-                                    aria-labelledby="dropdownMenuButton1" data-popper-placement="bottom-start"
-                                    style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(49px, 1636.5px, 0px);">
-                                    <li>
-                                        <a class="cursor-pointer block w-full px-4 py-1 text-sm font-medium text-green-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 "
-                                            data-tw-toggle="modal" data-tw-target="#modal-id_aktivation_all">
-                                            Aktivasi Akun
-                                        </a>
-                                    </li>
-                                    <hr class="my-1 border-gray-50 dark:border-zinc-600">
-                                    <li>
-                                        <a class="cursor-pointer block text-red-700 w-full px-4 py-1 text-sm font-medium  bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 "
-                                            data-tw-toggle="modal" data-tw-target="#modal-id_form_deaktivasi">
-                                            Deaktivasi Akun</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            @if (explode(' ', $rombel->nama_rombel)[0] == 'XII' && $tahun_ajaran->semester == 'genap')
-                                <div>
-                                    <a href="{{ route('admin.siswa.show_lulus', ['tahun' => $tahun_ajaran->tahun_ajaran, 'semester' => $tahun_ajaran->semester, 'rombel' => $rombel]) }}"
-                                        class=" w-[200px] text-white bg-red-600 hover:bg-red-700 border-transparent btn cursor-pointer">
-                                        Luluskan Siswa
-                                    </a>
-                                </div>
-                            @endif
-
-                            <div class="">
+                        <div class="">
+                            <div class=" flex gap-4 items-center mb-3">
                                 <div class="relative dropdown ">
                                     <button type="button"
-                                        class="hover:bg-gray-700 hover:text-white btn flex gap-2 items-center justify-center py-2 px-5 border border-gray-700 text-gray-700 rounded-md font-medium leading-tight  dropdown-toggle"
-                                        id="dropdownMenuButton1" data-bs-toggle="dropdown"><span>Cetak</span><i
-                                            class='bx bx-printer text-[20px]'></i></button>
+                                        class="dropdown-toggle flex gap-2 justify-center items-center cursor-pointer text-center w-[180px] border border-blue-500 bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-all duration-300"
+                                        id="dropdownMenuButton1" data-bs-toggle="dropdown"><span>Tambah Data</span> <i
+                                            class='bx bxs-plus-circle text-[20px]'></i></button>
+
                                     <ul class="absolute z-50 float-left py-2 mt-1 text-left list-none bg-white border-none rounded-lg shadow-lg dropdown-menu w-44 bg-clip-padding dark:bg-zinc-700 hidden"
                                         aria-labelledby="dropdownMenuButton1" data-popper-placement="bottom-start"
                                         style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(49px, 1636.5px, 0px);">
                                         <li>
-                                            <a class="block w-full px-4 py-1 text-sm font-medium text-green-500 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 dark:text-gray-100 dark:hover:bg-zinc-600/50"
-                                                id="btn_excel">
-                                                Excel
+                                            <a class="cursor-pointer block w-full px-4 py-1 text-sm font-medium text-black bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 "
+                                                id="btn-download">
+                                                Download Template
                                             </a>
                                         </li>
                                         <hr class="my-1 border-gray-50 dark:border-zinc-600">
                                         <li>
-                                            <a class="block text-red-500 w-full px-4 py-1 text-sm font-medium  bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 dark:text-gray-100 dark:hover:bg-zinc-600/50"
-                                                id="btn_pdf">
-                                                PDF</a>
+                                            <a class="cursor-pointer block text-blue-700 w-full px-4 py-1 text-sm font-medium  bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 "
+                                                href="{{ route('admin.siswa.tambah_data', ['tahun' => $tahun_ajaran->tahun_ajaran, 'semester' => $tahun_ajaran->semester, 'rombel' => $rombel]) }}">
+                                                Import Siswa</a>
+                                        </li>
+                                        @if ($tahun_ajaran->semester == 'genap')
+                                            @if (count($siswa) == 0)
+                                                <hr class="my-1 border-gray-50 dark:border-zinc-600">
+                                                <li>
+                                                    <a data-tw-toggle="modal" data-tw-target="#modal-id_migration"
+                                                        class="cursor-pointer block text-green-500 w-full px-4 py-1 text-sm font-medium  bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 ">
+                                                        Transfer Data</a>
+                                                </li>
+                                            @else
+                                                <hr class="my-1 border-gray-50 dark:border-zinc-600">
+                                                <li>
+                                                    <a href="{{ route('admin.siswa.show_next_grade', ['tahun' => $tahun_ajaran->tahun_ajaran, 'semester' => $tahun_ajaran->semester, 'rombel' => $rombel]) }}"
+                                                        class="cursor-pointer block text-red-500 w-full px-4 py-1 text-sm font-medium  bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 ">
+                                                        Naik Kelas</a>
+                                                </li>
+                                            @endif
+                                        @endif
+                                    </ul>
+                                </div>
+                                <div class="relative dropdown ">
+                                    <button type="button"
+                                        class="dropdown-toggle flex gap-2 justify-center items-center cursor-pointer text-center w-[180px] border border-blue-500 hover:bg-blue-500 hover:text-white text-blue-500 font-medium py-2 px-4 rounded-md transition-all duration-300"
+                                        id="dropdownMenuButton1" data-bs-toggle="dropdown"><span>Kelola Akun</span><i
+                                            class='bx bxs-user-account text-[20px]'></i></button>
+
+                                    <ul class="absolute z-50 float-left py-2 mt-1 text-left list-none bg-white border-none rounded-lg shadow-lg dropdown-menu w-44 bg-clip-padding dark:bg-zinc-700 hidden"
+                                        aria-labelledby="dropdownMenuButton1" data-popper-placement="bottom-start"
+                                        style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(49px, 1636.5px, 0px);">
+                                        <li>
+                                            <a class="cursor-pointer block w-full px-4 py-1 text-sm font-medium text-green-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 "
+                                                data-tw-toggle="modal" data-tw-target="#modal-id_aktivation_all">
+                                                Aktivasi Akun
+                                            </a>
+                                        </li>
+                                        <hr class="my-1 border-gray-50 dark:border-zinc-600">
+                                        <li>
+                                            <a class="cursor-pointer block text-red-700 w-full px-4 py-1 text-sm font-medium  bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 "
+                                                data-tw-toggle="modal" data-tw-target="#modal-id_form_deaktivasi">
+                                                Deaktivasi Akun</a>
                                         </li>
                                     </ul>
+                                </div>
+                            </div>
+                            <div class="flex gap-4 items-center">
+                                @if (explode(' ', $rombel->nama_rombel)[0] == 'XII' && $tahun_ajaran->semester == 'genap')
+                                    <div>
+                                        <a href="{{ route('admin.siswa.show_lulus', ['tahun' => $tahun_ajaran->tahun_ajaran, 'semester' => $tahun_ajaran->semester, 'rombel' => $rombel]) }}"
+                                            class=" w-[180px] text-white bg-red-600 hover:bg-red-700 border-transparent btn cursor-pointer">
+                                            Luluskan Siswa
+                                        </a>
+                                    </div>
+                                @else
+                                    <div class="w-[180px]"></div>
+                                @endif
+
+                                <div class="">
+                                    <div class="relative dropdown ">
+                                        <button type="button"
+                                            class="hover:bg-gray-700 hover:text-white btn flex gap-2 items-center justify-center py-2 w-[180px] border border-gray-700 text-gray-700 rounded-md font-medium leading-tight  dropdown-toggle"
+                                            id="dropdownMenuButton1" data-bs-toggle="dropdown"><span>Cetak</span><i
+                                                class='bx bx-printer text-[20px]'></i></button>
+                                        <ul class="absolute z-50 float-left py-2 mt-1 text-left list-none bg-white border-none rounded-lg shadow-lg dropdown-menu w-44 bg-clip-padding dark:bg-zinc-700 hidden"
+                                            aria-labelledby="dropdownMenuButton1" data-popper-placement="bottom-start"
+                                            style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(49px, 1636.5px, 0px);">
+                                            <li>
+                                                <a class="block w-full px-4 py-1 text-sm font-medium text-green-500 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 dark:text-gray-100 dark:hover:bg-zinc-600/50"
+                                                    id="btn_excel">
+                                                    Excel
+                                                </a>
+                                            </li>
+                                            <hr class="my-1 border-gray-50 dark:border-zinc-600">
+                                            <li>
+                                                <a class="block text-red-500 w-full px-4 py-1 text-sm font-medium  bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 dark:text-gray-100 dark:hover:bg-zinc-600/50"
+                                                    id="btn_pdf">
+                                                    PDF</a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -471,9 +477,11 @@
                                                                 <select name="rombel_id"
                                                                     class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100">
                                                                     @foreach ($rombels as $item)
-                                                                        <option value="{{ $item->id }}"
-                                                                            {{ $rombel->nama_rombel == $item->nama_rombel ? 'selected' : '' }}>
-                                                                            {{ $item->nama_rombel }}</option>
+                                                                        @if (explode(' ', $rombel->nama_rombel)[0] == explode(' ', $item->nama_rombel)[0])
+                                                                            <option value="{{ $item->id }}"
+                                                                                {{ $rombel->nama_rombel == $item->nama_rombel ? 'selected' : '' }}>
+                                                                                {{ $item->nama_rombel }}</option>
+                                                                        @endif
                                                                     @endforeach
                                                                 </select>
                                                             </div>

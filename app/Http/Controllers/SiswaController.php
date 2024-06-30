@@ -455,39 +455,33 @@ class SiswaController extends Controller
             'rombel' => $rombel,
         ]);
     }
-    public function siswa_not_active_index()
-    {
-        return view('pages.admin.siswa.siswa_not_active.index', [
-            'angkatans' => $this->siswa->getAngkatan(),
-        ]);
-    }
-    public function siswa_not_active($angkatan)
-    {
-        return view('pages.admin.siswa.siswa_not_active.not_active', [
-            'siswas' => $this->siswa->getNotActive($angkatan),
-            'tanggal' => $this->date->getDate()->format('d-m-Y'),
-            'angkatan' => $angkatan,
-        ]);
-    }
-    public function clear_data($angkatan)
+
+    public function clear_data($angkatan, $nama_rombel)
     {
         try {
-            $siswas = $this->siswa->getNotActive($angkatan);
+            $siswas = $this->siswa->getNotActive($angkatan, $nama_rombel);
+            // dd($siswas);
             if (count($siswas) > 0) {
                 foreach ($siswas as $data) {
                     $path = storage_path('app/public/' . $data->profil);
                     if (file_exists($path)) {
                         unlink($path);
                     }
-                    $siswa = $this->siswa->getById($data->id);
-                    $siswa->ekskuls()->detach();
-                    $siswa->kehadirans()->detach();
-                    $this->nilai->getNilaiByParams('siswa_id', $data->id)->delete();
-                    $this->nilai_ekskul->destroy('siswa_id', $data->id);
+                    $siswas_ = Siswa::where('nis', $data->nis)->get();
+                    foreach ($siswas_ as $item) {
+                        if (!is_null($item->ekskuls)) {
+                            $item->ekskuls()->detach();
+                        }
+                        if (!is_null($item->kehadirans)) {
+                            $item->kehadirans()->detach();
+                        }
+                        $this->nilai->clearDataNilai($item->nis);
+                        $this->nilai_ekskul->destroy($item->nis);
+
+                        $this->siswa->destroy($item->id);
+                    }
                 }
-                foreach ($siswas as $data) {
-                    $this->siswa->destroy($data->id);
-                }
+
                 $message = 'Berhasil menghapus semua data siswa di angkatan ' . $angkatan;
                 return redirect()->route('admin.siswa.siswa_not_active')
                     ->with('message', $message);
@@ -517,11 +511,13 @@ class SiswaController extends Controller
         $semester_ = 'ganjil';
         $tahun_ajaran_id = $this->tahun_ajaran->getId($tahun_, $semester_);
         if ($tahun_ajaran_id == null) {
-            return redirect()->route('admin.siswa.show_siswa', ['tahun' => $tahun, 'semester' => $semester, 'rombel' => $rombel]);
+            return redirect()->route('admin.siswa.show_siswa', ['tahun' => $tahun, 'semester' => $semester, 'rombel' => $rombel])
+                ->with('error', 'Rombel tujuan di tahun ajaran baru belum dibuat!');
         }
         $rombels = $this->rombel->getAll($tahun_ajaran_id);
         if (count($rombels) == 0) {
-            return redirect()->route('admin.siswa.show_siswa', ['tahun' => $tahun, 'semester' => $semester, 'rombel' => $rombel]);
+            return redirect()->route('admin.siswa.show_siswa', ['tahun' => $tahun, 'semester' => $semester, 'rombel' => $rombel])
+                ->with('error', 'Rombel tujuan di tahun ajaran baru belum dibuat!');
         }
         try {
             return view('pages.admin.siswa.naik_kelas', [
@@ -595,5 +591,29 @@ class SiswaController extends Controller
         } catch (ValidationException $err) {
             return back()->with('error', $er->getMessage());
         }
+    }
+
+    public function siswa_not_active_index()
+    {
+        return view('pages.admin.siswa.siswa_not_active.index', [
+            'angkatans' => $this->siswa->getAngkatan(),
+        ]);
+    }
+    public function siswa_not_active_rombel($angkatan)
+    {
+        // dd($this->siswa->getNotActiveRombel($angkatan));
+        return view('pages.admin.siswa.siswa_not_active.daftar_rombel', [
+            'angkatan' => $angkatan,
+            'rombels' => $this->siswa->getNotActiveRombel($angkatan),
+        ]);
+    }
+    public function siswa_not_active($angkatan, $nama_rombel)
+    {
+        return view('pages.admin.siswa.siswa_not_active.not_active', [
+            'siswas' => $this->siswa->getNotActive($angkatan, $nama_rombel),
+            'tanggal' => $this->date->getDate()->format('d-m-Y'),
+            'angkatan' => $angkatan,
+            'nama_rombel' => $nama_rombel,
+        ]);
     }
 }

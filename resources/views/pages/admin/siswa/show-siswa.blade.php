@@ -35,7 +35,6 @@
                             class="ms-6 text-[16px] font-medium text-gray-500">
                             Nomor Id:
                             {{ $siswa->nomor_id }}</span>
-                        <span>{{ $tahun }}{{ $semester }}</span>
                     </div>
                     <div class="mb-3">
                         <span class="font-medium text-[16px] text-gray-500">NISN: {{ $siswa->nisn }}</span>

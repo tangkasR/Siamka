@@ -2,10 +2,12 @@
 
 namespace App\Repositories;
 
+use App\Imports\NilaiImport;
 use App\Interfaces\NilaiInterface;
 use App\Models\Nilai;
 use App\Services\DateService;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class NilaiRepository implements NilaiInterface
 {
@@ -61,21 +63,14 @@ class NilaiRepository implements NilaiInterface
             );
     }
 
-    public function store($siswa_id, $mapel_id, $tipe_ujian, $nilai, $semester, $tahun_ajaran_id)
+    public function store($datas)
     {
-        return $this->nilai->create([
-            'siswa_id' => $siswa_id,
-            'mata_pelajaran_id' => $mapel_id,
-            'tahun_ajaran_id' => $tahun_ajaran_id,
-            'tipe_ujian' => $tipe_ujian,
-            'nilai' => $nilai,
-            'semester' => $semester,
-        ]);
+        return Excel::import(new NilaiImport($datas['tahun'], $datas['semester'], $datas['mapel_id'], $datas['tipe_ujian'], $datas['semester_nilai']), $datas['file']);
     }
 
     public function update($data, $nilai)
     {
-        return $nilai->update([
+        return $this->nilai->where('id', $nilai)->update([
             'tipe_ujian' => $data['tipe_ujian'],
             'nilai' => $data['nilai'],
         ]);
@@ -164,5 +159,9 @@ class NilaiRepository implements NilaiInterface
                 'nilais.nilai'
             )->get();
     }
-    
+    public function clearDataNilai($nis)
+    {
+        return $this->nilai->join('siswas', 'siswa_id', 'siswas.id')
+            ->where('siswas.nis', $nis)->delete();
+    }
 }

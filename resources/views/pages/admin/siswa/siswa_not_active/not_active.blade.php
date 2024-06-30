@@ -1,6 +1,12 @@
 @extends('layouts.dashboard')
 @section('table-name', 'Data Siswa')
 @section('table-role', 'Admin')
+@section('back')
+    <div class="font-medium  border border-slate-500 bg-slate-500 text-white rounded-full  me-3">
+        <a href="{{ route('admin.siswa.siswa_not_active_rombel', ['angkatan' => $angkatan]) }}"
+            class="flex justify-center items-center"><i class='bx bx-chevron-left text-[30px]'></i></a>
+    </div>
+@endsection
 @section('content')
     <div class="grid grid-cols-12 gap-6 bg-white shadow-md">
         <div class="col-span-12">
@@ -13,7 +19,7 @@
                             </h5>
                             <p>Tanggal hari ini: {{ $tanggal }}</p>
                         </div>
-                        <div class="md:mt-0 mt-3 ">
+                        {{-- <div class="md:mt-0 mt-3 ">
                             <div class="px-6 py-4  shadow-md border border-red-100 rounded-md">
                                 <p class="mb-3 text-sm font-medium">Hapus data siswa diangkatan {{ $angkatan }}
                                 </p>
@@ -22,7 +28,7 @@
                                     data-tw-target="#modal-id_form_destroy">
                                     <i class='bx bx-trash'></i> Hapus</a>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
                 <div class="relative overflow-x-auto card-body">
@@ -86,7 +92,7 @@
 
 
     {{-- Modal Destroy --}}
-    <div class="relative z-50 hidden modal" id="modal-id_form_destroy" aria-labelledby="modal-title" role="dialog"
+    {{-- <div class="relative z-50 hidden modal" id="modal-id_form_destroy" aria-labelledby="modal-title" role="dialog"
         aria-modal="true">
         <div class="fixed inset-0 z-50 overflow-y-auto">
             <div class="absolute inset-0 transition-opacity bg-black bg-opacity-50 modal-overlay">
@@ -107,8 +113,9 @@
                                 <span class="text-red-600 font-bold">{{ $angkatan }}!</span>
                             </h3>
                             <form class="space-y-4"
-                                action="{{ route('admin.siswa.clear_data', ['angkatan' => $angkatan]) }}" method="GET">
+                                action="{{ route('admin.siswa.clear_data', ['angkatan' => $angkatan, 'nama_rombel' => $nama_rombel]) }}" method="POST">
                                 @csrf
+                                @method('DELETE')
                                 <button type="submit" class="w-full text-white bg-red-600 border-transparent btn">
                                     Hapus
                                 </button>
@@ -118,7 +125,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     {{-- End Modal Destroy --}}
 
     @if (session('message'))

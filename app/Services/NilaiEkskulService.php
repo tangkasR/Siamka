@@ -27,9 +27,9 @@ class NilaiEkskulService
     {
         return $this->nilai_ekskul->update($datas, $id);
     }
-    public function destroy($condition, $params)
+    public function destroy($nis)
     {
-        return $this->nilai_ekskul->destroy($condition, $params);
+        return $this->nilai_ekskul-> destroy($nis);
     }
     public function rekap($nis)
     {

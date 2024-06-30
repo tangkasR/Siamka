@@ -101,15 +101,15 @@ class NilaiEkskulController extends Controller
 
     public function destroy($id)
     {
-        try {
-            $this->nilai_ekskul->destroy('id', $id);
-            return redirect()->back()
-                ->with('message', 'Berhasil menghapus data nilai');
+        // try {
+        //     $this->nilai_ekskul->destroy('id', $id);
+        //     return redirect()->back()
+        //         ->with('message', 'Berhasil menghapus data nilai');
 
-        } catch (QueryException $er) {
-            return redirect()->back()
-                ->with('error', 'Gagal menghapus data nilai');
-        }
+        // } catch (QueryException $er) {
+        //     return redirect()->back()
+        //         ->with('error', 'Gagal menghapus data nilai');
+        // }
     }
 
     public function admin_detail_ekskul($tahun, $semester, Ekskul $ekskul)

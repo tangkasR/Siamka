@@ -32,13 +32,33 @@ class SiswaRepository implements SiswaInterface
         return $this->siswa->with('rombels')->where('nama', $nama)->first();
     }
 
-    public function getNotActive($angkatan)
+    public function getNotActive($angkatan, $nama_rombel)
     {
         // mencari rombel terbaru setiap siswa
         return $this->siswa
             ->whereRaw('LEFT(nis, 2) = ?', [$angkatan])
             ->where('status_siswa', '!=', 'belum lulus')
+            ->join('rombel_siswa', 'id', 'rombel_siswa.siswa_id')
+            ->join('rombels', 'rombel_siswa.rombel_id', 'rombels.id')
+            ->where('rombels.nama_rombel', $nama_rombel)
+            ->select('*')
             ->get();
+    }
+    public function getNotActiveRombel($angkatan)
+    {
+        // mencari rombel terbaru setiap siswa
+        $rombels = $this->siswa
+            ->whereRaw('LEFT(nis, 2) = ?', [$angkatan])
+            ->where('status_siswa', '!=', 'belum lulus')
+            ->with(['rombels' => function ($query) {
+                $query->select('nama_rombel');
+            }])
+            ->get()
+            ->pluck('rombels.*.nama_rombel')
+            ->flatten()
+            ->unique();
+
+        return $rombels->values();
     }
 
     public function store($data)

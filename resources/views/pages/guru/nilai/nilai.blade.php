@@ -20,28 +20,65 @@
                             Semester
                             {{ $semester }}</h1>
                     </div>
-                    <div class="flex items-center gap-4">
-                        <div class="w-[200px]">
-                            <select id="tipe_ujian"
-                                class=" dropdown dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100">
-                                <option value="uts">
-                                    UTS
-                                </option>
-                                <option value="uas">
-                                    UAS
-                                </option>
-                            </select>
-                        </div>
-                        <div class="w-[200px]">
-                            <select id="mapel_id"
-                                class=" dropdown dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100">
-                                @foreach ($mapel as $data_mapel)
-                                    <option value="{{ $data_mapel->id }}"
-                                        {{ $guru->mata_pelajaran_id == $data_mapel->id ? 'selected' : '' }}>
-                                        {{ $data_mapel->nama_mata_pelajaran }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                    <div class=" flex items-center gap-4">
+                        <form
+                            action="{{ route('guru.nilai.show_siswa', ['tahun' => $tahun, 'semester' => $semester, 'rombel' => Crypt::encrypt($rombel->id)]) }}"
+                            method="GET">
+                            @if (explode(' ', $rombel->nama_rombel)[0] == 'X')
+                                @if ($semester == 'ganjil')
+                                    <input value="1" name="semester" hidden />
+                                @endif
+                                @if ($semester == 'genap')
+                                    <input value="2" name="semester" hidden />
+                                @endif
+                            @endif
+                            @if (explode(' ', $rombel->nama_rombel)[0] == 'XI')
+                                @if ($semester == 'ganjil')
+                                    <input value="3" name="semester" hidden />
+                                @endif
+                                @if ($semester == 'genap')
+                                    <input value="4" name="semester"hidden />
+                                @endif
+                            @endif
+                            @if (explode(' ', $rombel->nama_rombel)[0] == 'XII')
+                                @if ($semester == 'ganjil')
+                                    <input value="5" name="semester" hidden />
+                                @endif
+                                @if ($semester == 'genap')
+                                    <input value="6" name="semester" hidden />
+                                @endif
+                            @endif
+                            <div class="flex items-center gap-4">
+                                <div class="w-[200px]">
+                                    <select id="tipe_ujian" name="tipe_ujian"
+                                        class=" dropdown dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100">
+                                        <option value="" hidden>
+                                            Pilih Tipe Ujian
+                                        </option>
+                                        <option value="uts">
+                                            UTS
+                                        </option>
+                                        <option value="uas">
+                                            UAS
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="w-[200px]">
+                                    <select id="mapel_id" onchange="this.form.submit()" name="mapel_id"
+                                        class=" dropdown dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100">
+                                        <option value="" hidden>
+                                            Pilih Mata Pelajaran
+                                        </option>
+                                        @foreach ($mapel as $data_mapel)
+                                            <option value="{{ $data_mapel->id }}"
+                                                {{ $guru->mata_pelajaran_id == $data_mapel->id ? 'selected' : '' }}>
+                                                {{ $data_mapel->nama_mata_pelajaran }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <noscript><input type="submit" value="Submit"></noscript>
+                            </div>
+                        </form>
                         <div class="relative dropdown">
                             <button type="button"
                                 class="dropdown-toggle flex gap-2 justify-center items-center cursor-pointer text-center w-[180px] border border-blue-500 bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-all duration-300"
@@ -52,9 +89,9 @@
                                 aria-labelledby="dropdownMenuButton1" data-popper-placement="bottom-start"
                                 style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(49px, 1636.5px, 0px);">
                                 <li>
-                                    <a class="cursor-pointer block w-full px-4 py-1 text-sm font-medium text-blue-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 "
-                                        href="{{ route('guru.nilai.show_input', ['tahun' => $tahun, 'semester' => $semester, 'rombel' => $rombel]) }}">
-                                        Tambah Nilai
+                                    <a data-tw-toggle="modal" data-tw-target="#modal-id_tipe_ujian"
+                                        class="cursor-pointer block w-full px-4 py-1 text-sm font-medium text-blue-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 ">
+                                        Import Nilai
                                     </a>
                                 </li>
                                 <hr class="my-1 border-gray-50 dark:border-zinc-600">
@@ -69,7 +106,7 @@
                 </div>
             </div>
             <div class="relative overflow-x-auto card-body">
-                <table id="" class="table capitalize w-full pt-4 text-center text-gray-700 dark:text-zinc-100">
+                <table id="datatable" class="table capitalize w-full pt-4 text-center text-gray-700 dark:text-zinc-100">
                     <thead>
                         <tr class="bg-blue-200">
                             <th class="p-4 pr-8">
@@ -79,8 +116,6 @@
                             <th class="p-4 pr-8">
                                 Mata Pelajaran</th>
                             <th class="p-4 pr-8">
-                                Semester</th>
-                            <th class="p-4 pr-8">
                                 Tipe Ujian</th>
                             <th class="p-4 pr-8">
                                 Nilai</th>
@@ -88,41 +123,152 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody id="tabel-container">
-                    </tbody>
-                </table>
-                <div class="mt-4">
-                    <div class="">
-                        <div class="">
-                            <div class=" mt-2 xs:mt-0  flex justify-between " id="container-pagination">
-                                <!-- Buttons -->
-                                <div class="">
-                                    <button id="btn-previous"
-                                        class="flex items-center  justify-center px-4 h-10 text-base font-medium border-black border-[0.05px] text-black rounded-md hover:bg-gray-50 dark:bg-violet-800 dark:border-violet-700 dark:text-violet-400 dark:hover:bg-violet-700 dark:hover:text-white">
-                                        <svg class="w-3.5 h-3.5 me-2 rtl:rotate-180" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="2" d="M13 5H1m0 0 4 4M1 5l4-4" />
-                                        </svg>
-                                        Sebelumnya
-                                    </button>
-                                </div>
-                                <div class="">
-                                    <button id="btn-next"
-                                        class="flex   items-center justify-center px-4 h-10 text-base font-medium text-black  border-black border-[0.05px] border-s  rounded-md hover:bg-gray-50 dark:bg-violet-800 dark:border-violet-700 dark:text-violet-400 dark:hover:bg-violet-700 dark:hover:text-white">
-                                        Selanjutnya
-                                        <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
-                                        </svg>
-                                    </button>
+                    <tbody>
+                        @foreach ($nilais as $data)
+                            <tr class="{{ $loop->iteration % 2 == 0 ? 'bg-blue-50' : 'bg-white' }}">
+                                <td class="p-4 pr-8">
+                                    {{ $loop->iteration }}</td>
+                                <td class="p-4 pr-8">
+                                    {{ $data->nama }}</td>
+                                <td class="p-4 pr-8">
+                                    {{ $data->nama_mata_pelajaran }}</td>
+                                <td class="p-4 pr-8">
+                                    {{ $data->tipe_ujian }}</td>
+                                <td class="p-4 pr-8">
+                                    {{ $data->nilai }}</td>
+                                <td class="p-4 pr-8">
+                                    <div class="relative dropdown ">
+                                        <button type="button" class="py-2 font-medium leading-tight  dropdown-toggle"
+                                            id="dropdownMenuButton1" data-bs-toggle="dropdown"><i
+                                                class='bx bx-menu text-[20px]'></i></button>
+
+                                        <ul class="absolute z-50 float-left py-2 mt-1 text-left list-none bg-white border-none rounded-lg shadow-lg dropdown-menu w-44 bg-clip-padding dark:bg-zinc-700 hidden"
+                                            aria-labelledby="dropdownMenuButton1" data-popper-placement="bottom-start"
+                                            style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(49px, 1636.5px, 0px);">
+                                            <li>
+                                                <a class="block w-full px-4 py-1 text-sm font-medium text-gray-500 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 dark:text-gray-100 dark:hover:bg-zinc-600/50"
+                                                    data-tw-toggle="modal"
+                                                    data-tw-target="#modal-id_form_edit_{{ $loop->iteration }}">
+                                                    <i class='bx bxs-edit'></i>
+                                                    Ubah
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            {{-- Modal Edit --}}
+                            <div class="relative z-50 hidden modal" id="modal-id_form_edit_{{ $loop->iteration }}"
+                                aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                                <div class="fixed inset-0 z-50 overflow-y-auto">
+                                    <div class="absolute inset-0 transition-opacity bg-black bg-opacity-50 modal-overlay">
+                                    </div>
+                                    <div class="p-4 mx-auto animate-translate sm:max-w-lg">
+                                        <div
+                                            class="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl dark:bg-zinc-600">
+                                            <div class="bg-white dark:bg-zinc-700">
+                                                <button type="button"
+                                                    class="absolute top-3 right-2.5 text-gray-400 border-transparent hover:bg-gray-50/50 hover:text-gray-900 dark:text-gray-100 rounded-lg text-sm px-2 py-1 ltr:ml-auto rtl:mr-auto inline-flex items-center dark:hover:bg-zinc-600"
+                                                    data-tw-dismiss="modal">
+                                                    <i
+                                                        class="text-xl text-gray-500 mdi mdi-close dark:text-zinc-100/60"></i>
+                                                </button>
+                                                <div class="p-5">
+                                                    <h3 class="mb-4 text-xl font-medium text-gray-700 dark:text-gray-100">
+                                                        Ubah
+                                                        Data Sesi</h3>
+                                                    <form class="space-y-4 w-full"
+                                                        action="{{ route('guru.nilai.update', ['nilai' => $data->id]) }}"
+                                                        method="POST">
+                                                        @csrf
+                                                        <div class=" ">
+                                                            <input type="text" name="tahun_ajaran_"
+                                                                value="{{ $tahun }}" hidden>
+                                                            <input type="text" name="semester_"
+                                                                value="{{ $semester }}" hidden>
+                                                            <input type="text" name="rombel_id" id="rombel_id"
+                                                                class="" placeholder=""
+                                                                value="{{ $rombel->id }}" hidden>
+                                                            <div class="grid grid-cols-2 gap-4">
+                                                                <div class="mb-3 w-full">
+                                                                    <label for="nama"
+                                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
+                                                                        Nama Siswa
+                                                                    </label>
+                                                                    <input type="text" name="nama" id="nama"
+                                                                        class="bg-gray-800/5 border border-gray-100 text-gray-900 dark:text-gray-100 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder-gray-400 dark:placeholder:text-zinc-100/60 focus:ring-0"
+                                                                        placeholder="Masukan Nama Siswa"
+                                                                        value="{{ $data->nama }}" required readonly>
+                                                                </div>
+                                                                <div class="mb-3 w-full">
+                                                                    <label for="mapel"
+                                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
+                                                                        Mata Pelajaran
+                                                                    </label>
+                                                                    <input type="text" name="mapel" id="mapel"
+                                                                        class="bg-gray-800/5 border border-gray-100 text-gray-900 dark:text-gray-100 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder-gray-400 dark:placeholder:text-zinc-100/60 focus:ring-0"
+                                                                        placeholder=""
+                                                                        value="{{ $data->nama_mata_pelajaran }}" required
+                                                                        readonly>
+                                                                </div>
+                                                            </div>
+                                                            <div class="grid grid-cols-2 gap-4">
+                                                                <div class="mb-3 w-full">
+                                                                    <label for="semester"
+                                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
+                                                                        Semester
+                                                                    </label>
+                                                                    <input type="text" name="semester" id="semester"
+                                                                        class="bg-gray-800/5 border border-gray-100 text-gray-900 dark:text-gray-100 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder-gray-400 dark:placeholder:text-zinc-100/60 focus:ring-0"
+                                                                        placeholder="Masukan Semester"
+                                                                        value="{{ $data->semester }}" required readonly>
+                                                                </div>
+                                                                <div class="mb-3 w-full">
+                                                                    <label for="tipe_ujian"
+                                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
+                                                                        Tipe Ujian
+                                                                    </label>
+                                                                    <input type="text" name="tipe_ujian"
+                                                                        id="tipe_ujian"
+                                                                        class="bg-gray-800/5 border border-gray-100 text-gray-900 dark:text-gray-100 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder-gray-400 dark:placeholder:text-zinc-100/60 focus:ring-0"
+                                                                        placeholder="Masukan Tipe Ujian"
+                                                                        value="{{ $data->tipe_ujian }}" required readonly>
+                                                                </div>
+                                                            </div>
+                                                            <div class="grid grid-cols-2 gap-4">
+                                                                <div class="mb-3 w-full">
+                                                                    <label for="nilai"
+                                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
+                                                                        Nilai
+                                                                    </label>
+                                                                    <input type="text" name="nilai" id="nilai"
+                                                                        class="bg-gray-800/5 border border-gray-100 text-gray-900 dark:text-gray-100 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder-gray-400 dark:placeholder:text-zinc-100/60 focus:ring-0"
+                                                                        placeholder="Masukan Nilai Siswa"
+                                                                        value="{{ $data->nilai }}" required>
+                                                                </div>
+                                                                <div></div>
+                                                            </div>
+                                                            <!-- Modal footer -->
+                                                        </div>
+
+                                                        <div class="flex gap-4">
+                                                            <button type="submit"
+                                                                class=" w-full text-white hover:bg-blue-700 bg-blue-500 border-transparent btn">
+                                                                Simpan
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <!-- Help text -->
-                    </div>
-                </div>
+                            {{-- End Modal Edit --}}
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -147,6 +293,8 @@
                                 menghapus data Nilai?</h3>
                             <form class="space-y-4" action="{{ route('guru.nilai.destroy') }}" method="GET">
                                 @csrf
+                                <input type="text" name="tahun_ajaran_id" value="{{ $tahun_ajaran_id }}"
+                                    id="" hidden>
                                 <div>
                                     <label for="rombel_id"
                                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100 ltr:text-left rtl:text-right">
@@ -240,35 +388,48 @@
         </div>
     </div>
 
-    @if (explode(' ', $rombel->nama_rombel)[0] == 'X')
-        @if ($semester == 'ganjil')
-            <input value="1" id="semester" hidden />
-        @endif
-        @if ($semester == 'genap')
-            <input value="2" id="semester" hidden />
-        @endif
-    @endif
-    @if (explode(' ', $rombel->nama_rombel)[0] == 'XI')
-        @if ($semester == 'ganjil')
-            <input value="3" id="semester" hidden />
-        @endif
-        @if ($semester == 'genap')
-            <input value="4" id="semester"hidden />
-        @endif
-    @endif
-    @if (explode(' ', $rombel->nama_rombel)[0] == 'XII')
-        @if ($semester == 'ganjil')
-            <input value="5" id="semester" hidden />
-        @endif
-        @if ($semester == 'genap')
-            <input value="6" id="semester" hidden />
-        @endif
-    @endif
+    {{-- Modal Semester --}}
+    <div class="absolute z-50 hidden modal" id="modal-id_tipe_ujian" aria-labelledby="modal-title" role="dialog"
+        aria-modal="true">
+        <div class="fixed inset-0 z-50 overflow-y-auto">
+            <div class="absolute inset-0 transition-opacity bg-black bg-opacity-50 modal-overlay">
+            </div>
+            <div class="p-4 mx-auto animate-translate sm:max-w-lg">
+                <div
+                    class="relative overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl dark:bg-zinc-600">
+                    <div class="bg-white dark:bg-zinc-700">
+                        <button type="button"
+                            class="absolute top-3 right-2.5 text-gray-400 border-transparent hover:bg-gray-50/50 hover:text-gray-900 dark:text-gray-100 rounded-lg text-sm px-2 py-1 ltr:ml-auto rtl:mr-auto inline-flex items-center dark:hover:bg-zinc-600"
+                            data-tw-dismiss="modal">
+                            <i class="text-xl text-gray-500 mdi mdi-close dark:text-zinc-100/60"></i>
+                        </button>
+                        <div class="py-5 px-10 mb-4">
+                            <h3 class="my-4 text-xl font-medium text-gray-700 dark:text-gray-100">
+                                Pilih Tipe Ujian
+                            </h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                <a href="{{ route('guru.nilai.show_input', ['tahun' => $tahun, 'semester' => $semester, 'tipe_ujian' => 'uts', 'rombel' => $rombel]) }}"
+                                    class="cursor-pointer w-full hover:text-white text-blue-600 font-medium  hover:bg-blue-600 border-2 border-blue-600 btn capitalize transition-all duration-300">
+                                    UTS
+                                </a>
+                                <a href="{{ route('guru.nilai.show_input', ['tahun' => $tahun, 'semester' => $semester, 'tipe_ujian' => 'uas', 'rombel' => $rombel]) }}"
+                                    class="cursor-pointer w-full hover:text-white text-blue-600 font-medium  hover:bg-blue-600 border-2 border-blue-600 btn capitalize transition-all duration-300">
+                                    UAS
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- End Modal Semester --}}
+
     <input type="text" id="tahun_ajaran_" value="{{ $tahun }}" hidden>
     <input type="text" id="semester_" value="{{ $semester }}" hidden>
     <input type="text" id="rombel_id" value="{{ $rombel->id }}" hidden>
     <input type="text" id="tahun_ajaran_id" value="{{ $tahun_ajaran_id }}" hidden>
-    <script type="module">
+    {{-- <script type="module">
         $(document).ready(function() {
             let page = 1;
             let url = null;
@@ -447,7 +608,7 @@
                 }
             }
         });
-    </script>
+    </script> --}}
 
     @if (session('message'))
         <script>

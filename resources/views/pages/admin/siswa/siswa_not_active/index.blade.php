@@ -27,7 +27,7 @@
                                         Silahkan pilih angkatan dengan menekan tombol dibawah!
                                     </p>
                                     <div class="">
-                                        <a href="{{ route('admin.siswa.not_active', ['angkatan' => $data->angkatan]) }}"
+                                        <a href="{{ route('admin.siswa.siswa_not_active_rombel', ['angkatan' => $data->angkatan]) }}"
                                             class="hover:bg-blue-700 block text-center text-white border-transparent shadow btn bg-blue-500  shadow-blue-300 dark:shadow-zinc-600">
                                             Pilih
                                         </a>

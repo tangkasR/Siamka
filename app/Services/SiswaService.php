@@ -34,9 +34,9 @@ class SiswaService
     {
         return $this->siswa->getById($siswa);
     }
-    public function getNotActive($angkatan)
+    public function getNotActive($angkatan, $nama_rombel)
     {
-        return $this->siswa->getNotActive($angkatan);
+        return $this->siswa->getNotActive($angkatan, $nama_rombel);
     }
     public function getSiswa($id)
     {
@@ -211,6 +211,9 @@ class SiswaService
             $this->siswa->deaktivasi($siswa->id);
             $this->siswa->create($siswa, $datas['tahun_ajaran_id'], $rombel_next);
         }
-
+    }
+    public function getNotActiveRombel($angkatan)
+    {
+        return $this->siswa->getNotActiveRombel($angkatan);
     }
 }
