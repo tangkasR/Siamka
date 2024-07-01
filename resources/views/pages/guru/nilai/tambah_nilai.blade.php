@@ -22,7 +22,7 @@
                                 {{ $semester }}</h1>
                         </div>
                         <a id="btn_excel"
-                            class="flex gap-2 justify-center items-center cursor-pointer text-center md:w-[200px] w-full border border-slate-700 hover:bg-slate-800 hover:text-white text-black font-medium py-2 px-4 rounded-md transition-all duration-300">
+                            class="flex gap-2 justify-center items-center cursor-pointer text-center md:w-[200px]  border border-slate-700 hover:bg-slate-800 hover:text-white text-black font-medium py-2 px-4 rounded-md transition-all duration-300">
                             <span>Download Template</span><i class='bx bxs-cloud-upload text-[20px]'></i></a>
 
                     </div>

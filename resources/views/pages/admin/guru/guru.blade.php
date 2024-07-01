@@ -356,7 +356,7 @@
                                                                         </label>
                                                                         <select id="mapel_id_{{ $loop->iteration }}"
                                                                             name="mapel_id_{{ $loop->iteration }}"
-                                                                            class=" dropdown dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100">
+                                                                            class=" dropdown dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-blue-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100">
                                                                             <option value="">- Tidak berubah -
                                                                             </option>
                                                                             @foreach ($mapels as $item_mapel)
@@ -375,7 +375,7 @@
                                                                             Mata Pelajaran 2 (opsional)
                                                                         </label>
                                                                         <select id="mapel_id_2" name="mapel_id_2"
-                                                                            class=" dropdown dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100">
+                                                                            class=" dropdown dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-blue-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100">
                                                                             <option value="">- Optional -
                                                                             </option>
                                                                             @foreach ($mapels as $mapel)
@@ -409,7 +409,7 @@
                                                                 </div>
                                                             </div>
                                                             <button type="submit"
-                                                                class="w-full text-white mt-3 bg-violet-600 border-transparent btn">
+                                                                class="w-full text-white mt-3 bg-blue-600 border-transparent btn">
                                                                 Simpan
                                                             </button>
                                                         </form>

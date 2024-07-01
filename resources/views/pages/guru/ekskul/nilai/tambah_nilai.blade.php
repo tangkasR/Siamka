@@ -74,11 +74,14 @@
                                     <div class="">
                                         <div class="card dark:bg-zinc-800 dark:border-zinc-600 ">
                                             <div class="card-body grid grid-cols-12 gap-3 items-center">
-                                                <h6 class="text-gray-600 text-[16px] font-semibold capitalize col-span-7">
-                                                    {{ $data->nama }} - <span class="text-[14px] font-medium">
-                                                        <span>( </span>{{ $data->rombels[0]->nama_rombel }} <span> )</span>
-                                                    </span>
-                                                </h6>
+                                                <div class=" col-span-7">
+                                                    <h6 class="mb-2 text-gray-600 text-[16px] font-semibold capitalize">
+                                                        {{ $data->nama }}</h6>
+                                                    <p class="text-[14px] font-medium">
+                                                        <span>( </span>{{ $data->rombels[0]->nama_rombel }}
+                                                        <span>)</span>
+                                                    </p>
+                                                </div>
                                                 <div class="form-check  col-span-5">
                                                     <div>
                                                         <select name="nilai[]"

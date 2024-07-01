@@ -20,7 +20,7 @@
                 </a>
             </div>
             <div class="relative overflow-x-auto card-body ">
-                <div class="grid md:grid-cols-4 gap-4">
+                <div class="grid md:grid-cols-3 gap-4">
                     @foreach ($ekskuls as $data)
                         <div
                             class=" relative mx-auto max-w-md rounded-lg bg-gradient-to-tr from-pink-300 to-blue-300 p-0.5 border-violet-300  hover:shadow-lg hover:shadow-violet-200 transition-all  ">

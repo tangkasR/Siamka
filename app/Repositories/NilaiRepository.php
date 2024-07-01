@@ -26,6 +26,7 @@ class NilaiRepository implements NilaiInterface
     }
     public function getNilai($rombel_id, $mapel_id, $tahun_ajaran_id)
     {
+        // dd($rombel_id);
         return $this->nilai->join('siswas', 'nilais.siswa_id', '=', 'siswas.id')
             ->join('mata_pelajarans', 'nilais.mata_pelajaran_id', '=', 'mata_pelajarans.id')
             ->join('rombel_siswa', 'siswas.id', '=', 'rombel_siswa.siswa_id')

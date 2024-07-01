@@ -33,7 +33,7 @@ class NilaiImport implements ToCollection, WithHeadingRow
         $check = 0;
 
         foreach ($rows as $row) {
-            $siswa = Siswa::where('nama', $row['nama'])->orWhere('nomor_id', $row['nomor_id'])->where('tahun_ajaran_id', $tahun_ajaran_id)->first();
+            $siswa = Siswa::where('tahun_ajaran_id', $tahun_ajaran_id)->where('nama', $row['nama'])->where('nomor_id', $row['nomor_id'])->first();
             if ($siswa != null && $row['nilai'] != null) {
                 $checkNilaiSiswa = Nilai::where('siswa_id', $siswa->id)->where('mata_pelajaran_id', $this->mapel_id)
                     ->where('tahun_ajaran_id', $tahun_ajaran_id)->where('tipe_ujian', $this->tipe_ujian)->where('semester', $this->semester_nilai)->get();

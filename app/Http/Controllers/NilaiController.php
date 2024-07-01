@@ -59,19 +59,21 @@ class NilaiController extends Controller
     {
         $guru_ = $this->auth->getUser('guru');
         $guru = $this->guru->getById($guru_->id);
-        if ($request->has("mapel_id") && $request->has('tipe_ujian')) {
-            return view('pages.guru.nilai.nilai', [
-                'rombel' => $this->rombel->getOne(Crypt::decrypt($rombel)),
-                'mapel' => $guru->mapels,
-                'guru' => $guru,
-                'nilais' => $this->nilai->getNilaiByParams(
-                    Crypt::decrypt($rombel), $request->mapel_id, $request->tipe_ujian, $request->semester, $this->tahun_ajaran->getId($tahun, $semester)
-                )->get(),
-                'tahun' => $tahun,
-                'semester' => $semester,
-                'tahun_ajaran_id' => $this->tahun_ajaran->getId($tahun, $semester),
-            ]);
-        }
+        // if ($request->has("mapel_id") && $request->has('tipe_ujian')) {
+        //     return view('pages.guru.nilai.nilai', [
+        //         'rombel' => $this->rombel->getOne(Crypt::decrypt($rombel)),
+        //         'mapel' => $guru->mapels,
+        //         'guru' => $guru,
+        //         'nilais' => $this->nilai->getNilaiByParams(
+        //             Crypt::decrypt($rombel), $request->mapel_id, $request->tipe_ujian, $request->semester, $this->tahun_ajaran->getId($tahun, $semester)
+        //         )->get(),
+        //         'tahun' => $tahun,
+        //         'semester' => $semester,
+        //         'tahun_ajaran_id' => $this->tahun_ajaran->getId($tahun, $semester),
+        //     ]);
+        // }
+
+        // dd($this->nilai->getNilai(Crypt::decrypt($rombel), $guru->mapels[0]->id, $this->tahun_ajaran->getId($tahun, $semester))->get());
         return view('pages.guru.nilai.nilai', [
             'rombel' => $this->rombel->getOne(Crypt::decrypt($rombel)),
             'mapel' => $guru->mapels,
@@ -130,7 +132,7 @@ class NilaiController extends Controller
         }
 
     }
-  
+
     public function update(Request $request, $nilai)
     {
 

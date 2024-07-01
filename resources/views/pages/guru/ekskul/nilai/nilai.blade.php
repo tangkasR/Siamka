@@ -21,7 +21,7 @@
                         {{ $semester }}</h1>
                     <a type="submit"
                         href="{{ route('guru.tambah_nilai', ['rombel' => $rombel, 'tahun_ajaran_id' => Crypt::encrypt($tahun_ajaran_id), 'ekskul' => $ekskul]) }}"
-                        class=" md:w-fit w-full justify-center md:mt-0 mt-6 cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md flex items-center gap-2">
+                        class=" md:w-fit justify-center md:mt-0 mt-6 cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md flex items-center gap-2">
                         <span>Tambah Data</span> <i class='bx bxs-plus-circle text-[25px]'></i>
                     </a>
                 </div>
