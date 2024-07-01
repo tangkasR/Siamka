@@ -79,17 +79,17 @@
                         </div>
                     </div>
                     <div class="pb-20 mt-10">
-                        <div class=" md:px-[20px] grid md:grid-cols-12 gap-4">
-                            <div class="md:col-span-4 flex justify-end flex-col">
+                        <div class=" md:px-[20px] grid md:grid-cols-12 md:gap-4">
+                            <div class="md:col-span-4 md:mb-0 mb-4 flex justify-end flex-col">
                                 <p for="example-text-input"
                                     class=" block font-medium text-gray-700 dark:text-gray-100 text-[18px]">
                                     Rekap
                                     Kehadiran
                                     Per Bulan</p>
                             </div>
-                            <div class="col-span-3">
+                            <div class="md:col-span-3">
                             </div>
-                            <div class="col-span-2">
+                            <div class="md:col-span-2">
                                 <select id="tahun_rekap" name="tahun_rekap"
                                     class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100">
                                     @foreach ($years as $item)
@@ -98,7 +98,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="md:col-span-3 grid grid-cols-2 mt-3 md:mt-0 gap-4 items-end">
+                            <div class="md:col-span-3 md:mb-0 mb-4 grid grid-cols-2 mt-3 md:mt-0 gap-4 items-end">
                                 <div class="">
                                     <button
                                         class="w-full  py-1 border  border-green-900 bg-green-50  font-medium

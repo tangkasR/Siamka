@@ -14,15 +14,15 @@
         <div class="col-span-12">
             <div class="card  dark:bg-zinc-800 dark:border-zinc-600">
                 <div class="card-body border-b border-gray-100 dark:border-zinc-600">
-                    <div class="flex justify-between items-start">
-                        <h1 class="text-[18px] font-medium capitalize">Tahun Ajaran
+                    <div class="md:flex md:justify-between md:items-start">
+                        <h1 class="text-[18px] font-medium capitalize leading-7 md:mb-0 mb-4">Tahun Ajaran
                             {{ str_replace('-', '/', $tahun_ajaran->tahun_ajaran) }},
                             Semester
                             {{ $tahun_ajaran->semester }}</h1>
                         <div class="flex items-center gap-4">
                             <div class="relative dropdown ">
                                 <button type="button"
-                                    class="dropdown-toggle flex gap-2 justify-center items-center cursor-pointer text-center w-[180px] border border-blue-500 bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-all duration-300"
+                                    class="dropdown-toggle flex gap-2 justify-center items-center cursor-pointer text-center md:w-[180px] w-full border border-blue-500 bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-all duration-300"
                                     id="dropdownMenuButton1" data-bs-toggle="dropdown"><span>Tambah Data</span> <i
                                         class='bx bxs-plus-circle text-[20px]'></i></button>
 
@@ -53,7 +53,7 @@
                             </div>
                             <div class="relative dropdown ">
                                 <button type="button"
-                                    class="dropdown-toggle flex gap-2 justify-center items-center cursor-pointer text-center w-[180px] border border-blue-500 hover:bg-blue-500 hover:text-white text-blue-500 font-medium py-2 px-4 rounded-md transition-all duration-300"
+                                    class="dropdown-toggle flex gap-2 justify-center items-center cursor-pointer text-center md:w-[180px] w-full border border-blue-500 hover:bg-blue-500 hover:text-white text-blue-500 font-medium py-2 px-4 rounded-md transition-all duration-300"
                                     id="dropdownMenuButton1" data-bs-toggle="dropdown"><span>Kelola Akun</span><i
                                         class='bx bxs-user-account text-[20px]'></i></button>
 
@@ -442,7 +442,7 @@
                                                         <h3
                                                             class="mb-4 text-xl font-medium text-gray-700 dark:text-gray-100">
                                                             Apakah anda ingin
-                                                            menghapus data {{ $data->nama }}</h3>
+                                                            menghapus data {{ $data->nama }}?</h3>
                                                         <form class="space-y-4"
                                                             action="{{ route('admin.guru.destroy', ['guru' => $data]) }}"
                                                             method="POST">
@@ -494,7 +494,8 @@
                                 enctype="multipart/form-data">
                                 @csrf
                                 <input type="text" name="tahun" value="{{ $tahun }}" id="" hidden>
-                                <input type="text" name="semester" value="{{ $semester }}" id="" hidden>
+                                <input type="text" name="semester" value="{{ $semester }}" id=""
+                                    hidden>
                                 <input type="text" name="tahun_ajaran_id" value="{{ $tahun_ajaran_id }}"
                                     id="" hidden>
                                 <button type="submit"

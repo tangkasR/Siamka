@@ -14,9 +14,9 @@
         <div class="col-span-12">
             <div class="card dark:bg-zinc-800 dark:border-zinc-600">
                 <div class="card-body border-b border-gray-100 dark:border-zinc-600 ">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h1 class="text-[18px] font-medium capitalize">Tahun Ajaran
+                    <div class="md:flex md:justify-between md:items-start">
+                        <div class="md:mb-0 mb-6">
+                            <h1 class="text-[18px] font-medium capitalize leading-7">Tahun Ajaran
                                 {{ str_replace('-', '/', $tahun) }},
                                 Semester
                                 {{ $semester }}</h1>
@@ -25,7 +25,7 @@
 
                             <div class="relative dropdown ">
                                 <button type="button"
-                                    class="dropdown-toggle flex gap-2 justify-center items-center cursor-pointer text-center w-[180px] border border-blue-500 bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-all duration-300"
+                                    class="dropdown-toggle flex gap-2 justify-center items-center cursor-pointer text-center md:w-[180px] w-[148px] border border-blue-500 bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-all duration-300"
                                     id="dropdownMenuButton1" data-bs-toggle="dropdown"><span>Tambah Data</span> <i
                                         class='bx bxs-plus-circle text-[20px]'></i></button>
 
@@ -55,7 +55,7 @@
                                 </ul>
                             </div>
                             <div class="">
-                                <a class="flex gap-2 justify-center items-center cursor-pointer text-center w-[180px] border border-blue-500 hover:bg-blue-500 hover:text-white text-blue-500 font-medium py-2 px-4 rounded-md transition-all duration-300"
+                                <a class="flex gap-2 justify-center items-center cursor-pointer text-center md:w-[180px] w-[148px] border border-blue-500 hover:bg-blue-500 hover:text-white text-blue-500 font-medium py-2 px-4 rounded-md transition-all duration-300"
                                     data-tw-toggle="modal" data-tw-target="#modal-id_form_destroy">
                                     <span> Hapus</span><i class='bx bxs-trash text-[20px]'></i></a>
                             </div>

@@ -12,7 +12,7 @@
                 <hr class="text-[2px] my-[20px] text-black w-full" />
                 <div class="relative overflow-x-auto card-body mb-[50px] h-[100%]">
                     {{-- Data --}}
-                    <div class="grid grid-cols-4 gap-4 mb-10 px-[10px]">
+                    <div class="grid md:grid-cols-3 gap-4 mb-10 px-[10px]">
                         @foreach ($tahun_ajarans as $data)
                             <div
                                 class="card hover:scale-98 duration-300 bg-blue-50 border-blue-300 border-2  transition-all">

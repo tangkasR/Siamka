@@ -10,4 +10,5 @@ interface NilaiEkskulInterface
     public function update($datas, $id);
     public function destroy($nis);
     public function getBySiswaNis($nis);
+    public function getAllAdmin($ekskul_id);
 }

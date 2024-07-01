@@ -43,15 +43,14 @@
             </div>
             @foreach ($gurus as $guru)
                 <div class="">
-                    <div class=" rounded-xl mb-6 capitalize grid grid-cols-12 items-center">
-                        <div class=" col-span-4 flex items-center">
-                            <span class="text-[30px] opacity-30 text-slate-500">&bull;</span>
-                            <span class="p-3 font-medium text-[16px]">{{ $guru->nama }}</span><i
+                    <div class=" rounded-xl mb-6 capitalize grid grid-cols-3 gap-4 items-center">
+                        <div class="flex justify-between items-center">
+                            <p class="p-3 font-medium text-[16px]">{{ $guru->nama }}</p><i
                                 class='bx bx-chevrons-right text-[20px]'></i>
                         </div>
                         @if (count($guru->mapels) > 1)
                             <div
-                                class=" border-l-4  {{ $loop->iteration % 2 == 1 ? 'border-l-green-300' : 'border-l-pink-300' }} subject-container hover:bg-blue-300 p-3 cursor-pointer leading-6 font-semibold col-span-4">
+                                class=" border-l-4  {{ $loop->iteration % 2 == 1 ? 'border-l-green-300' : 'border-l-pink-300' }} subject-container hover:bg-blue-300 p-3 cursor-pointer leading-6 font-semibold ">
                                 <label class="cursor-pointer">
                                     <input type="radio" name="selected_subject" class="hidden"
                                         value="{{ $guru->mapels[0]->nama_mata_pelajaran }}"
@@ -60,7 +59,7 @@
                                 </label>
                             </div>
                             <div
-                                class="border-l-4  {{ $loop->iteration % 2 == 1 ? 'border-l-green-300' : 'border-l-pink-300' }} subject-container hover:bg-blue-300 p-3  cursor-pointer leading-6 font-semibold col-span-4">
+                                class="border-l-4  {{ $loop->iteration % 2 == 1 ? 'border-l-green-300' : 'border-l-pink-300' }} subject-container hover:bg-blue-300 p-3  cursor-pointer leading-6 font-semibold ">
                                 <label class="cursor-pointer">
                                     <input type="radio" name="selected_subject" class="hidden"
                                         value="{{ $guru->mapels[1]->nama_mata_pelajaran }}"
@@ -70,7 +69,7 @@
                             </div>
                         @else
                             <div
-                                class="border-l-4  {{ $loop->iteration % 2 == 1 ? 'border-l-green-300' : 'border-l-pink-300' }} subject-container hover:bg-blue-300 p-3  cursor-pointer leading-6 font-semibold col-span-8">
+                                class="border-l-4  {{ $loop->iteration % 2 == 1 ? 'border-l-green-300' : 'border-l-pink-300' }} subject-container hover:bg-blue-300 p-3  cursor-pointer leading-6 font-semibold ">
                                 <label class="cursor-pointer">
                                     <input type="radio" name="selected_subject" class="hidden"
                                         value="{{ $guru->mapels[0]->nama_mata_pelajaran }}"

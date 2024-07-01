@@ -27,8 +27,8 @@
                                             <img src="{{ asset('assets/img/img-ekskul.png') }}" alt=""
                                                 class="max-w-[100px]">
                                         </span>
-                                        <h1 class="font-bold text-[24px] m-0  capitalize">{{ $data->nama_ekskul }}</h1>
-                                        <p class="mb-3 text-[16px] font-medium">Pembina Ekskul: {{ $data->nama }}</p>
+                                        <h1 class="font-bold text-[20px] m-0  capitalize">{{ $data->nama_ekskul }}</h1>
+                                        <p class="mb-3 text-[14px] font-medium">Pembina Ekskul: {{ $data->nama }}</p>
                                         <p>Silahkan kelola nilai ekskul
                                             <span class="capitalize">{{ $data->nama_ekskul }}</span> dengan
                                             menekan kotak ini.

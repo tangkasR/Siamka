@@ -16,16 +16,17 @@
         <div class="card dark:bg-zinc-800 dark:border-zinc-600">
             @if ($rombel)
                 <div class="card-body border-b border-gray-100 dark:border-zinc-600">
-                    <div class="flex justify-between items-center">
-                        <div class="">
-                            <h6 class="mb-3 text-gray-700 text-[16px] dark:text-gray-100 font-medium">Menampilkan daftar
+                    <div class="md:flex md:justify-between md:items-center">
+                        <div class="md:mb-0 mb-6">
+                            <h6 class="mb-3 text-gray-700 text-[16px] dark:text-gray-100 font-medium leading-7">Menampilkan
+                                daftar
                                 kehadiran siswa tanggal {{ $date }}
                             </h6>
                         </div>
                         <div class=" ">
                             <a type="submit"
                                 href="{{ route('guru.kehadiran.show_input', ['tahun' => $tahun, 'semester' => $semester, 'id' => $rombel->id]) }}"
-                                class=" w-fit md:mt-0 mt-6 cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md flex items-center justify-center gap-2">
+                                class=" md:w-fit w-full md:mt-0 mt-6 cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md flex items-center justify-center gap-2">
                                 <span>Tambah Data</span> <i class='bx bxs-plus-circle text-[25px]'></i>
                             </a>
                         </div>

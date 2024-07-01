@@ -12,9 +12,9 @@
         <div class="col-span-12">
             <div class="card dark:bg-zinc-800 dark:border-zinc-600">
                 <div class="card-body border-b border-gray-100 dark:border-zinc-600">
-                    <div class="flex justify-between items-center">
-                        <div class="">
-                            <h1 class="text-[18px] font-medium capitalize">Tahun Ajaran
+                    <div class="md:flex md:justify-between md:items-center">
+                        <div class="md:mb-0 mb-6">
+                            <h1 class="text-[18px] font-medium capitalize leading-7">Tahun Ajaran
                                 {{ str_replace('-', '/', $tahun) }},
                                 Semester
                                 {{ $semester }}</h1>

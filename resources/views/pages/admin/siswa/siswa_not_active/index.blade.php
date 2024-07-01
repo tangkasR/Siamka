@@ -8,7 +8,8 @@
                 <div class="px-[30px] pt-[20px]">
                     <div>
                         <h1 class="text-[18px]
-                    font-medium text-gray-800">Pilih Angkatan Untuk Melihat
+                    font-medium text-gray-800 leading-7">Pilih Angkatan Untuk
+                            Melihat
                             Daftar Siswa</h1>
                     </div>
                 </div>

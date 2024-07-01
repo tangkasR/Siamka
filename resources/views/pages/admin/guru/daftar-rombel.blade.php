@@ -12,8 +12,8 @@
 @section('content')
     <div class="grid grid-cols-1 bg-white shadow-md">
         <div class="card dark:bg-zinc-800 dark:border-zinc-600">
-            <div class="card-body border-b border-gray-100 dark:border-zinc-600 flex justify-between flex-wrap">
-                <h1 class="text-[18px] font-medium capitalize">Tahun Ajaran
+            <div class="card-body border-b border-gray-100 dark:border-zinc-600 flex justify-between flex-wrap items-center">
+                <h1 class="md:mb-0 mb-6 text-[18px] font-medium capitalize leading-7">Tahun Ajaran
                     {{ str_replace('-', '/', $tahun) }},
                     Semester
                     {{ $semester }}</h1>

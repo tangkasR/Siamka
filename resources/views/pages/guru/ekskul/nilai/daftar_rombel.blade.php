@@ -12,7 +12,8 @@
         <div class="order-last md:order-1">
             <div class="card dark:bg-zinc-800 dark:border-zinc-600 min-h-screen">
                 <div class="card-body border-b border-gray-100 dark:border-zinc-600">
-                    <h6 class="mb-1 text-gray-600 text-[18px] font-medium dark:text-gray-100">Pilih rombel untuk menambah
+                    <h6 class="mb-1 text-gray-600 text-[18px] font-medium dark:text-gray-100 leading-7">Pilih rombel untuk
+                        menambah
                         nilai ekskul!</h6>
                 </div>
                 <div class="relative overflow-x-auto card-body">
@@ -21,7 +22,7 @@
                             <div
                                 class=" w-full rounded-lg bg-gradient-to-tr from-pink-300 to-blue-300 p-0.5 border-violet-300  hover:shadow-lg hover:shadow-violet-200 transition-all  ">
                                 <a
-                                    href="{{ route('guru.nilai_ekskul', ['tahun' => $tahun, 'semester' => $semester,'rombel' => $data ,'id' => Crypt::encrypt($ekskul->id)]) }}">
+                                    href="{{ route('guru.nilai_ekskul', ['tahun' => $tahun, 'semester' => $semester, 'rombel' => $data, 'id' => Crypt::encrypt($ekskul->id)]) }}">
                                     <div class="bg-white p-3 rounded-md">
                                         <h1 class="font-bold text-[24px] m-0  capitalize">Rombel {{ $data }}</h1>
                                         <p class="mb-3 text-[16px] font-medium">Nama Ekskul: {{ $ekskul->nama_ekskul }}</p>

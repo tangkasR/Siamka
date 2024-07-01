@@ -21,11 +21,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="text-left md:mt-0 mt-6">
-                    <div class="mb-3">
+                <div class="text-left md:mt-0 mt-10">
+                    <div class="md:mb-3">
                         <span class="font-semibold text-[24px] capitalize">{{ $guru->nama }} </span>
                     </div>
-                    <div class="mb-3">
+                    <div class="md:mb-3">
                         <span class="font-medium text-[16px] text-gray-500">Kompetensi:
                             @foreach ($guru->mapels as $index => $mapel)
                                 @if ($index == 1)
@@ -37,11 +37,11 @@
                     </div>
                 </div>
             </div>
-            <div class="p-6 flex gap-2 items-center">
+            <div class="md:p-6 px-6 md:flex md:gap-2 md:items-center">
                 <div>
                     <div class="relative dropdown ">
                         <button type="button"
-                            class="flex gap-2 items-center dropdown-toggle w-fit border border-blue-600 hover:bg-blue-700 text-blue-600 hover:text-white font-bold py-2 px-6 rounded-md "
+                            class="md:mb-0 mb-4 flex justify-center gap-2 items-center dropdown-toggle md:w-[200px] w-full  border border-blue-600 hover:bg-blue-700 text-blue-600 hover:text-white font-bold py-2 px-6 rounded-md "
                             id="dropdownMenuButton1" data-bs-toggle="dropdown"><span> Download</span> <i
                                 class='bx bxs-cloud-download text-[20px]'></i></button>
                         <ul class="absolute text-left z-50 float-left py-2 mt-1  list-none bg-white border-none rounded-lg shadow-lg dropdown-menu w-44 bg-clip-padding dark:bg-zinc-700 hidden"
@@ -88,8 +88,8 @@
                 </div>
                 <div>
                     <a href="{{ route('admin.guru.cetak_kehadiran', ['tahun' => $tahun, 'semester' => $semester, 'guru' => $guru]) }}"
-                        class="flex gap-2 items-center w-fit border border-slate-600 hover:bg-slate-700 text-slate-600 hover:text-white font-bold py-2 px-6 rounded-md">
-                        <span>Rekap Kehadiran</span><i class='bx bx-calendar-alt text-[20px]'></i>
+                        class="flex gap-2 items-center justify-center md:w-[200px] w-full border border-slate-600 hover:bg-slate-700 text-slate-600 hover:text-white font-bold py-2 px-6 rounded-md">
+                        <span class="leading-5">Rekap Kehadiran</span><i class='bx bx-calendar-alt text-[20px]'></i>
                     </a>
                 </div>
             </div>

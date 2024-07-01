@@ -118,7 +118,7 @@ class NilaiEkskulController extends Controller
             'tahun' => $tahun,
             'semester' => $semester,
             'ekskul' => $ekskul,
-            'nilais' => $this->nilai_ekskul->getAll($ekskul->id),
+            'nilais' => $this->nilai_ekskul->getAllAdmin($ekskul->id),
         ]);
     }
 

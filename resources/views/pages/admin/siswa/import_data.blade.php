@@ -12,19 +12,19 @@
         <div class="col-span-12">
             <div class="card dark:bg-zinc-800 dark:border-zinc-600">
                 <div class="card-body border-b border-gray-100 dark:border-zinc-600">
-                    <div class="flex justify-between items-center">
-                        <div class="">
-                            <h1 class="text-[18px] font-medium capitalize">Tahun Ajaran
+                    <div class="md:flex md:justify-between md:items-center">
+                        <div class="md:mb-0 mb-6">
+                            <h1 class="text-[18px] font-medium capitalize leading-7">Tahun Ajaran
                                 {{ str_replace('-', '/', $tahun) }},
                                 Semester
                                 {{ $semester }}</h1>
                         </div>
                         <div class="flex items-center gap-4">
                             <a data-tw-toggle="modal" data-tw-target="#modal-id_preview"
-                                class="flex gap-2 justify-center items-center cursor-pointer text-center w-[180px] border border-slate-500 bg-slate-500 hover:bg-slate-800 text-white font-medium py-2 px-4 rounded-md transition-all duration-300">
+                                class="flex gap-2 justify-center items-center cursor-pointer text-center md:w-[180px] w-[150px] border border-slate-500 bg-slate-500 hover:bg-slate-800 text-white font-medium py-2 px-4 rounded-md transition-all duration-300">
                                 <span>Preview</span><i class='bx bxs-show text-[20px]'></i></a>
                             <a data-tw-toggle="modal" data-tw-target="#modal-id_form_add"
-                                class="flex gap-2 justify-center items-center cursor-pointer text-center w-[180px] border border-blue-500 bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-all duration-300">
+                                class="flex gap-2 justify-center items-center cursor-pointer text-center md:w-[180px] w-[150px] border border-blue-500 bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-all duration-300">
                                 <span>Import</span><i class='bx bxs-cloud-upload text-[20px]'></i></a>
                         </div>
                     </div>

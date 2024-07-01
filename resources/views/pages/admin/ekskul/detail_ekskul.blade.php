@@ -36,8 +36,17 @@
                                         {{ $data->nama_ekskul }}</td>
                                     <td class="p-4 ">
                                         {{ $data->semester }}</td>
-                                    <td class="p-4 ">
-                                        {{ $data->nilai }}</td>
+                                    <td class="p-4 font-bold">
+                                        @if ($data->nilai == 'Amat Baik')
+                                            <span class="text-[#007BFF]">{{ $data->nilai }}</span>
+                                        @endif
+                                        @if ($data->nilai == 'Baik')
+                                            <span class="text-[#0047AB]">{{ $data->nilai }}</span>
+                                        @endif
+                                        @if ($data->nilai == 'Cukup')
+                                            <span class="text-[#808080]">{{ $data->nilai }}</span>
+                                        @endif
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>

@@ -18,24 +18,32 @@
                             </div>
                         </div>
                     </div>
-                    <div class="text-left md:mt-0 mt-6">
+                    <div class="text-left md:mt-0 mt-10">
                         <div class="mb-3">
-                            <span class="font-semibold text-[24px] capitalize">{{ $siswa->nama }} </span><span
-                                class="ms-6 text-[16px] font-medium text-gray-500">
+                            <span class="font-semibold text-[24px] capitalize">{{ $siswa->nama }} </span>
+                            <br class="md:hidden block">
+                            <div class="md:hidden block mb-3"></div>
+                            <span class="md:ms-6 text-[16px] font-medium text-gray-500">
                                 Nomor Id:
                                 {{ $siswa->nomor_id }}</span>
                         </div>
                         <div class="mb-3">
                             <span class="font-medium text-[16px] text-gray-500">NISN: {{ $siswa->nisn }}</span>
-                            <span class="mx-6 text-[20px] text-slate-300">&bull;</span>
+                            <span class="md:opacity-100 opacity-0  mx-6 text-[20px] text-slate-300">&bull;</span>
+                            <br class="md:hidden block">
+                            <div class="md:hidden block mb-3"></div>
                             <span class="font-medium text-[16px] text-gray-500">NIS: {{ $siswa->nis }}</span>
-                            <span class="mx-6 text-[20px] text-slate-300">&bull;</span>
+                            <span class="md:opacity-100 opacity-0 hidden mx-6 text-[20px] text-slate-300">&bull;</span>
+                            <br class="md:hidden block">
+                            <div class="md:hidden block mb-3"></div>
                             <span class="font-medium text-[16px] text-gray-500">Jenis Kelamin:
                                 {{ $siswa->jenis_kelamin == 'L' ? 'Laki-Laki' : 'Perempuan' }}</span>
                         </div>
                         <div class="">
                             <span class="font-medium text-[16px] text-gray-500">Username: {{ $siswa->username }}</span>
-                            <span class="mx-6 text-[20px] text-slate-300">&bull;</span>
+                            <span class="md:opacity-100 opacity-0 mx-6 text-[20px] text-slate-300">&bull;</span>
+                            <br class="md:hidden block">
+                            <div class="md:hidden block mb-3"></div>
                             <span class="font-medium text-[16px] text-gray-500">Riwayat Rombel:
                                 @foreach ($siswa->rombels as $rombel)
                                     <span class="ms-1">{{ $rombel->nama_rombel }}</span>
@@ -44,9 +52,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="relative p-6 ">
-                    <span class="px-6 py-2 text-blue-600 font-medium border border-blue-500 rounded-md">Ubah Foto <i
-                            class='bx bxs-edit ms-1'></i></span>
+                <div class="relative p-6">
+                    <span class=" px-6 py-2 text-blue-600 font-medium border border-blue-500 rounded-md">Ubah
+                        Foto <i class='bx bxs-edit ms-1'></i></span>
                     <input class="absolute w-full h-full opacity-0 cursor-pointer top-0 right-0 z-50" id="file"
                         type="file" name="profil" onchange="loadPhoto(this)" value="{{ $siswa->profil }}">
                 </div>

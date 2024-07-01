@@ -29,24 +29,32 @@
                         </div>
                     </div>
                 </div>
-                <div class="text-left md:mt-0 mt-6">
+                <div class="text-left md:mt-0 mt-10">
                     <div class="mb-3">
-                        <span class="font-semibold text-[24px] capitalize">{{ $siswa->nama }} </span><span
-                            class="ms-6 text-[16px] font-medium text-gray-500">
+                        <span class=" font-semibold text-[24px] capitalize">{{ $siswa->nama }} </span>
+                        <br class="md:hidden block">
+                        <div class="md:hidden block mb-3"></div>
+                        <span class="md:ms-6  text-[16px] font-medium text-gray-500">
                             Nomor Id:
                             {{ $siswa->nomor_id }}</span>
                     </div>
                     <div class="mb-3">
                         <span class="font-medium text-[16px] text-gray-500">NISN: {{ $siswa->nisn }}</span>
-                        <span class="mx-6 text-[20px] text-slate-300">&bull;</span>
+                        <span class="md:opacity-100 opacity-0  mx-6 text-[20px] text-slate-300">&bull;</span>
+                        <br class="md:hidden block">
+                        <div class="md:hidden block mb-3"></div>
                         <span class="font-medium text-[16px] text-gray-500">NIS: {{ $siswa->nis }}</span>
-                        <span class="mx-6 text-[20px] text-slate-300">&bull;</span>
+                        <span class="md:opacity-100 opacity-0 hidden mx-6 text-[20px] text-slate-300">&bull;</span>
+                        <br class="md:hidden block">
+                        <div class="md:hidden block mb-3"></div>
                         <span class="font-medium text-[16px] text-gray-500">Jenis Kelamin:
                             {{ $siswa->jenis_kelamin == 'L' ? 'Laki-Laki' : 'Perempuan' }}</span>
                     </div>
                     <div class="">
                         <span class="font-medium text-[16px] text-gray-500">Username: {{ $siswa->username }}</span>
-                        <span class="mx-6 text-[20px] text-slate-300">&bull;</span>
+                        <span class="md:opacity-100 opacity-0 mx-6 text-[20px] text-slate-300">&bull;</span>
+                        <br class="md:hidden block">
+                        <div class="md:hidden block mb-3"></div>
                         <span class="font-medium text-[16px] text-gray-500">Riwayat Rombel:
                             @foreach ($siswa->rombels as $rombel)
                                 <span class="ms-1">{{ $rombel->nama_rombel }}</span>
@@ -55,16 +63,16 @@
                     </div>
                 </div>
             </div>
-            <div class="flex gap-2 p-6 ">
+            <div class="md:block flex gap-2 justify-center">
                 <div>
                     <a href="{{ route('admin.siswa.rekap_nilai', ['tahun' => $tahun, 'semester' => $semester, 'rombel' => $rombel, 'id' => Crypt::encrypt($siswa->id)]) }}"
-                        class="flex gap-2 items-center w-fit border border-slate-600 hover:bg-slate-700 text-slate-600 hover:text-white font-bold py-2 px-6 rounded-md">
+                        class="mb-3 justify-center flex gap-2 items-center md:w-[200px] w-[150px] border border-slate-600 hover:bg-slate-700 text-slate-600 hover:text-white font-bold py-2 px-6 rounded-md">
                         <span>Rekap Nilai</span> <i class='bx bxs-report text-[20px]'></i></i>
                     </a>
                 </div>
                 <div>
                     <a href="{{ route('admin.siswa.rekap_kehadiran', ['tahun' => $tahun, 'semester' => $semester, 'rombel' => $rombel, 'id' => Crypt::encrypt($siswa->id)]) }}"
-                        class="flex gap-2 items-center w-fit border border-slate-600 hover:bg-slate-700 text-slate-600 hover:text-white font-bold py-2 px-6 rounded-md">
+                        class="flex justify-center gap-2 items-center md:w-[200px] w-[150px] border border-slate-600 hover:bg-slate-700 text-slate-600 hover:text-white font-bold py-2 px-6 rounded-md">
                         <span>Rekap Kehadiran</span><i class='bx bx-calendar-alt text-[20px]'></i>
                     </a>
                 </div>

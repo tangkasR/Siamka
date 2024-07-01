@@ -381,8 +381,8 @@
                 </a>
             </div>
             <div class="mt-10">
-                <div class="font-semibold flex justify-between items-end mb-6 ">
-                    <div class="flex gap-3 items-center ">
+                <div class="font-semibold flex justify-between flex-wrap items-end mb-6 ">
+                    <div class="flex gap-3 items-center md:mb-0 mb-6">
                         <div class="rounded-full p-2 bg-blue-100 flex justify-center items-center border">
                             <i class='bx bxs-user-voice text-[25px]  '></i>
                         </div>
@@ -569,8 +569,8 @@
                 </a>
             </div>
             <div class="mt-10">
-                <div class="font-semibold flex justify-between items-end mb-6 ">
-                    <div class="flex gap-3 items-center ">
+                <div class="font-semibold flex justify-between flex-wrap items-end mb-6 ">
+                    <div class="flex gap-3 items-center md:mb-0 mb-6">
                         <div class="rounded-full p-2 bg-blue-100 flex justify-center items-center border">
                             <i class='bx bxs-user-voice text-[25px]  '></i>
                         </div>

@@ -14,7 +14,7 @@
         <div class="md:grid md:grid-cols-12 ">
             <div class="md:col-span-4 py-4">
                 <div class=" relative mx-auto max-w-md rounded-lg bg-gradient-to-tr  ">
-                    <div class="bg-white rounded-md">
+                    <div class="bg-white rounded-md md:px-0 px-5">
                         <span
                             class="flex justify-center items-center h-48 w-48 place-items-center rounded-md  duration-300  text-blue-100 ">
                             <img src="{{ asset('assets/img/img-ekskul.png') }}" alt="">
@@ -48,7 +48,7 @@
                     <div class="card-body border-b border-gray-100 dark:border-zinc-600 pt-6">
                         <div class="flex justify-end">
                             <a href="{{ route('guru.ekskul.daftar_rombel', ['tahun' => $tahun, 'semester' => $semester, 'tahun_ajaran' => $tahun_ajaran, 'ekskul' => $ekskul]) }}"
-                                class="w-[200px] flex gap-2 justify-center items-center text-white hover:bg-blue-700 font-medium border border-blue-700 bg-blue-500 border-transparent btn">
+                                class="md:w-[200px] w-full flex gap-2 justify-center items-center text-white hover:bg-blue-700 font-medium border border-blue-700 bg-blue-500 border-transparent btn">
                                 <span>Tambah Anggota</span><i class='bx bxs-plus-circle text-[20px]'></i>
                             </a>
                         </div>

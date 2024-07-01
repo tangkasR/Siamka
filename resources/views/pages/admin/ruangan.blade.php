@@ -93,7 +93,7 @@
                                                                     value="{{ $data->nomor_ruangan }}" required>
                                                             </div>
                                                             <button type="submit"
-                                                                class="w-full mt-3 text-white hover:bg-blue-700 bg-blue-500 border-transparent btn">
+                                                                class="w-full mt-3 text-white hover:bg-blue-700 bg-blue-600 border-transparent btn">
                                                                 Simpan
                                                             </button>
                                                         </form>
@@ -162,7 +162,7 @@
                 <div class="flex justify-between">
                     <h1 class="text-slate-600 font-semibold text-[20px]">Tambah Data Ruangan</h1>
                     <button type="button" class="
-                    text-violet-600 text-[40px] " id="add_input"><i
+                    text-blue-600 text-[40px] " id="add_input"><i
                             class='bx bxs-plus-circle'></i></button>
                     <div id="count"
                         class="text-gray-500 absolute right-9 rounded-full z-50 text-[16px] top-15 px-2 border bg-green-50 ">
@@ -174,9 +174,10 @@
                     class="
                 w-full
                 text-white
-                bg-violet-400
-                hover:bg-black
+                hover:bg-blue-700
+                bg-blue-600
                 py-2
+                btn
                 rounded-md">
                     Simpan
                 </button>

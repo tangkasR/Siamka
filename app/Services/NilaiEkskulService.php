@@ -74,4 +74,7 @@ class NilaiEkskulService
             $this->nilai_ekskul->store($siswa_id, $datas['ekskul_id'], $datas['nilai'][$key], $datas['tahun_ajaran_id'], $datas['semester']);
         }
     }
+    public function getAllAdmin($ekskul_id){
+        return $this->nilai_ekskul->getAllAdmin($ekskul_id);
+    }
 }

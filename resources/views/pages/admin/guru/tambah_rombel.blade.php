@@ -161,7 +161,7 @@
                     spaceBetween: 20,
                 },
                 768: {
-                    slidesPerView: 4,
+                    slidesPerView: 3,
                     spaceBetween: 40,
                 },
             },
@@ -179,7 +179,7 @@
                     spaceBetween: 20,
                 },
                 768: {
-                    slidesPerView: 4,
+                    slidesPerView: 3,
                     spaceBetween: 40,
                 },
             },
@@ -197,7 +197,7 @@
                     spaceBetween: 20,
                 },
                 768: {
-                    slidesPerView: 4,
+                    slidesPerView: 3,
                     spaceBetween: 40,
                 },
             },

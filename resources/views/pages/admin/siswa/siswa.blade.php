@@ -14,18 +14,42 @@
         <div class="col-span-12">
             <div class="card dark:bg-zinc-800 dark:border-zinc-600">
                 <div class="card-body border-b border-gray-100 dark:border-zinc-600">
-                    <div class="flex justify-between items-center ">
+                    <div class="md:flex md:justify-between md:items-center ">
                         <div>
-                            <h1 class="text-[18px] font-medium capitalize">Tahun Ajaran
+                            <h1 class="text-[18px] font-medium capitalize leading-7">Tahun Ajaran
                                 {{ str_replace('-', '/', $tahun_ajaran->tahun_ajaran) }},
                                 Semester
                                 {{ $tahun_ajaran->semester }}</h1>
-                        </div>
-                        <div class="">
-                            <div class=" flex gap-4 items-center mb-3">
+                            <div class="mt-3">
                                 <div class="relative dropdown ">
                                     <button type="button"
-                                        class="dropdown-toggle flex gap-2 justify-center items-center cursor-pointer text-center w-[180px] border border-blue-500 bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-all duration-300"
+                                        class="hover:bg-gray-700 hover:text-white btn flex gap-2 items-center justify-center py-2 px-5 w-fit border border-gray-700 text-gray-700 rounded-md font-medium leading-tight  dropdown-toggle"
+                                        id="dropdownMenuButton1" data-bs-toggle="dropdown"><span>Cetak</span><i
+                                            class='bx bx-printer text-[20px]'></i></button>
+                                    <ul class="absolute z-50 float-left py-2 mt-1 text-left list-none bg-white border-none rounded-lg shadow-lg dropdown-menu w-44 bg-clip-padding dark:bg-zinc-700 hidden"
+                                        aria-labelledby="dropdownMenuButton1" data-popper-placement="bottom-start"
+                                        style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(49px, 1636.5px, 0px);">
+                                        <li>
+                                            <a class="block w-full px-4 py-1 text-sm font-medium text-green-500 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 dark:text-gray-100 dark:hover:bg-zinc-600/50"
+                                                id="btn_excel">
+                                                Excel
+                                            </a>
+                                        </li>
+                                        <hr class="my-1 border-gray-50 dark:border-zinc-600">
+                                        <li>
+                                            <a class="block text-red-500 w-full px-4 py-1 text-sm font-medium  bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 dark:text-gray-100 dark:hover:bg-zinc-600/50"
+                                                id="btn_pdf">
+                                                PDF</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="md:mt-0 mt-5">
+                            <div class=" md:flex md:items-center grid grid-cols-2 gap-4 mb-3">
+                                <div class="relative dropdown w-full">
+                                    <button type="button"
+                                        class="dropdown-toggle flex gap-2 justify-center items-center cursor-pointer text-center md:w-[180px] w-[150px] border border-blue-500 bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-all duration-300"
                                         id="dropdownMenuButton1" data-bs-toggle="dropdown"><span>Tambah Data</span> <i
                                             class='bx bxs-plus-circle text-[20px]'></i></button>
 
@@ -63,9 +87,9 @@
                                         @endif
                                     </ul>
                                 </div>
-                                <div class="relative dropdown ">
+                                <div class="relative dropdown w-full">
                                     <button type="button"
-                                        class="dropdown-toggle flex gap-2 justify-center items-center cursor-pointer text-center w-[180px] border border-blue-500 hover:bg-blue-500 hover:text-white text-blue-500 font-medium py-2 px-4 rounded-md transition-all duration-300"
+                                        class="dropdown-toggle flex gap-2 justify-center items-center cursor-pointer text-center md:w-[180px] w-[148px] border border-blue-500 hover:bg-blue-500 hover:text-white text-blue-500 font-medium py-2 px-4 rounded-md transition-all duration-300"
                                         id="dropdownMenuButton1" data-bs-toggle="dropdown"><span>Kelola Akun</span><i
                                             class='bx bxs-user-account text-[20px]'></i></button>
 
@@ -86,43 +110,19 @@
                                         </li>
                                     </ul>
                                 </div>
-                            </div>
-                            <div class="flex gap-4 items-center">
                                 @if (explode(' ', $rombel->nama_rombel)[0] == 'XII' && $tahun_ajaran->semester == 'genap')
                                     <div>
                                         <a href="{{ route('admin.siswa.show_lulus', ['tahun' => $tahun_ajaran->tahun_ajaran, 'semester' => $tahun_ajaran->semester, 'rombel' => $rombel]) }}"
-                                            class=" w-[180px] text-white bg-red-600 hover:bg-red-700 border-transparent btn cursor-pointer">
+                                            class=" md:w-[180px] w-[148px] hover:text-white text-red-600 border border-red-600 hover:bg-red-700 font-medium btn cursor-pointer">
                                             Luluskan Siswa
                                         </a>
                                     </div>
-                                @else
-                                    <div class="w-[180px]"></div>
                                 @endif
+                            </div>
+                            <div class="flex gap-4 items-center">
 
-                                <div class="">
-                                    <div class="relative dropdown ">
-                                        <button type="button"
-                                            class="hover:bg-gray-700 hover:text-white btn flex gap-2 items-center justify-center py-2 w-[180px] border border-gray-700 text-gray-700 rounded-md font-medium leading-tight  dropdown-toggle"
-                                            id="dropdownMenuButton1" data-bs-toggle="dropdown"><span>Cetak</span><i
-                                                class='bx bx-printer text-[20px]'></i></button>
-                                        <ul class="absolute z-50 float-left py-2 mt-1 text-left list-none bg-white border-none rounded-lg shadow-lg dropdown-menu w-44 bg-clip-padding dark:bg-zinc-700 hidden"
-                                            aria-labelledby="dropdownMenuButton1" data-popper-placement="bottom-start"
-                                            style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(49px, 1636.5px, 0px);">
-                                            <li>
-                                                <a class="block w-full px-4 py-1 text-sm font-medium text-green-500 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 dark:text-gray-100 dark:hover:bg-zinc-600/50"
-                                                    id="btn_excel">
-                                                    Excel
-                                                </a>
-                                            </li>
-                                            <hr class="my-1 border-gray-50 dark:border-zinc-600">
-                                            <li>
-                                                <a class="block text-red-500 w-full px-4 py-1 text-sm font-medium  bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 dark:text-gray-100 dark:hover:bg-zinc-600/50"
-                                                    id="btn_pdf">
-                                                    PDF</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
+
+
                             </div>
                         </div>
                         <div class="" hidden>
@@ -570,7 +570,7 @@
                                                             class="mb-4 text-xl font-medium text-gray-700 dark:text-gray-100">
                                                             Apakah anda ingin
                                                             menghapus data <span
-                                                                class="text-red-500">{{ $data->nama }}</span></h3>
+                                                                class="text-red-500">{{ $data->nama }}?</span></h3>
                                                         <form class="space-y-4"
                                                             action="{{ route('admin.siswa.destroy', ['id' => $data->id]) }}"
                                                             method="POST">

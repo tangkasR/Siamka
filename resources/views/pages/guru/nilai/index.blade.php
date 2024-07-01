@@ -12,12 +12,13 @@
         <div class="col-span-12">
             <div class="card dark:bg-zinc-800 dark:border-zinc-600">
                 <div class="px-[30px] pt-[20px] ">
-                    <h1 class="text-[18px] font-medium text-gray-800 leading-4 md:mb-0 mb-4">Pilih Rombel Untuk Memasukan
+                    <h1 class="text-[18px] font-medium text-gray-800 md:mb-0 mb-4 leading-7">Pilih Rombel Untuk
+                        Memasukan
                         Nilai</h1>
                 </div>
                 <hr class="text-[2px] mt-[20px]  text-black w-full" />
                 <div class="relative overflow-x-auto card-body mb-[50px] h-[100%]">
-                    <div class="grid md:grid-cols-4 gap-4">
+                    <div class="grid md:grid-cols-3 gap-4">
                         @foreach ($rombel as $data)
                             <div class="swiper-slide">
                                 <div class="hover:scale-98  card bg-blue-50 border-blue-300 border-2  transition-all">

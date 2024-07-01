@@ -16,23 +16,24 @@
         <div class="">
             <div class="card dark:bg-zinc-800 dark:border-zinc-600">
                 <div class="relative overflow-x-auto card-body">
-                    <div class="mb-3 flex justify-between items-center">
-                        <div class="">
-                            <h6 class="mb-3 text-gray-700 text-[16px] dark:text-gray-100 font-medium">Menampilkan daftar
+                    <div class="mb-4 md:flex md:justify-between md:items-center">
+                        <div class="md:mb-0 mb-6">
+                            <h6 class="mb-3 text-gray-700 text-[16px] dark:text-gray-100 font-medium leading-7">Menampilkan
+                                daftar
                                 kehadiran siswa tanggal {{ $tanggal }}
                             </h6>
                         </div>
-                        <div class=" flex gap-4 items-center">
+                        <div class=" md:flex md:gap-4 md:items-center">
                             <a type="submit"
                                 href="{{ route('admin.kehadiran.show_input', ['tahun' => $tahun, 'semester' => $semester, 'id' => $rombel->id]) }}"
-                                class=" w-fit md:mt-0 mt-6 cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md flex items-center justify-center gap-2">
+                                class="md:mb-0 mb-4 md:w-fit w-full md:mt-0 mt-6 cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md flex items-center justify-center gap-2">
                                 <span>Tambah Data</span> <i class='bx bxs-plus-circle text-[25px]'></i>
                             </a>
                             <form
                                 action="{{ route('admin.kehadiran.detail_kehadiran', ['tahun' => $tahun, 'semester' => $semester, 'rombel' => $rombel]) }}"
                                 method="GET">
                                 <input onchange="this.form.submit()"
-                                    class="w-[200px] border-gray-100 rounded placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
+                                    class="md:w-[200px] w-full border-gray-100 rounded placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
                                     type="date" name="tanggal">
                                 <noscript><input type="submit" value="Submit"></noscript>
                             </form>

@@ -91,7 +91,7 @@
                                                                     value="{{ $data->nama_mata_pelajaran }}" required>
                                                             </div>
                                                             <button type="submit"
-                                                                class="w-full mt-3 text-white bg-violet-600 border-transparent btn">
+                                                                class="w-full mt-3 text-white hover:bg-blue-700 bg-blue-600 border-transparent btn">
                                                                 Simpan
                                                             </button>
                                                         </form>
@@ -130,7 +130,7 @@
                                                         <h3
                                                             class="mb-4 text-xl font-medium text-gray-700 dark:text-gray-100">
                                                             Apakah anda ingin
-                                                            menghapus data {{ $data->nama_mata_pelajaran }}</h3>
+                                                            menghapus data {{ $data->nama_mata_pelajaran }}?</h3>
                                                         <form class="space-y-4"
                                                             action="{{ route('admin.mapel.destroy', ['mapel' => $data]) }}"
                                                             method="GET">
@@ -160,7 +160,7 @@
                 <div class="flex justify-between">
                     <h1 class="text-slate-600 font-semibold text-[20px]">Tambah Data Mata Pelajaran</h1>
                     <button type="button" class="
-                    text-violet-600 text-[40px] " id="add_input"><i
+                    text-blue-600 text-[40px] " id="add_input"><i
                             class='bx bxs-plus-circle'></i></button>
                     <div id="count"
                         class="text-gray-500 absolute right-9 rounded-full z-50 text-[16px] top-15 px-2 border bg-green-50 ">
@@ -172,9 +172,10 @@
                     class="
                 w-full
                 text-white
-                bg-violet-400
-                hover:bg-black
+                hover:bg-blue-700
+                bg-blue-600
                 py-2
+                btn
                 rounded-md ">
                     Simpan
                 </button>

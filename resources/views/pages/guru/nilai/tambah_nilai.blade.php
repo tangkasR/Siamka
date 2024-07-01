@@ -14,22 +14,23 @@
         <div class="">
             <div class="card dark:bg-zinc-800 dark:border-zinc-600 ">
                 <div class="card-body border-b border-gray-100 dark:border-zinc-600 ">
-                    <div class="flex justify-between items-center">
-                        <div class="">
-                            <h1 class="text-[18px] font-medium capitalize">Tahun Ajaran
+                    <div class="md:flex md:justify-between md:items-center">
+                        <div class="md:mb-0 mb-6">
+                            <h1 class="text-[18px] font-medium capitalize leading-7">Tahun Ajaran
                                 {{ str_replace('-', '/', $tahun) }},
                                 Semester
                                 {{ $semester }}</h1>
                         </div>
                         <a id="btn_excel"
-                            class="flex gap-2 justify-center items-center cursor-pointer text-center w-[200px] border border-slate-700 hover:bg-slate-800 hover:text-white text-black font-medium py-2 px-4 rounded-md transition-all duration-300">
+                            class="flex gap-2 justify-center items-center cursor-pointer text-center md:w-[200px] w-full border border-slate-700 hover:bg-slate-800 hover:text-white text-black font-medium py-2 px-4 rounded-md transition-all duration-300">
                             <span>Download Template</span><i class='bx bxs-cloud-upload text-[20px]'></i></a>
 
                     </div>
-                    <div class=" grid grid-cols-12 gap-4">
-                        <div class="col-span-5">
+                    <div class=" grid md:grid-cols-12 gap-4">
+                        <div class="md:col-span-6 border border-slate-300 rounded-xl p-6 pt-3 mt-5">
+                            <h1 class="mb-1 font-medium text-[18px]">Import Data Nilai</h1>
                             <form action="{{ route('guru.nilai.store') }}" method="POST" enctype="multipart/form-data"
-                                class="md:mb-0 mb-6 md:col-span-4">
+                                class="md:mb-0 mb-6">
                                 @csrf
                                 <input type="text" value="{{ $tahun }}" name="tahun" hidden id="tahun">
                                 <input type="text" value="{{ $semester }}" name="semester" hidden id="semester">
@@ -121,7 +122,7 @@
                                 </button>
                             </form>
                         </div>
-                        <div class="relative overflow-x-auto mt-6 col-span-7">
+                        <div class="relative overflow-x-auto mt-6 md:col-span-6">
                             <table class="table  w-full pt-4 text-center text-gray-700 dark:text-zinc-100"
                                 id="daftar_siswa">
                                 <thead>

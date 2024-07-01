@@ -222,8 +222,10 @@
                         <div
                             class="grid grid-cols-1 p-6  bg-white mb-3  shadow-sm rounded-md border-[0.5px] border-gray-50">
                             <div class="md:flex items-center justify-between px-[2px]">
-                                <div class="flex items-center">
-                                    @yield('back')
+                                <div class="md:flex md:items-center">
+                                    <div class="md:mb-0 mb-3 w-fit">
+                                        @yield('back')
+                                    </div>
                                     <h4 class="text-[25px] font-medium text-gray-800 mb-sm-0 grow dark:text-gray-100 mb-2 md:mb-0"
                                         style="line-height: 32px">
                                         @yield('table-name')</h4>

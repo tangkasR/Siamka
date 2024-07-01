@@ -40,6 +40,7 @@
                                 class='bx bxs-edit ms-1'></i></span>
                         <input class="absolute w-full h-full opacity-0 cursor-pointer top-0 right-0 z-50" id="file"
                             type="file" name="profil" onchange="loadPhoto(this)" value="{{ $guru->profil }}">
+                            
                     </div>
 
                 </div>
