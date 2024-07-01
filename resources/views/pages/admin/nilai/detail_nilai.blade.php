@@ -30,9 +30,9 @@
                 </div>
             </div>
         </div>
-        <div class="md:col-span-5 w-full md:order-2">
-            <div class="flex justify-between items-center my-6">
-                <h1 class="text-[20px] font-medium">Daftar Guru</h1>
+        <div class="md:col-span-5 w-full md:order-2 md:px-0 px-3">
+            <div class="md:flex md:justify-between md:items-center my-6 md:px-0 px-3">
+                <h1 class="text-[20px] font-medium leading-7 md:mb-0 mb-3">Daftar Guru</h1>
                 <div class="w-[200px]">
                     <select id="tipe_ujian"
                         class="dropdown dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100">
@@ -43,14 +43,14 @@
             </div>
             @foreach ($gurus as $guru)
                 <div class="">
-                    <div class=" rounded-xl mb-6 capitalize grid grid-cols-3 gap-4 items-center">
-                        <div class="flex justify-between items-center">
+                    <div class=" rounded-xl mb-6 capitalize grid grid-cols-12 gap-4 items-center">
+                        <div class="flex justify-between items-center col-span-4">
                             <p class="p-3 font-medium text-[16px]">{{ $guru->nama }}</p><i
-                                class='bx bx-chevrons-right text-[20px]'></i>
+                                class='bx bx-chevrons-right text-[20px] md:block hidden'></i>
                         </div>
                         @if (count($guru->mapels) > 1)
                             <div
-                                class=" border-l-4  {{ $loop->iteration % 2 == 1 ? 'border-l-green-300' : 'border-l-pink-300' }} subject-container hover:bg-blue-300 p-3 cursor-pointer leading-6 font-semibold ">
+                                class="col-span-4 border-l-4  {{ $loop->iteration % 2 == 1 ? 'border-l-green-300' : 'border-l-pink-300' }} subject-container hover:bg-blue-300 p-3 cursor-pointer leading-6 font-semibold ">
                                 <label class="cursor-pointer">
                                     <input type="radio" name="selected_subject" class="hidden"
                                         value="{{ $guru->mapels[0]->nama_mata_pelajaran }}"
@@ -59,7 +59,7 @@
                                 </label>
                             </div>
                             <div
-                                class="border-l-4  {{ $loop->iteration % 2 == 1 ? 'border-l-green-300' : 'border-l-pink-300' }} subject-container hover:bg-blue-300 p-3  cursor-pointer leading-6 font-semibold ">
+                                class="col-span-4 border-l-4  {{ $loop->iteration % 2 == 1 ? 'border-l-green-300' : 'border-l-pink-300' }} subject-container hover:bg-blue-300 p-3  cursor-pointer leading-6 font-semibold ">
                                 <label class="cursor-pointer">
                                     <input type="radio" name="selected_subject" class="hidden"
                                         value="{{ $guru->mapels[1]->nama_mata_pelajaran }}"
@@ -69,7 +69,7 @@
                             </div>
                         @else
                             <div
-                                class="border-l-4  {{ $loop->iteration % 2 == 1 ? 'border-l-green-300' : 'border-l-pink-300' }} subject-container hover:bg-blue-300 p-3  cursor-pointer leading-6 font-semibold ">
+                                class="col-span-8 border-l-4  {{ $loop->iteration % 2 == 1 ? 'border-l-green-300' : 'border-l-pink-300' }} subject-container hover:bg-blue-300 p-3  cursor-pointer leading-6 font-semibold ">
                                 <label class="cursor-pointer">
                                     <input type="radio" name="selected_subject" class="hidden"
                                         value="{{ $guru->mapels[0]->nama_mata_pelajaran }}"

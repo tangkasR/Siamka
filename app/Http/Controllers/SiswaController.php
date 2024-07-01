@@ -66,6 +66,7 @@ class SiswaController extends Controller
     }
     public function show_siswa($tahun, $semester, Rombel $rombel)
     {
+
         $tahun_ajaran_id = $this->tahun_ajaran->getId($tahun, $semester);
         $tahun_ajaran = $this->tahun_ajaran->getById($tahun_ajaran_id);
 
