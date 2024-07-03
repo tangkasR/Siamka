@@ -132,7 +132,7 @@
                                                         <h3
                                                             class="mb-4 text-xl font-medium text-gray-700 dark:text-gray-100">
                                                             Apakah anda ingin
-                                                            menghapus data {{ $data->nomor_ruangan }}</h3>
+                                                            menghapus data {{ $data->nomor_ruangan }}?</h3>
                                                         <form class="space-y-4"
                                                             action="{{ route('admin.ruangan.destroy', ['ruangan' => $data]) }}"
                                                             method="GET">

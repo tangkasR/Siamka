@@ -86,13 +86,6 @@
                                                         Ubah
                                                     </a>
                                                 </li>
-                                                <hr class="my-1 border-gray-50 dark:border-zinc-600">
-                                                <li>
-                                                    <a class="block text-red-500 w-full px-4 py-1 text-sm font-medium  bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 dark:text-gray-100 dark:hover:bg-zinc-600/50"
-                                                        data-tw-toggle="modal"
-                                                        data-tw-target="#modal-id_form_destroy_{{ $loop->iteration }}">
-                                                        <i class='bx bx-trash'></i> Hapus</a>
-                                                </li>
                                             </ul>
                                         </div>
                                     </td>

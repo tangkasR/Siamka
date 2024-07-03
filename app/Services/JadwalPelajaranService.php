@@ -101,6 +101,9 @@ class JadwalPelajaranService
         }
         $rombel = $this->rombel->getByNama($datas['nama_rombel'], $tahun_ajaran_id);
         $jadwals = $this->getByRombelId($rombel->id);
+        if (count($jadwals) == 0) {
+            throw ValidationException::withMessages(['error' => 'Data semester sebelumnya tidak ada!']);
+        }
         $rombel = $this->rombel->getOne($datas['rombel_id']);
         foreach ($jadwals as $jadwal) {
             $guru = $this->guru->getById($jadwal->guru_id);

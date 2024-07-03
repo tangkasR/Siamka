@@ -285,7 +285,8 @@ class GuruController extends Controller
     public function wali_kelas($tahun, $semester)
     {
         $guru_ = $this->auth->getUser('guru');
-        $guru = $this->guru->getById($guru_->id);
+        $tahun_ajaran_id = $this->tahun_ajaran->getId($tahun, $semester);
+        $guru = $this->guru->getByNiy($guru_->nomor_induk_yayasan, $tahun_ajaran_id);
         $siswa = null;
         if ($guru->rombel) {
             $siswa = $this->siswa->getSiswa($guru->rombel->id);

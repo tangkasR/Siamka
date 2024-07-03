@@ -91,11 +91,11 @@ class NilaiEkskulController extends Controller
         try {
             $this->nilai_ekskul->update($request->all(), $id);
             return redirect()->back()
-                ->with('message', 'Berhasil menambah data nilai');
+                ->with('message', 'Berhasil mengubah data nilai');
 
         } catch (QueryException $er) {
             return redirect()->back()
-                ->with('error', 'Gagal menambah data nilai');
+                ->with('error', 'Gagal mengubah data nilai');
         }
     }
 

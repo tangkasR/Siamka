@@ -21,7 +21,7 @@
                         <div class="relative dropdown ">
                             <button type="button"
                                 class="dropdown-toggle flex gap-2 justify-center items-center cursor-pointer text-center w-[180px] border border-blue-500 bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-all duration-300"
-                                id="dropdownMenuButton1" data-bs-toggle="dropdown"><span>Tambah Data</span> <i
+                                id="dropdownMenuButton1" data-bs-toggle="dropdown"><span>Kelola Data</span> <i
                                     class='bx bxs-plus-circle text-[20px]'></i></button>
 
                             <ul class="absolute z-50 float-left py-2 mt-1 text-left list-none bg-white border-none rounded-lg shadow-lg dropdown-menu w-44 bg-clip-padding dark:bg-zinc-700 hidden"

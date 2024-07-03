@@ -21,45 +21,45 @@
                                 Semester
                                 {{ $semester }}</h1>
                         </div>
-                        <div class="flex gap-4">
 
-                            <div class="relative dropdown ">
-                                <button type="button"
-                                    class="dropdown-toggle flex gap-2 justify-center items-center cursor-pointer text-center md:w-[180px] w-[148px] border border-blue-500 bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-all duration-300"
-                                    id="dropdownMenuButton1" data-bs-toggle="dropdown"><span>Tambah Data</span> <i
-                                        class='bx bxs-plus-circle text-[20px]'></i></button>
+                        <div class="relative dropdown ">
+                            <button type="button"
+                                class="dropdown-toggle flex gap-2 justify-center items-center cursor-pointer text-center md:w-[180px] w-[148px] border border-blue-500 bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-all duration-300"
+                                id="dropdownMenuButton1" data-bs-toggle="dropdown"><span>Kelola Data</span> <i
+                                    class='bx bxs-plus-circle text-[20px]'></i></button>
 
-                                <ul class="absolute z-50 float-left py-2 mt-1 text-left list-none bg-white border-none rounded-lg shadow-lg dropdown-menu w-44 bg-clip-padding dark:bg-zinc-700 hidden"
-                                    aria-labelledby="dropdownMenuButton1" data-popper-placement="bottom-start"
-                                    style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(49px, 1636.5px, 0px);">
-                                    <li>
-                                        <a class="cursor-pointer block w-full px-4 py-1 text-sm font-medium text-black bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 "
-                                            id="btn-download">
-                                            Download Template
-                                        </a>
-                                    </li>
+                            <ul class="absolute z-50 float-left py-2 mt-1 text-left list-none bg-white border-none rounded-lg shadow-lg dropdown-menu w-44 bg-clip-padding dark:bg-zinc-700 hidden"
+                                aria-labelledby="dropdownMenuButton1" data-popper-placement="bottom-start"
+                                style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(49px, 1636.5px, 0px);">
+                                <li>
+                                    <a class="cursor-pointer block w-full px-4 py-1 text-sm font-medium text-black bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 "
+                                        id="btn-download">
+                                        Download Template
+                                    </a>
+                                </li>
+                                <hr class="my-1 border-gray-50 dark:border-zinc-600">
+                                <li>
+                                    <a class="cursor-pointer block text-blue-700 w-full px-4 py-1 text-sm font-medium  bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 "
+                                        href="{{ route('admin.jadwal.tambah_data', ['tahun' => $tahun, 'semester' => $semester, 'rombel' => $rombel]) }}">
+                                        Import Jadwal</a>
+                                </li>
+                                @if (count($jadwal_pelajaran) == 0)
                                     <hr class="my-1 border-gray-50 dark:border-zinc-600">
                                     <li>
-                                        <a class="cursor-pointer block text-blue-700 w-full px-4 py-1 text-sm font-medium  bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 "
-                                            href="{{ route('admin.jadwal.tambah_data', ['tahun' => $tahun, 'semester' => $semester, 'rombel' => $rombel]) }}">
-                                            Import Jadwal</a>
+                                        <a data-tw-toggle="modal" data-tw-target="#modal-id_migration"
+                                            class="cursor-pointer block text-green-500 w-full px-4 py-1 text-sm font-medium  bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 ">
+                                            Transfer Data</a>
                                     </li>
-                                    @if (count($jadwal_pelajaran) == 0)
-                                        <hr class="my-1 border-gray-50 dark:border-zinc-600">
-                                        <li>
-                                            <a data-tw-toggle="modal" data-tw-target="#modal-id_migration"
-                                                class="cursor-pointer block text-green-500 w-full px-4 py-1 text-sm font-medium  bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 ">
-                                                Transfer Data</a>
-                                        </li>
-                                    @endif
-                                </ul>
-                            </div>
-                            <div class="">
-                                <a class="flex gap-2 justify-center items-center cursor-pointer text-center md:w-[180px] w-[148px] border border-blue-500 hover:bg-blue-500 hover:text-white text-blue-500 font-medium py-2 px-4 rounded-md transition-all duration-300"
-                                    data-tw-toggle="modal" data-tw-target="#modal-id_form_destroy">
-                                    <span> Hapus</span><i class='bx bxs-trash text-[20px]'></i></a>
-                            </div>
+                                @endif
+                                <hr class="my-1 border-gray-50 dark:border-zinc-600">
+                                <li>
+                                    <a class="cursor-pointer block text-red-700 w-full px-4 py-1 text-sm font-medium  bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-50/50 "
+                                        data-tw-toggle="modal" data-tw-target="#modal-id_form_destroy">
+                                        Hapus Data</a>
+                                </li>
+                            </ul>
                         </div>
+
                         <div class="" hidden>
                             {{-- template excel --}}
                             <input type="text" id="nama_rombel_input" value="{{ $rombel->nama_rombel }}">

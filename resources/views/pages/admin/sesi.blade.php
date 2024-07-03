@@ -130,7 +130,7 @@
                                                         <h3
                                                             class="mb-4 text-xl font-medium text-gray-700 dark:text-gray-100">
                                                             Apakah anda ingin
-                                                            menghapus data {{ $data->nama_sesi }}</h3>
+                                                            menghapus data {{ $data->nama_sesi }}?</h3>
                                                         <form class="space-y-4"
                                                             action="{{ route('admin.sesi.destroy', ['sesi' => $data]) }}"
                                                             method="GET">
