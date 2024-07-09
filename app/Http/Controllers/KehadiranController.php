@@ -59,7 +59,7 @@ class KehadiranController extends Controller
             'semester' => $semester,
         ]);
     }
-    public function getKehadiran_guru(Request $request)
+public function getKehadiran_guru(Request $request)
     {
         $kehadiran = $this->kehadiran
             ->getByRombelId($request->rombel_id, $this->date->getDate()->format('Y-m-d'))
@@ -131,17 +131,7 @@ class KehadiranController extends Controller
     }
     public function admin_detail_kehadiran($tahun, $semester, Rombel $rombel, Request $request)
     {
-        // $query = Order::query();
-
-        // $employee = Employee::where(
-        //     "id",
-        //     Auth::guard("employee")->user()->id
-        // )->first();
-
-        // $orders = $query->latest()->paginate(5);
-
         $tanggal = $this->date->getDate();
-
         $tahun_ajaran_id = $this->tahun_ajaran->getId($tahun, $semester);
         $rombel = $this->rombel->getOne($rombel->id);
 

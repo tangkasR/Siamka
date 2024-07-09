@@ -12,10 +12,6 @@ class MataPelajaranRepository implements MataPelajaranInterface
     {
         $this->mapel = $mapel;
     }
-    public function getOne($id)
-    {
-        return $this->mapel->where('id', $id)->first();
-    }
     public function getAll()
     {
         return $this->mapel->get();
@@ -26,6 +22,11 @@ class MataPelajaranRepository implements MataPelajaranInterface
             'nama_mata_pelajaran' => $data,
         ]);
     }
+    public function getOne($id)
+    {
+        return $this->mapel->where('id', $id)->first();
+    }
+
     public function update($data, $mapel)
     {
         return $mapel->update([

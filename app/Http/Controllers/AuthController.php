@@ -40,8 +40,8 @@ class AuthController extends Controller
         }
 
         Session::flash('status', 'failed');
-        Session::flash('message1', 'Email atau Password salah!');
-        Session::flash('message2', 'Konfirmasi ke Admin jika email dan password sudah benar!');
+        Session::flash('message1', 'Username atau Password salah!');
+        Session::flash('message2', 'Konfirmasi ke Admin jika username dan password sudah benar!');
         return redirect('/');
     }
 

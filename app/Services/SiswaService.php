@@ -57,7 +57,6 @@ class SiswaService
     }
     public function moveClass($data, $id)
     {
-        // dd($data);
         $siswa = $this->siswa->getById($id);
         $new_rombel = $this->rombel->getOne($data['rombel_id']);
         $old_rombel = $siswa->rombels->last();
@@ -75,6 +74,26 @@ class SiswaService
     {
         return $this->handleNextGrade($datas);
     }
+    private function handleNextGrade($datas)
+    {
+
+        $rombel_next = $this->rombel->getOne($datas['id_next']);
+        $rombel_now = $this->rombel->getOne($datas['class_id_now']);
+
+        if (isset($datas['siswa_id'])) {
+            foreach ($datas['siswa_id'] as $index => $id) {
+                $this->siswa->deaktivasi($id);
+                $siswa = $this->siswa->getById($id);
+                if ($datas['status'][$index] == 'naik') {
+                    $this->siswa->create($siswa, $datas['tahun_ajaran_id'], $rombel_next);
+                } else {
+                    $this->siswa->create($siswa, $datas['tahun_ajaran_id'], $rombel_now);
+                }
+            }
+        } else {
+            throw ValidationException::withMessages(['error' => 'Data siswa sudah naik kelas']);
+        }
+    }
     public function lulus($datas)
     {
         return $this->handleLulus($datas);
@@ -88,11 +107,7 @@ class SiswaService
         $siswas = $this->siswa->getSiswa($rombel->id);
         return $this->handleAktivasiAll($siswas);
     }
-    public function deaktivasiAll($rombel)
-    {
-        $siswas = $this->siswa->getSiswa($rombel->id);
-        return $this->handleDeaktivasiAll($siswas);
-    }
+
     public function deaktivasi($id)
     {
         return $this->siswa->deaktivasi($id);
@@ -109,12 +124,10 @@ class SiswaService
 
         return $this->siswa->update_profil($datas, $siswa->id);
     }
-
-    private function handleAktivasiAll($datas)
+    public function deaktivasiAll($rombel)
     {
-        foreach ($datas as $data) {
-            $this->siswa->aktivasi($data->id);
-        }
+        $siswas = $this->siswa->getSiswa($rombel->id);
+        return $this->handleDeaktivasiAll($siswas);
     }
     private function handleDeaktivasiAll($datas)
     {
@@ -122,6 +135,13 @@ class SiswaService
             $this->siswa->deaktivasi($data->id);
         }
     }
+    private function handleAktivasiAll($datas)
+    {
+        foreach ($datas as $data) {
+            $this->siswa->aktivasi($data->id);
+        }
+    }
+
     private function handleStoreAs($new_path, $new_file, $old_file)
     {
         $oldPath = storage_path('app/public/' . $old_file);
@@ -149,26 +169,7 @@ class SiswaService
             }
         }
     }
-    private function handleNextGrade($datas)
-    {
 
-        $rombel_next = $this->rombel->getOne($datas['id_next']);
-        $rombel_now = $this->rombel->getOne($datas['class_id_now']);
-
-        if (isset($datas['siswa_id'])) {
-            foreach ($datas['siswa_id'] as $index => $id) {
-                $this->siswa->deaktivasi($id);
-                $siswa = $this->siswa->getById($id);
-                if ($datas['status'][$index] == 'naik') {
-                    $this->siswa->create($siswa, $datas['tahun_ajaran_id'], $rombel_next);
-                } else {
-                    $this->siswa->create($siswa, $datas['tahun_ajaran_id'], $rombel_now);
-                }
-            }
-        } else {
-            throw ValidationException::withMessages(['error' => 'Data siswa sudah naik kelas']);
-        }
-    }
 
     public function getAngkatan()
     {

@@ -43,15 +43,6 @@ class EkskulService
     {
         return $this->handleAddMember($datas);
     }
-    public function update($data, $id)
-    {
-        return $this->ekskul->update($data['nama_ekskul'], $id);
-    }
-
-    public function delete_member($id_siswa, $datas)
-    {
-        return $this->handleDeleteMember($id_siswa, $datas);
-    }
     private function handleAddMember($datas)
     {
         $ekskul = $this->ekskul->getById($datas['ekskul_id']);
@@ -61,12 +52,23 @@ class EkskulService
             $siswa->ekskuls()->attach($ekskul);
         }
     }
+    public function update($data, $id)
+    {
+        return $this->ekskul->update($data['nama_ekskul'], $id);
+    }
+
+    public function delete_member($id_siswa, $datas)
+    {
+        return $this->handleDeleteMember($id_siswa, $datas);
+    }
     private function handleDeleteMember($id_siswa, $datas)
     {
         $siswa = $this->siswa->getById($id_siswa);
         $ekskul = $this->ekskul->getById($datas['ekskul_id']);
         $ekskul->siswas()->detach($siswa);
     }
+
+
 
     public function getEkskulSiswa($nis)
     {

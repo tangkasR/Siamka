@@ -17,16 +17,17 @@ class SesiRepository implements SesiInterface
     {
         return $this->sesi->get();
     }
-    public function getById($nama)
-    {
-        return $this->sesi->where('nama_sesi', $nama)->first();
-    }
     public function store($data)
     {
         return $this->sesi->create([
             'nama_sesi' => $data,
         ]);
     }
+    public function getById($nama)
+    {
+        return $this->sesi->where('nama_sesi', $nama)->first();
+    }
+
     public function update($data, $sesi)
     {
         return $sesi->update([

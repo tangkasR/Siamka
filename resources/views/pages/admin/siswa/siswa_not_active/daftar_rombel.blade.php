@@ -19,43 +19,39 @@
                 <hr class="text-[2px] my-[20px] text-black w-full" />
                 <div class="relative overflow-x-auto card-body mb-[50px] h-[100%]">
                     {{-- Data Kelas X --}}
-                    <div class="grid grid-cols-1 mb-10">
-                        <div class="swiper mySwiper1">
-                            <div class="swiper-wrapper">
-                                @foreach ($rombels as $data)
-                                    @if (explode(' ', $data)[0] == 'X')
-                                        <div class="swiper-slide">
-                                            <div
-                                                class="hover:scale-98  card bg-blue-50 border-blue-300 border-2  transition-all">
-                                                <div class="card-body">
-                                                    <h6
-                                                        class="mb-3 text-slate-700 text-[25px] dark:text-gray-100 font-bold">
-                                                        {{ $data }}
-                                                    </h6>
-                                                    <p class="text-slate-600 card-text dark:text-zinc-100 mb-2">
-                                                        Silahkan pilih rombel dengan menekan tombol dibawah!
-                                                    </p>
-                                                    <div class="">
-                                                        <a href="{{ route('admin.siswa.not_active', ['angkatan' => $angkatan, 'nama_rombel' => $data]) }}"
-                                                            class="hover:bg-blue-700
+                    <div class="grid grid-cols-4 mb-10">
+                        {{-- <div class="swiper mySwiper1">
+                            <div class="swiper-wrapper"> --}}
+                        @foreach ($rombels as $data)
+                            {{-- <div class="swiper-slide"> --}}
+                            <div class="hover:scale-98  card bg-blue-50 border-blue-300 border-2  transition-all">
+                                <div class="card-body">
+                                    <h6 class="mb-3 text-slate-700 text-[25px] dark:text-gray-100 font-bold">
+                                        {{ $data }}
+                                    </h6>
+                                    <p class="text-slate-600 card-text dark:text-zinc-100 mb-2">
+                                        Silahkan pilih rombel dengan menekan tombol dibawah!
+                                    </p>
+                                    <div class="">
+                                        <a href="{{ route('admin.siswa.not_active', ['angkatan' => $angkatan, 'nama_rombel' => $data]) }}"
+                                            class="hover:bg-blue-700
                                                             block text-center text-white border-transparent shadow btn bg-blue-500  shadow-blue-500 dark:shadow-zinc-600">
-                                                            Pilih
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endif
-                                @endforeach
+                                            Pilih
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
+                            {{-- </div> --}}
+                        @endforeach
+                        {{-- </div>
                         </div>
                         <div class="mt-3 mx-auto">
                             <div class="swiper-pagination1 "></div>
-                        </div>
+                        </div> --}}
                     </div>
                     {{-- End Data Kelas X --}}
                     {{-- Data Kelas XI --}}
-                    <div class="grid grid-cols-1 mb-10">
+                    {{-- <div class="grid grid-cols-1 mb-10">
                         <div class="swiper mySwiper2">
                             <div class="swiper-wrapper">
                                 @foreach ($rombels as $data)
@@ -88,10 +84,10 @@
                         <div class="mt-3 mx-auto">
                             <div class="swiper-pagination2 "></div>
                         </div>
-                    </div>
+                    </div> --}}
                     {{-- End Data Kelas XI --}}
                     {{-- Data Kelas XII --}}
-                    <div class="grid grid-cols-1 mb-10">
+                    {{-- <div class="grid grid-cols-1 mb-10">
                         <div class="swiper mySwiper3">
                             <div class="swiper-wrapper">
                                 @foreach ($rombels as $data)
@@ -120,20 +116,20 @@
                                     @endif
                                 @endforeach
                             </div>
-                        </div>
-                        <div class="mt-3 mx-auto">
+                        </div> --}}
+                    {{-- <div class="mt-3 mx-auto">
                             <div class="swiper-pagination3 "></div>
-                        </div>
-                    </div>
-                    {{-- End Data Kelas XII --}}
+                        </div> --}}
                 </div>
+                {{-- End Data Kelas XII --}}
             </div>
         </div>
+    </div>
     </div>
 
 
 
-    <!-- Initialize Swiper -->
+    {{-- <!-- Initialize Swiper -->
     <script type="module">
         var swiper = new Swiper(".mySwiper1", {
             centeredSlides: false,
@@ -191,5 +187,5 @@
                 },
             },
         });
-    </script>
+    </script> --}}
 @endsection

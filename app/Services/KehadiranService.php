@@ -44,6 +44,15 @@ class KehadiranService
     {
         return $this->handleUpdate($datas, $id);
     }
+    private function handleUpdate($datas, $id)
+    {
+        $kehadiran = $this->kehadiran->getById($id);
+        $siswa = $this->siswa->getById($datas['siswa_id']);
+        $kehadiran->siswas()->detach($siswa);
+        $kehadiran->siswas()->attach($siswa, [
+            'kehadiran' => $datas['daftar_kehadiran'],
+        ]);
+    }
     public function destroy($rombel_id)
     {
         return $this->kehadiran->destroy($rombel_id);
@@ -70,15 +79,7 @@ class KehadiranService
             }
         }
     }
-    private function handleUpdate($datas, $id)
-    {
-        $kehadiran = $this->kehadiran->getById($id);
-        $siswa = $this->siswa->getById($datas['siswa_id']);
-        $kehadiran->siswas()->detach($siswa);
-        $kehadiran->siswas()->attach($siswa, [
-            'kehadiran' => $datas['daftar_kehadiran'],
-        ]);
-    }
+
     public function clearData($year)
     {
         return $this->kehadiran->clearData($year);

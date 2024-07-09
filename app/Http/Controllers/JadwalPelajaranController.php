@@ -57,7 +57,6 @@ class JadwalPelajaranController extends Controller
             'semester' => $semeter,
             'tahun_ajaran_id' => $tahun_ajaran_id,
         ]);
-
     }
 
     public function store(Request $request)
