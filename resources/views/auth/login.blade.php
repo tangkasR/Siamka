@@ -134,7 +134,7 @@
     <div class="items-center justify-center min-h-screen w-full hidden md:p-0 p-6 relative Section_top overflow-hidden"
         id="container">
         <div
-            class="bg-gradient-to-r from-blue-500 to-blue-100 md:bg-none sm:hidden absolute -rotate-45 w-[800px] min-h-[150vh]">
+            class="bg-gradient-to-r from-blue-500 to-blue-100 md:bg-none sm:hidden absolute -rotate-45 w-[3000px] min-h-[150vh]">
         </div>
         <div class="relative py-3 sm:max-w-xl sm:mx-auto">
             <div class="md:absolute z-0 inset-0 bg-gradient-to-r from-blue-300 to-blue-600 shadow-lg transform -skew-y-12 sm:skew-y-0 sm:-rotate-6 rotate-0 sm:rounded-3xl rounded-md"
