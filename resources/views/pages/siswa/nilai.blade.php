@@ -181,7 +181,7 @@
                     </div>
                     <div class="relative overflow-x-scroll card-body">
                         <table id="table_nilai_ekskul"
-                            class="text-center uppercase table w-full pt-4 text-gray-700 dark:text-zinc-100">
+                            class="text-center capitalize table w-full pt-4 text-gray-700 dark:text-zinc-100">
                             <thead>
                                 <tr class="bg-blue-200">
                                     @foreach ($nilai_ekskuls[0] as $header)

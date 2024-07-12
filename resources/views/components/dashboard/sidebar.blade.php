@@ -136,7 +136,7 @@
                         <a href="{{ route('guru.kehadiran_guru') }}"
                             class="block py-2.5 px-6 text-sm font-medium text-gray-950 transition-all duration-150 ease-linear hover:text-violet-500 dark:text-gray-300 dark:active:text-white dark:hover:text-white">
                             <i class='bx bx-check-double'></i>
-                            <span data-key="t-dashboard"> Absen</span>
+                            <span data-key="t-dashboard"> Presensi</span>
                         </a>
                     </li>
                     <li>

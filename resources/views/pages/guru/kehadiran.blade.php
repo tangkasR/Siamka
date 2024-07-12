@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('table-name', 'Absensi')
+@section('table-name', 'Presensi')
 @section('table-role', 'Guru')
 @section('content')
     <div class="max-w-xl flex items-center h-auto lg:h-screen flex-wrap mx-auto  lg:my-0 md:py-10 bg-slate-50">
@@ -23,7 +23,7 @@
                         <p class="mb-4 text-gray-800 text-[18px] font-medium">Selamat datang <span
                                 class="font-semibold text-violet-600 text-[20px] capitalize">{{ $guru->nama }}</span>
                             di fitur
-                            Absensi</p>
+                            Presensi</p>
                         <p class="mb-4 text-gray-500 text-[16px] font-medium">
                             Tanggal: {{ $tanggal }}</p>
                         <p class="mb-4 text-gray-500 text-[16px] font-medium">
@@ -32,8 +32,8 @@
                         <p class="mb-1 text-gray-500 text-[16px]">Pastikan bahwa Anda sudah di lingkungan sekolah
                             supaya dapat
                             melakukan
-                            absensi!</p>
-                        <p class=" text-gray-500 text-[16px]">Silahkan melakukan absensi dengan menekan tombol dibawah
+                            presensi!</p>
+                        <p class=" text-gray-500 text-[16px]">Silahkan melakukan presensi dengan menekan tombol dibawah
                         </p>
 
                     </div>
@@ -42,7 +42,7 @@
                             class="w-full  text-md font-medium hover:bg-blue-700 bg-blue-500
                         mt-3 px-4 py-2 rounded-lg
                         text-white text-center btn">
-                            Absen Masuk
+                            Presensi Masuk
                         </button>
                     @endif
                 </form>
