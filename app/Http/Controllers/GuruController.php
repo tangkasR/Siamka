@@ -346,13 +346,13 @@ class GuruController extends Controller
 
         // Custom order for the days of the week
         $daysOrder = [
-            'senin' => 7,
-            'selasa' => 6,
-            'rabu' => 5,
+            'senin' => 1,
+            'selasa' => 2,
+            'rabu' => 3,
             'kamis' => 4,
-            'jumat' => 3,
-            'sabtu' => 2,
-            'minggu' => 1,
+            'jumat' => 5,
+            'sabtu' => 6,
+            'minggu' => 7,
         ];
 
         // Sort the collection by 'hari' using the custom order
