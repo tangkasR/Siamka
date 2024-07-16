@@ -355,9 +355,8 @@ class GuruController extends Controller
             'minggu' => 7,
         ];
 
-        // Sort the collection by 'hari' using the custom order
         $sortedJadwalPelajarans = $jadwalPelajarans->sortBy(function ($item) use ($daysOrder) {
-            return $daysOrder[strtolower($item->hari)];
+            return $daysOrder[$item->hari];
         });
 
         // Optionally, if you want to reindex the array
