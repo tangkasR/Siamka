@@ -356,8 +356,11 @@ class GuruController extends Controller
         ];
 
         $sortedJadwalPelajarans = $jadwalPelajarans->sortBy(function ($item) use ($daysOrder) {
-            return $daysOrder[$item->hari];
+            return $daysOrder[strtolower($item->hari)];
         });
+
+        // Output the sorted collection for debugging purposes
+        dd($sortedJadwalPelajarans);
 
         // Optionally, if you want to reindex the array
         $sortedJadwalPelajarans = $sortedJadwalPelajarans->values();
