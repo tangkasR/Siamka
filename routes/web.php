@@ -244,7 +244,7 @@ Route::group(['middleware' => ["must-login"]], function () {
             Route::get('/profil', 'profil')->name('profil');
             Route::post('/update_profil', 'update_profil')->name('update_profil');
             Route::get('/wali_kelas/{tahun}/{semester}', 'wali_kelas')->name('wali_kelas');
-            Route::get('/jadwal_mengajar/{tahun}/{semester}', 'jadwal_mengajar')->name('jadwal_mengajar');
+            Route::get('/jadwal_mengajar', 'jadwal_mengajar')->name('jadwal_mengajar');
         });
 
         // absensi guru

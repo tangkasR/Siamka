@@ -337,7 +337,7 @@ class GuruController extends Controller
             return back()->with('error', $er->getMessage());
         }
     }
-    public function jadwal_mengajar($tahun, $semester)
+    public function jadwal_mengajar()
     {
         $jadwalPelajarans = $this->guru->getById($this->auth->getUser('guru')->id)
             ->jadwal_pelajarans()
@@ -363,8 +363,6 @@ class GuruController extends Controller
         // Optionally, if you want to reindex the array
         $sortedJadwalPelajarans = $sortedJadwalPelajarans->values();
         return view('pages.guru.jadwal_mengajar', [
-            'tahun' => $tahun,
-            'semester' => $semester,
             'jadwals' => $sortedJadwalPelajarans,
         ]);
     }
