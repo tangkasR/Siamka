@@ -339,7 +339,29 @@ class GuruController extends Controller
     }
     public function jadwal_mengajar($tahun, $semester)
     {
-        dd($this->guru->getById($this->auth->getUser('guru')->id)->jadwal_pelajarans->sortBy('hari'));
+        $daysOrder = [
+            'senin' => 1,
+            'selasa' => 2,
+            'rabu' => 3,
+            'kamis' => 4,
+            'jumat' => 5,
+            'sabtu' => 6,
+            'minggu' => 7,
+        ];
+
+        // Get the jadwal_pelajarans for the authenticated guru
+        $jadwalPelajarans = $this->guru->getById($this->auth->getUser('guru')->id)->jadwal_pelajarans;
+
+        // Sort the collection by 'hari' using the custom order
+        $sortedJadwalPelajarans = $jadwalPelajarans->sortBy(function ($item) use ($daysOrder) {
+            return $daysOrder[strtolower($item->hari)];
+        });
+
+        // Optionally, if you want to reindex the array
+        $sortedJadwalPelajarans = $sortedJadwalPelajarans->values();
+
+        // You can now use $sortedJadwalPelajarans for further processing or return
+        dd($sortedJadwalPelajarans);
         return view('pages.guru.jadwal_mengajar', []);
     }
 }
