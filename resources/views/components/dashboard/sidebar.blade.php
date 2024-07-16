@@ -128,7 +128,7 @@
                     <li>
                         <a href="{{ route('guru.jadwal_mengajar') }}"
                             class="block py-2.5 px-6 text-sm font-medium text-gray-950 transition-all duration-150 ease-linear hover:text-violet-500 dark:text-gray-300 dark:active:text-white dark:hover:text-white">
-                            <i class='bx bxs-user-voice'></i>
+                            <i class='bx bxs-spreadsheet'></i>
                             <span data-key="t-dashboard"> Jadwal Mengajar</span>
                         </a>
                     </li>
