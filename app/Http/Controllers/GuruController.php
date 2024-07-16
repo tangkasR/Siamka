@@ -337,4 +337,9 @@ class GuruController extends Controller
             return back()->with('error', $er->getMessage());
         }
     }
+    public function jadwal_mengajar($tahun, $semester)
+    {
+        dd($this->guru->getById($this->auth->getUser('guru')->id)->jadwal_pelajarans);
+        return view('pages.guru.jadwal_mengajar', []);
+    }
 }

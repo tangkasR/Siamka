@@ -244,6 +244,7 @@ Route::group(['middleware' => ["must-login"]], function () {
             Route::get('/profil', 'profil')->name('profil');
             Route::post('/update_profil', 'update_profil')->name('update_profil');
             Route::get('/wali_kelas/{tahun}/{semester}', 'wali_kelas')->name('wali_kelas');
+            Route::get('/jadwal_mengajar/{tahun}/{semester}', 'jadwal_mengajar')->name('jadwal_mengajar');
         });
 
         // absensi guru
@@ -252,6 +253,7 @@ Route::group(['middleware' => ["must-login"]], function () {
             Route::post('/kehadiran_guru/store', 'store')->name('kehadiran_guru.store');
             Route::put('/kehadiran_guru/absen_keluar', 'absen_keluar')->name('kehadiran_guru.absen_keluar');
         });
+
     });
     Route::controller(KehadiranGuruController::class)->prefix('guru')->name('guru.')->group(function () {
         Route::get('/getData', 'getData')->name('kehadiran_guru.getData');

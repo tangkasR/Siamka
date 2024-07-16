@@ -133,6 +133,14 @@
                                                             @endforeach
                                                         </div>
                                                     @endif
+                                                    @if ($type == 'jadwal_mengajar')
+                                                        <div class="grid grid-cols-2 gap-4">
+                                                            @foreach ($data->semesters as $semester)
+                                                                <x-link link="guru.jadwal_mengajar" :tahun="$data->tahun_ajaran"
+                                                                    :semester="$semester"></x-link>
+                                                            @endforeach
+                                                        </div>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
