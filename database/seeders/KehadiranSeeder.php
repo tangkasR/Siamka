@@ -20,74 +20,21 @@ class KehadiranSeeder extends Seeder
     }
     public function run(): void
     {
-        // Data siswa angkatan 21 ganjil 21-22
-        $tahun_ajaran_id = 1;
-        $rombel_id = 1;
-        // Data siswa angkatan 21 ganjil
-
-        $faker = Faker::create();
-        $statusList = ['hadir', 'izin', 'sakit', 'alpa'];
-        $siswas = $this->siswa->getSiswa($rombel_id);
-
-        for ($i = 0; $i < 100; $i++) {
-            // Membuat data kehadiran
-            $kehadiran = Kehadiran::create([
-                'rombel_id' => $rombel_id,
-                'tahun_ajaran_id' => $tahun_ajaran_id,
-                'tanggal' => $faker->dateTimeBetween('2021-07-01', '2021-12-31'),
-            ]);
-
-            // Melampirkan siswa dengan status acak
-            foreach ($siswas as $siswa) {
-                $siswa = $this->siswa->getById($siswa->id);
-                $kehadiran->siswas()->attach($siswa, [
-                    'kehadiran' => $faker->randomElement($statusList),
-                ]);
-            }
-        }
-
-        // Data siswa angkatan 21 ganjil 21-22
-        $tahun_ajaran_id = 1;
-        $rombel_id = 2;
-        // Data siswa angkatan 21 ganjil
-
-        $faker = Faker::create();
-        $statusList = ['hadir', 'izin', 'sakit', 'alpa'];
-        $siswas = $this->siswa->getSiswa($rombel_id);
-
-        for ($i = 0; $i < 100; $i++) {
-            // Membuat data kehadiran
-            $kehadiran = Kehadiran::create([
-                'rombel_id' => $rombel_id,
-                'tahun_ajaran_id' => $tahun_ajaran_id,
-                'tanggal' => $faker->dateTimeBetween('2021-07-01', '2021-12-31'),
-            ]);
-
-            // Melampirkan siswa dengan status acak
-            foreach ($siswas as $siswa) {
-                $siswa = $this->siswa->getById($siswa->id);
-                $kehadiran->siswas()->attach($siswa, [
-                    'kehadiran' => $faker->randomElement($statusList),
-                ]);
-            }
-        }
-
-        // // Data siswa angkatan 21 genap 21-22
-        // $tahun_ajaran_id = 2;
-        // $rombel_id = 7;
-
-        // // Data siswa angkatan 21 genap
+        // // Data siswa angkatan 21 ganjil 21-22
+        // $tahun_ajaran_id = 1;
+        // $rombel_id = 1;
+        // // Data siswa angkatan 21 ganjil
 
         // $faker = Faker::create();
         // $statusList = ['hadir', 'izin', 'sakit', 'alpa'];
         // $siswas = $this->siswa->getSiswa($rombel_id);
 
-        // for ($i = 0; $i < 50; $i++) {
+        // for ($i = 0; $i < 100; $i++) {
         //     // Membuat data kehadiran
         //     $kehadiran = Kehadiran::create([
         //         'rombel_id' => $rombel_id,
         //         'tahun_ajaran_id' => $tahun_ajaran_id,
-        //         'tanggal' => $faker->dateTimeBetween('2022-01-01', '2022-06-20'),
+        //         'tanggal' => $faker->dateTimeBetween('2021-07-01', '2021-12-31'),
         //     ]);
 
         //     // Melampirkan siswa dengan status acak
@@ -98,6 +45,85 @@ class KehadiranSeeder extends Seeder
         //         ]);
         //     }
         // }
+
+        // // Data siswa angkatan 21 ganjil 21-22
+        // $tahun_ajaran_id = 1;
+        // $rombel_id = 2;
+        // // Data siswa angkatan 21 ganjil
+
+        // $faker = Faker::create();
+        // $statusList = ['hadir', 'izin', 'sakit', 'alpa'];
+        // $siswas = $this->siswa->getSiswa($rombel_id);
+
+        // for ($i = 0; $i < 100; $i++) {
+        //     // Membuat data kehadiran
+        //     $kehadiran = Kehadiran::create([
+        //         'rombel_id' => $rombel_id,
+        //         'tahun_ajaran_id' => $tahun_ajaran_id,
+        //         'tanggal' => $faker->dateTimeBetween('2021-07-01', '2021-12-31'),
+        //     ]);
+
+        //     // Melampirkan siswa dengan status acak
+        //     foreach ($siswas as $siswa) {
+        //         $siswa = $this->siswa->getById($siswa->id);
+        //         $kehadiran->siswas()->attach($siswa, [
+        //             'kehadiran' => $faker->randomElement($statusList),
+        //         ]);
+        //     }
+        // }
+
+        // Data siswa angkatan 21 genap 21-22
+        $tahun_ajaran_id = 2;
+        $rombel_id = 7;
+
+        // Data siswa angkatan 21 genap
+
+        $faker = Faker::create();
+        $statusList = ['hadir', 'izin', 'sakit', 'alpa'];
+        $siswas = $this->siswa->getSiswa($rombel_id);
+
+        for ($i = 0; $i < 50; $i++) {
+            // Membuat data kehadiran
+            $kehadiran = Kehadiran::create([
+                'rombel_id' => $rombel_id,
+                'tahun_ajaran_id' => $tahun_ajaran_id,
+                'tanggal' => $faker->dateTimeBetween('2022-01-01', '2022-06-20'),
+            ]);
+
+            // Melampirkan siswa dengan status acak
+            foreach ($siswas as $siswa) {
+                $siswa = $this->siswa->getById($siswa->id);
+                $kehadiran->siswas()->attach($siswa, [
+                    'kehadiran' => $faker->randomElement($statusList),
+                ]);
+            }
+        }
+        // Data siswa angkatan 21 genap 21-22
+        $tahun_ajaran_id = 2;
+        $rombel_id = 8;
+
+        // Data siswa angkatan 21 genap
+
+        $faker = Faker::create();
+        $statusList = ['hadir', 'izin', 'sakit', 'alpa'];
+        $siswas = $this->siswa->getSiswa($rombel_id);
+
+        for ($i = 0; $i < 50; $i++) {
+            // Membuat data kehadiran
+            $kehadiran = Kehadiran::create([
+                'rombel_id' => $rombel_id,
+                'tahun_ajaran_id' => $tahun_ajaran_id,
+                'tanggal' => $faker->dateTimeBetween('2022-01-01', '2022-06-20'),
+            ]);
+
+            // Melampirkan siswa dengan status acak
+            foreach ($siswas as $siswa) {
+                $siswa = $this->siswa->getById($siswa->id);
+                $kehadiran->siswas()->attach($siswa, [
+                    'kehadiran' => $faker->randomElement($statusList),
+                ]);
+            }
+        }
 
         //  // Data siswa angkatan 21 ganjil 22-23
         //  $tahun_ajaran_id = 3;
