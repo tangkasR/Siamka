@@ -158,7 +158,7 @@
     </div>
 
 
-
+    <input type="text" id="rombel_name" value="{{ $rombel->nama_rombel }}" hidden>
     <script>
         document.getElementById('file').addEventListener('change', function(e) {
             var file = e.target.files[0];
@@ -215,10 +215,11 @@
             const workbook = XLSX.utils.book_new();
             const tableTemplate = document.getElementById('daftar_siswa');
             const worksheetTemplate = XLSX.utils.table_to_sheet(tableTemplate);
+            const rombel = document.getElementById('rombel_name').value;
 
             XLSX.utils.book_append_sheet(workbook, worksheetTemplate, 'Template input nilai');
 
-            XLSX.writeFile(workbook, `template-input-nilai-${tahun}-${semester}-${tipe_ujian}.xlsx`);
+            XLSX.writeFile(workbook, `template-input-nilai-${rombel}-${tahun}-${semester}-${tipe_ujian}.xlsx`);
         })
     </script>
 
