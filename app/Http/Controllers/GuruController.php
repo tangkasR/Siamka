@@ -359,11 +359,6 @@ class GuruController extends Controller
             return $daysOrder[strtolower($item->hari)];
         });
 
-        // Output the sorted collection for debugging purposes
-        dd($sortedJadwalPelajarans);
-
-        // Optionally, if you want to reindex the array
-        $sortedJadwalPelajarans = $sortedJadwalPelajarans->values();
         return view('pages.guru.jadwal_mengajar', [
             'jadwals' => $sortedJadwalPelajarans,
         ]);
