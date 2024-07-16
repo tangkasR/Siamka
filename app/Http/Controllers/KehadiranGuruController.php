@@ -36,7 +36,7 @@ class KehadiranGuruController extends Controller
         $checkAbsen = false;
         if (count($this->kehadiran_guru->checkAbsensi($guru->id)) > 0) {
             $checkAbsen = true;
-            if ($this->kehadiran_guru->checkAbsensi($guru->id)[0]->total_jam != 0) {
+            if ($this->kehadiran_guru->checkAbsensi($guru->id)[0]->total_jam > 0) {
                 $checkAbsen = false;
             }
         }
