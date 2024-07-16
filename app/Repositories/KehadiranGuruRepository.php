@@ -77,10 +77,16 @@ class KehadiranGuruRepository implements KehadiranGuruInterface
         //     'longitude' => 110.39078129170166,
         // ];
 
-        // benar
+        // // sekolah
+        // return $lokasi = [
+        //     'latitude' => -7.537327498680522,
+        //     'longitude' => 109.1264301817605,
+        // ];
+
+        // kost
         return $lokasi = [
-            'latitude' => -7.537327498680522,
-            'longitude' => 109.1264301817605,
+            'latitude' => -7.76862162539639,
+            'longitude' => 110.41380980763537,
         ];
 
     }
