@@ -716,7 +716,7 @@
                                     hidden>
                                 <button type="submit"
                                     class="mt-3 w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-md transition-all duration-300">
-                                    Migrasi
+                                    Transfer
                                 </button>
                             </form>
                         </div>
