@@ -357,7 +357,7 @@ class GuruController extends Controller
 
         $sortedJadwalPelajarans = $jadwalPelajarans->sortBy(function ($item) use ($daysOrder) {
             return $daysOrder[strtolower($item->hari)];
-        });
+        })->values()->all(); // Convert to a reindexed array
 
         return view('pages.guru.jadwal_mengajar', [
             'jadwals' => $sortedJadwalPelajarans,
