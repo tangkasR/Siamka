@@ -341,7 +341,7 @@ class GuruController extends Controller
     {
         $jadwalPelajarans = $this->guru->getById($this->auth->getUser('guru')->id)
             ->jadwal_pelajarans()
-            ->with(['rombels', 'sesis'])
+            ->with(['rombels', 'sesis', 'ruangans'])
             ->get();
 
         // Custom order for the days of the week
@@ -362,10 +362,10 @@ class GuruController extends Controller
 
         // Optionally, if you want to reindex the array
         $sortedJadwalPelajarans = $sortedJadwalPelajarans->values();
-
-        // You can now use $sortedJadwalPelajarans for further processing or return
-        dd($sortedJadwalPelajarans[0]->rombels);
-        dd($sortedJadwalPelajarans[0]->sesis);
-        return view('pages.guru.jadwal_mengajar', []);
+        return view('pages.guru.jadwal_mengajar', [
+            'tahun' => $tahun,
+            'semester' => $semester,
+            'jadwals' => $sortedJadwalPelajarans,
+        ]);
     }
 }

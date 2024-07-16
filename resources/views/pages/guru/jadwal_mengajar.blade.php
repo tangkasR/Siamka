@@ -30,43 +30,32 @@
                         <thead>
                             <tr class="bg-blue-100">
                                 <th class="p-4">
-                                    No</th>
+                                    Hari</th>
                                 <th class="p-4">
-                                    Nama</th>
+                                    Sesi</th>
                                 <th class="p-4">
-                                    NIS</th>
+                                    Rombel</th>
                                 <th class="p-4">
-                                    NISN</th>
+                                    Ruangan</th>
                                 <th class="p-4">
-                                    Nomor Id</th>
-                                <th class="p-4">
-                                    Jenis Kelamin</th>
-                                <th class="p-4 hidden_item">
-                                    Username</th>
-                                <th class="p-4 hidden_item">
-                                    Status Siswa</th>
+                                    Mata Pelajaran</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- @foreach ($siswa as $data)
+                            @foreach ($jadwals as $data)
                                 <tr class="{{ $loop->iteration % 2 == 0 ? 'bg-blue-50' : 'bg-white' }}">
                                     <td class="p-4">
-                                        {{ $loop->iteration }}</td>
+                                        {{ $data->hari }}</td>
                                     <td class="p-4">
-                                        {{ $data->nama }}</td>
-
+                                        {{ $data->sesis->nama_sesi }}</td>
                                     <td class="p-4">
-                                        {{ $data->nis }}</td>
+                                        {{ $data->rombels->nama_rombel }}</td>
                                     <td class="p-4">
-                                        {{ $data->nisn }}</td>
+                                        {{ $data->ruangans->nomor_ruangan }}</td>
                                     <td class="p-4">
-                                        {{ $data->nomor_id }}</td>
-                                    <td class="p-4">
-                                        {{ $data->jenis_kelamin }}</td>
-                                    <td class="p-4 hidden_item">
-                                        {{ $data->username }}</td>
+                                        {{ $data->nama_mata_pelajaran }}</td>
                                 </tr>
-                            @endforeach --}}
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
