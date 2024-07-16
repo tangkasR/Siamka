@@ -21,7 +21,7 @@ class KehadiranGuruSeeder extends Seeder
 
         foreach ($gurus as $guru) {
             for ($i = 0; $i < 100; $i++) {
-                $tanggal = $faker->dateTimeBetween('2024-07-01', '2024-12-31')->format('Y-m-d');
+                $tanggal = $faker->dateTimeBetween('2021-07-01', '2021-12-31')->format('Y-m-d');
 
                 // Generate random times for jam_masuk and jam_keluar
                 $jamMasuk = $faker->dateTimeBetween('07:00:00', '09:00:00')->format('H:i:s');

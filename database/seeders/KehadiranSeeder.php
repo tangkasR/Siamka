@@ -34,7 +34,33 @@ class KehadiranSeeder extends Seeder
             $kehadiran = Kehadiran::create([
                 'rombel_id' => $rombel_id,
                 'tahun_ajaran_id' => $tahun_ajaran_id,
-                'tanggal' => $faker->dateTimeBetween('2024-07-01', '2024-12-31'),
+                'tanggal' => $faker->dateTimeBetween('2021-07-01', '2021-12-31'),
+            ]);
+
+            // Melampirkan siswa dengan status acak
+            foreach ($siswas as $siswa) {
+                $siswa = $this->siswa->getById($siswa->id);
+                $kehadiran->siswas()->attach($siswa, [
+                    'kehadiran' => $faker->randomElement($statusList),
+                ]);
+            }
+        }
+
+        // Data siswa angkatan 21 ganjil 21-22
+        $tahun_ajaran_id = 1;
+        $rombel_id = 2;
+        // Data siswa angkatan 21 ganjil
+
+        $faker = Faker::create();
+        $statusList = ['hadir', 'izin', 'sakit', 'alpa'];
+        $siswas = $this->siswa->getSiswa($rombel_id);
+
+        for ($i = 0; $i < 100; $i++) {
+            // Membuat data kehadiran
+            $kehadiran = Kehadiran::create([
+                'rombel_id' => $rombel_id,
+                'tahun_ajaran_id' => $tahun_ajaran_id,
+                'tanggal' => $faker->dateTimeBetween('2021-07-01', '2021-12-31'),
             ]);
 
             // Melampirkan siswa dengan status acak
