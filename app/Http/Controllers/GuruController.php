@@ -339,7 +339,7 @@ class GuruController extends Controller
     }
     public function jadwal_mengajar($tahun, $semester)
     {
-        dd($this->guru->getById($this->auth->getUser('guru')->id)->jadwal_pelajarans);
+        dd($this->guru->getById($this->auth->getUser('guru')->id)->jadwal_pelajarans->sortBy('hari'));
         return view('pages.guru.jadwal_mengajar', []);
     }
 }
