@@ -341,7 +341,7 @@ class GuruController extends Controller
     {
         $jadwalPelajarans = $this->guru->getById($this->auth->getUser('guru')->id)
             ->jadwal_pelajarans()
-            ->with(['rombel', 'sesi'])
+            ->with(['rombels', 'sesis'])
             ->get();
 
         // Custom order for the days of the week
