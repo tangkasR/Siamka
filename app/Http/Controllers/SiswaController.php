@@ -188,7 +188,7 @@ class SiswaController extends Controller
         if ($request->ajax()) {
             if ($request->tahun) {
                 $tahun = $request->tahun;
-                return view('pages.Siswa.data-kehadiran', [
+                return view('pages.siswa.data-kehadiran', [
                     'bulan' => $bulan,
                     'kehadirans' => $this->kehadiran->getMonthlyAttendance($siswa->nis, $tahun),
                     'siswa' => $siswa,
