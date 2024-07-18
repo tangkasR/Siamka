@@ -18,7 +18,7 @@
                 <div class="grid md:grid-cols-3 gap-4">
                     @foreach ($ekskuls as $data)
                         <div
-                            class=" relative mx-auto max-w-md rounded-lg bg-gradient-to-tr from-pink-300 to-blue-300 p-0.5 border-violet-300  hover:shadow-lg hover:shadow-violet-200 transition-all  ">
+                            class=" w-full  relative mx-auto  rounded-lg border border-violet-300  hover:shadow-lg hover:shadow-violet-200 transition-all  ">
                             <a
                                 href="{{ route('admin.ekskul.detail_ekskul', ['tahun' => $tahun, 'semester' => $semester, 'ekskul' => $data]) }}">
                                 <div class="bg-white p-3 rounded-md">

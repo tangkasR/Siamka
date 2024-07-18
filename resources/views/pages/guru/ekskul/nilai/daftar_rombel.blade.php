@@ -20,7 +20,7 @@
                     <div class="grid md:grid-cols-3 mb-3 gap-5">
                         @foreach ($rombels as $data)
                             <div
-                                class=" w-full rounded-lg bg-gradient-to-tr from-pink-300 to-blue-300 p-0.5 border-violet-300  hover:shadow-lg hover:shadow-violet-200 transition-all  ">
+                                class=" w-full  relative mx-auto  rounded-lg border border-violet-300  hover:shadow-lg hover:shadow-violet-200 transition-all ">
                                 <a
                                     href="{{ route('guru.nilai_ekskul', ['tahun' => $tahun, 'semester' => $semester, 'rombel' => $data, 'id' => Crypt::encrypt($ekskul->id)]) }}">
                                     <div class="bg-white p-3 rounded-md">

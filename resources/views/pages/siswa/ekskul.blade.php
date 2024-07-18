@@ -9,7 +9,7 @@
                     <div class="grid md:grid-cols-4 mb-3 gap-4 capitalize">
                         @foreach ($ekskuls as $data)
                             <div
-                                class="w-full  relative mx-auto  rounded-lg bg-gradient-to-tr from-pink-300 to-blue-300 p-0.5 border-violet-300  hover:shadow-lg hover:shadow-violet-200 transition-all  ">
+                                class="w-full  relative mx-auto  rounded-lg border border-violet-300  hover:shadow-lg hover:shadow-violet-200 transition-all">
                                 <div class="bg-white py-3 px-6 rounded-md min-h-[300px] w-full">
                                     <span
                                         class="mt-3 p-3 flex flex-col mb-3 justify-center items-center place-items-center rounded-md w-full duration-300 text-white bg-indigo-100 border border-indigo-300">
