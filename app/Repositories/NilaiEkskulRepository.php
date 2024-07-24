@@ -36,7 +36,6 @@ class NilaiEkskulRepository implements NilaiEkskulInterface
     }
     public function getBySiswaNis($nis)
     {
-        dd($nis);
         return $this->nilai_ekskul
             ->join('siswas', 'nilai_ekskuls.siswa_id', '=', 'siswas.id')
             ->where('siswas.nis', $nis)
