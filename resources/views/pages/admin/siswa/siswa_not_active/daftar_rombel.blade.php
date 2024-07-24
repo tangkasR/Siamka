@@ -19,7 +19,7 @@
                 <hr class="text-[2px] my-[20px] text-black w-full" />
                 <div class="relative overflow-x-auto card-body mb-[50px] h-[100%]">
                     {{-- Data Kelas X --}}
-                    <div class="grid grid-cols-4 mb-10">
+                    <div class="grid grid-cols-4 gap-4 mb-10">
                         {{-- <div class="swiper mySwiper1">
                             <div class="swiper-wrapper"> --}}
                         @foreach ($rombels as $data)
