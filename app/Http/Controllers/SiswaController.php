@@ -448,7 +448,7 @@ class SiswaController extends Controller
 
         return view('pages.admin.siswa.rekap-nilai', [
             'siswa' => $siswa,
-            'nilai_ekskuls' => $this->nilai_ekskul->rekap($siswa->id),
+            'nilai_ekskuls' => $this->nilai_ekskul->rekap($siswa->nis),
             'nilais' => $data,
             'semesters' => $semesters,
             'tahun' => $tahun_,
