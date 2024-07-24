@@ -23,7 +23,7 @@
                     class="block md:mx-0 mx-auto  rounded-full shadow-xl h-[200px] w-[200px] bg-cover bg-center "
                     style="background-image: url('{{ $siswa->profil != '-' ? asset('storage/' . $siswa->profil) : asset('assets/img/profil-default.jpg') }}')">
                     <div class="w-full h-full relative">
-                        <div class="absolute -bottom-2  w-full  text-center py-2 px-6 rounded-full"
+                        <div class="absolute -bottom-2  w-full  text-center py-2 px-6 rounded-full capitalize"
                             style="background-color: rgb(237, 233, 254)">
                             <p class="text-[16px] font-medium">{{ $siswa->status_siswa }}</p>
                         </div>
