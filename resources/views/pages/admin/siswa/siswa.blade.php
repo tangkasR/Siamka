@@ -167,9 +167,9 @@
                                         <td></td>
                                         <td>L / P</td>
                                         <td></td>
-                                        <td>NISN</td>
-                                        <td></td>
                                         <td>Nomor_id</td>
+                                        <td></td>
+                                        <td>NIS</td>
                                     </tr>
                                 </tbody>
                             </table>
