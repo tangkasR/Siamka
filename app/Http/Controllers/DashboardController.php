@@ -48,7 +48,7 @@ class DashboardController extends Controller
 
         $year = $this->date->getDate()->year;
         $month = $this->date->getDate()->month;
-        if ($month < 7) {
+        if ($month < 6) {
             $tahun_ajaran = $year - 1 . '-' . $year;
             $semester = 'genap';
         } else {
