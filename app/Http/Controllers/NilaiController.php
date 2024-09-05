@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\MataPelajaran;
 use App\Models\Nilai;
 use App\Models\Rombel;
+use Illuminate\Http\Request;
+use App\Models\MataPelajaran;
 use App\Services\AuthService;
 use App\Services\GuruService;
-use App\Services\MataPelajaranService;
 use App\Services\NilaiService;
-use App\Services\RombelService;
 use App\Services\SiswaService;
+use App\Services\RombelService;
 use App\Services\TahunAjaranService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use App\Services\MataPelajaranService;
+use Illuminate\Database\QueryException;
 use Illuminate\Validation\ValidationException;
 
 class NilaiController extends Controller

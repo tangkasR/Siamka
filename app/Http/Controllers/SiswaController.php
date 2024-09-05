@@ -590,7 +590,7 @@ class SiswaController extends Controller
             $this->siswa->migrasi($request->all());
             return back()->with('message', 'Berhasil mengirim data!');
         } catch (ValidationException $err) {
-            return back()->with('error', $er->getMessage());
+            return back()->with('error', $err->getMessage());
         }
     }
 

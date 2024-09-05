@@ -15,6 +15,9 @@ class NilaiImport implements ToCollection, WithHeadingRow
     protected $tahun_ajaran;
     protected $semester;
     protected $rombel_id;
+    protected $mapel_id;
+    protected $tipe_ujian;
+    protected $semester_nilai;
 
     public function __construct($tahun_ajaran, $semester, $mapel_id, $tipe_ujian, $semester_nilai)
     {

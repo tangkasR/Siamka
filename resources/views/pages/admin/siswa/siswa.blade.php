@@ -416,7 +416,7 @@
                                                                     </label>
                                                                     <input type="text" name="password" id="password"
                                                                         class="bg-gray-800/5 border border-gray-100 text-gray-900 dark:text-gray-100 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder-gray-400 dark:placeholder:text-zinc-100/60 focus:ring-0"
-                                                                        value="{{ $data->nomor_id }}"
+                                                                        value="{{ $data->nis }}"
                                                                         placeholder="Masukan Password Siswa" required>
                                                                 </div>
                                                             </div>

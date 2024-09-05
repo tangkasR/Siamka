@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ekskul;
+use Illuminate\Http\Request;
 use App\Services\AuthService;
 use App\Services\EkskulService;
 use App\Services\NilaiEkskulService;
 use App\Services\TahunAjaranService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Database\QueryException;
 
 class NilaiEkskulController extends Controller
 {

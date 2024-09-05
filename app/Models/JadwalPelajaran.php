@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Models\Guru;
-use App\Models\JadwalPelajaran;
 use App\Models\MataPelajaran;
 use App\Models\Rombel;
 use App\Models\Ruangan;

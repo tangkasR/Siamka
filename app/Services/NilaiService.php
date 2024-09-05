@@ -100,14 +100,14 @@ class NilaiService
         return $arrNilaiUas;
     }
 
-    public function getNilaiUts($id)
-    {
-        return $this->nilai->getNilaiUts($id);
-    }
-    public function getNilaiUas($id)
-    {
-        return $this->nilai->getNilaiUas($id);
-    }
+    // public function getNilaiUts($id)
+    // {
+    //     return $this->nilai->getNilaiUts($id);
+    // }
+    // public function getNilaiUas($id)
+    // {
+    //     return $this->nilai->getNilaiUas($id);
+    // }
 
     public function getNilaiBySiswa($semester, $tipe_ujian, $nis)
     {

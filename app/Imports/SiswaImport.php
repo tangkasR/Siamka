@@ -47,7 +47,7 @@ class SiswaImport implements ToCollection, WithHeadingRow
                             'nomor_id' => $row['nomor_id'],
                             'jenis_kelamin' => $row['jenis_kelamin'],
                             'username' => '-',
-                            'password' => Hash::make($row['nomor_id']),
+                            'password' => Hash::make($row['nis']),
                             'nik' => '-',
                             'tempat_tanggal_lahir' => '-',
                             'alamat' => '-',

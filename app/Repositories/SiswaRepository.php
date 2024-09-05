@@ -95,7 +95,7 @@ class SiswaRepository implements SiswaInterface
         $siswa = $this->siswa->where('id', $id)->first();
         return $this->siswa->where('id', $id)->update([
             'aktivasi_akun' => 'aktif',
-            'username' => $siswa->nisn,
+            'username' => $siswa->nomor_id,
         ]);
     }
     public function deaktivasi($id)

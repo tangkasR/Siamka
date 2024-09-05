@@ -12,7 +12,7 @@ class RombelRepository implements RombelInterface
 {
     private $rombel;
     private $sesi;
-    private $data;
+    private $date;
     public function __construct(Rombel $rombel, SesiService $sesi, DateService $date)
     {
         $this->rombel = $rombel;

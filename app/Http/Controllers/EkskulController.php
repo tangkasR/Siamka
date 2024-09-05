@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Ekskul;
 use App\Models\Rombel;
 use App\Models\TahunAjaran;
+use Illuminate\Http\Request;
 use App\Services\AuthService;
 use App\Services\EkskulService;
 use App\Services\RombelService;
 use App\Services\TahunAjaranService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Database\QueryException;
 
 class EkskulController extends Controller
 {
